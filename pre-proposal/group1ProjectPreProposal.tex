@@ -1,0 +1,84 @@
+\documentclass[a4paper,11pt]{report}
+\usepackage{fancyhdr}
+\setlength{\headheight}{11pt}
+\pagestyle{fancyplain}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+
+%%%%%%%%%%%%%%
+%%%UPDATE 2011-04-05
+%%%%%%%%%%%%%%
+\lhead{ }
+\renewcommand{\headrulewidth}{0.0pt}
+%%%%%%%%%END%%
+
+\lfoot{Group 1: Pre-proposal Y}
+%COMMENT: change Y with one in {ML, NLP, Planning}
+\cfoot{\thepage}
+\rfoot{}
+
+%
+%%    homebrew commands -- to save typing
+\newcommand\etc{\textsl{etc}}
+\newcommand\eg{\textsl{eg.}\ }
+\newcommand\etal{\textsl{et al.}}
+\newcommand\Quote[1]{\lq\textsl{#1}\rq}
+\newcommand\fr[2]{{\textstyle\frac{#1}{#2}}}
+\newcommand\miktex{\textsl{MikTeX}}
+\newcommand\comp{\textsl{The Companion}}
+\newcommand\nss{\textsl{Not so Short}}
+
+
+\begin{document}
+%-----------------------------------------------------------
+\title{A good title for an interesting pre-proposal}
+\author{Group X: Author 1, Author 2, Author 3, Author 4}
+\maketitle
+%-----------------------------------------------------------
+\begin{abstract}\centering
+%%COMMENT
+%%no more than 10 lines!
+\end{abstract}
+
+\chapter{Introduction}
+\section{What is the problem you are trying to solve?}
+\section{What results are available in the literature on that problem?}
+%%COMMENT
+%%describe briefly the scientific papers you found relevant to the problem
+%% references to appendix via <<\cite{ref1}>>
+
+\section{What tools and programs are already available for the problem, or for closely related ones?}
+%%COMMENT:
+%%(describe these briefly. Say how you can use them, and how your work will build on them, or differ from them). 
+
+\chapter{Key ideas and delimitations} 
+\section{Why is the problem interesting or significant?  What will a solution achieve?}
+\section{The central idea in your solution}
+\subsection{Why do you think it will work?}
+\section{Define an instance of the problem. How will you measure the performance of your program?} 
+%%COMMENT:
+%%You must know this in advance, find instances - benchmarks, or make your own.
+\section{The scope of your work} 
+%%COMMENT:
+%%also, what interesting and related things are outside the scope of your proposal?
+
+\chapter{First results}
+%%COMMENT:
+%%A small piece of pseudo-code for a key part of the solution.  
+
+\chapter{Appendix}
+%%COMMENT:
+%%The first 3 sections (excluding title page and references) are limited to 3 pages. Here, you can put in anything that didn't fit in there, but that you still think is essential.
+
+\begin{thebibliography}{9}
+%%COMMENT:
+%%you might want to use bibtex instead, you decide
+
+\bibitem{ref1}
+  Authors,
+  \emph{Title},
+  Editor,
+  Year,  
+  ...
+
+\end{thebibliography}
+\end{document}

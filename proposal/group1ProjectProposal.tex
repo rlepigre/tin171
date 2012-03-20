@@ -1,0 +1,92 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{fancyhdr}
+\setlength{\headheight}{11pt}
+\pagestyle{fancyplain}
+%\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+
+\lhead{ }
+\rhead{}
+%\renewcommand{\headrulewidth}{0.0pt}
+
+\lfoot{Group X: Y proposal}
+%COMMENT: Y is the topic which has been assigned to you
+\cfoot{\thepage}
+\rfoot{}
+
+%
+%%    homebrew commands -- to save typing
+\newcommand\etc{\textsl{etc}}
+\newcommand\eg{\textsl{eg.}\ }
+\newcommand\etal{\textsl{et al.}}
+\newcommand\Quote[1]{\lq\textsl{#1}\rq}
+\newcommand\fr[2]{{\textstyle\frac{#1}{#2}}}
+\newcommand\miktex{\textsl{MikTeX}}
+\newcommand\comp{\textsl{The Companion}}
+\newcommand\nss{\textsl{Not so Short}}
+
+
+\begin{document}
+%-----------------------------------------------------------
+\title{
+(probably) The same title\\
+you used \\
+for your pre-proposal\\}
+\author{Group X: Author 1, Author 2, Author 3, Author 4}
+\maketitle
+%-----------------------------------------------------------
+\begin{abstract}\centering
+%%COMMENT
+no more than 10 lines!
+\end{abstract}
+
+\section{Introduction}
+\subsection{What is the problem you are trying to solve?}
+\subsection{What results are available in the literature on that problem?}
+(describe briefly the scientific papers you found relevant to the problem, references to sec 4.)
+
+\subsection{What tools and programs are already available for the problem, or for closely related ones?}
+(describe these briefly. Say how you can use them, and how your work will build on them, or differ from them). 
+
+\section{Key ideas and delimitations} 
+\subsection{Why is the problem interesting or significant?  What will a solution achieve?}
+\subsection{The central idea in your solution}
+\subsubsection{Why do you think it will work?}
+\subsection{Define an instance of the problem. How will you measure the performance of your program?} 
+(You must know this in advance, find instances /benchmarks, or make your own).
+ \subsection{The scope of your work} 
+(also, what interesting and related things are outside the scope of your proposal?)
+
+\section{First results}
+(A small piece of pseudo-code for a key part of the solution. )
+
+\section{References}
+
+Reminder: References should be cited (i.e. actually be referred to) at the appropriate place in your text, they should visibly inﬂuence your document, and they should convey as much information as possible to the reader.
+
+To help you produce a good literature survey, we advise you to use an annotated list of references.
+
+A reference to a paper will start with a unique ID (numbers, letters, ...) and have the following three paragraphs:
+\begin{enumerate}
+\item Author(s) [year of publication], ``Title of paper'', Journal (or conference etc.), location data (i.e., volume numbers, etc. needed to ﬁnd the item), a live www link if available.
+\item A couple of lines saying what question the paper is attacking, and what the proposed solution is. Or what topic the reference deals with (your textbook has excellent examples in the sections entitled ``Bibilographical and Historical notes''). 
+\item A pointer back to where you cite this reference. 
+\end{enumerate}
+
+An example would look like this:
+\newline
+[REF1]
+\begin{enumerate}
+\item Turing, A.M. (1936).`On Computable Numbers, with an Application to the Entscheidungsproblem". Proceedings of the London Mathematical Society. 2 42: 230–65.
+\item The paper is about ... 
+\item The most important reference to this paper in our document is in Section XYZ
+\end{enumerate}
+
+A reference to a specific topic in a book (or large survey article) has similar 2nd. and 3rd. paragraphs, but the first will look like this:
+\begin{enumerate}
+\item Author(s) [year of publication], ``Title of book'', Publisher, a live www link if available.
+\textbf{Section numbers or page numbers in the book dealing with the material you are referring to}. 
+\end{enumerate}
+
+\section{Appendix}
+The first 3 sections (excluding title page and references) are limited to 8 pages. Here, you can put in anything that didn't fit in there, but that you still think is essential.
+\end{document}
