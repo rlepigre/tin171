@@ -1,4 +1,5 @@
 \documentclass[a4paper,11pt]{report}
+\usepackage[utf8]{inputenc}
 \usepackage{fancyhdr}
 \setlength{\headheight}{11pt}
 \pagestyle{fancyplain}
@@ -11,7 +12,7 @@
 \renewcommand{\headrulewidth}{0.0pt}
 %%%%%%%%%END%%
 
-\lfoot{Group 1: Pre-proposal Y}
+\lfoot{Group 1: Pre-proposal Planning}
 %COMMENT: change Y with one in {ML, NLP, Planning}
 \cfoot{\thepage}
 \rfoot{}
@@ -30,55 +31,123 @@
 
 \begin{document}
 %-----------------------------------------------------------
-\title{A good title for an interesting pre-proposal}
-\author{Group X: Author 1, Author 2, Author 3, Author 4}
+\title{Chinese Checkers (preliminary title)}
+\author{Group 1: Emil Falk, Rodolphe Lepigre, Salvo Tomaselli, Göran Weinholt}
 \maketitle
 %-----------------------------------------------------------
 \begin{abstract}\centering
 %%COMMENT
 %%no more than 10 lines!
+\emph{To be written\dots}
 \end{abstract}
 
 \chapter{Introduction}
 \section{What is the problem you are trying to solve?}
+
+We want to write a computer program that plays a game. Chinese
+Checkers is a board game that can be played by two to six players.
+Each player controls ten pegs that are placed in the corners of a
+hexagonal star. The board has little holes in it where the pegs can be
+placed. In each round of the game a player must move a peg in one of
+two ways. A peg can be moved to one of the six holes next to it or, if
+one of the holes is occupied by another peg, it can also ``jump'' over
+that peg in a straight line (thereby traveling two holes over). The
+player can jump over other pegs an unlimited number of times every
+round, potentially moving a peg straight across the whole board. The
+objective is to move all pegs to the opposing corner.
+
 \section{What results are available in the literature on that problem?}
 %%COMMENT
 %%describe briefly the scientific papers you found relevant to the problem
 %% references to appendix via <<\cite{ref1}>>
 
+Sturtevant has explored the max$^n$ and paranoid algorithms in
+relation to Chinese Checkers
+\cite{springerlink:10.1007/978-3-540-40031-8_8}. Later on he also
+evaluated the UCT algorithm
+\cite{springerlink:10.1007/978-3-540-87608-3_4}. The algorithms were
+pitted against each other and it is not clear how well they play
+against humans, but we will assume that they are adequate.
+
+An interesting point that Sturtevant makes is that multi-player games
+(i.e.~Chinese Checkers) are difficult for computers for two reasons:
+search strategies are less effective than for two-player games and
+there is a need for opponent modelling which is normally not required.
+
+Research into programs that play games is likely to be geared towards
+producing strong programs that one day will be able to be the best
+human players. Perhaps a weaker program would be just as suitable for
+our needs. Huang describes a contest in which he supervised students
+who wrote programs to play Chinese Checkers
+\cite{Huang:2001:SGP:378593.378708}. The students used
+iterative-deepening search and experimented with heuristics.
+
 \section{What tools and programs are already available for the problem, or for closely related ones?}
 %%COMMENT:
 %%(describe these briefly. Say how you can use them, and how your work will build on them, or differ from them). 
 
+\emph{cheech} is a free software implementation of Chinese Checkers.
+It provides a graphical interface and a network protocol. It appears
+that we can make our own program connect to \emph{cheech} as a player
+and thereby use the existing multiplayer functionality and graphics.
+
 \chapter{Key ideas and delimitations} 
 \section{Why is the problem interesting or significant?  What will a solution achieve?}
+
+An interesting aspect of Chinese Checkers is that it's a multiplayer
+game. This means that players can form temporary coalitions against
+other players. While traditional two-player strategies can be used to
+play the game they are not going to be able to play it perfectly.
+
 \section{The central idea in your solution}
+
+\emph{To be written\dots}
+
 \subsection{Why do you think it will work?}
+
+\emph{To be written\dots}
+
 \section{Define an instance of the problem. How will you measure the performance of your program?} 
 %%COMMENT:
 %%You must know this in advance, find instances - benchmarks, or make your own.
+
+The program should play a game in the same way a human would play: the
+program waits its turn and makes a move. The initial board setup is
+one instance of the problem, but from the perspective of analysing the
+game every intermediate state of the board may also be considered an
+instance.
+
+The \emph{cheech} program includes a number of bots that we can have
+play against our program. The program that wins the most games will
+clearly be the better program. Another metric, which Sturtevant used,
+is to count the number of moves a player is away from the goal state.
+
 \section{The scope of your work} 
 %%COMMENT:
 %%also, what interesting and related things are outside the scope of your proposal?
+
+Playing a perfect game must be outside our scope because it appears to
+be an open research problem.
 
 \chapter{First results}
 %%COMMENT:
 %%A small piece of pseudo-code for a key part of the solution.  
 
-\chapter{Appendix}
+\emph{To be written\dots}
+
+% for each peg:
+%   estimate a weight
+% pick move with biggest weight
+
+%\chapter{Appendix}
 %%COMMENT:
 %%The first 3 sections (excluding title page and references) are limited to 3 pages. Here, you can put in anything that didn't fit in there, but that you still think is essential.
 
-\begin{thebibliography}{9}
-%%COMMENT:
-%%you might want to use bibtex instead, you decide
+%\begin{thebibliography}{9}
 
-\bibitem{ref1}
-  Authors,
-  \emph{Title},
-  Editor,
-  Year,  
-  ...
+\bibliographystyle{aiaa}
+\bibliography{refs}
 
-\end{thebibliography}
+
+%\end{thebibliography}
 \end{document}
