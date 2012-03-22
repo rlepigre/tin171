@@ -1,6 +1,7 @@
 \documentclass[a4paper,11pt]{report}
 \usepackage[utf8]{inputenc}
 \usepackage{fancyhdr}
+\usepackage{algpseudocode}
 \setlength{\headheight}{11pt}
 \pagestyle{fancyplain}
 \renewcommand{\chaptermark}[1]{\markboth{#1}{}}
@@ -134,7 +135,46 @@ be an open research problem.
 %%COMMENT:
 %%A small piece of pseudo-code for a key part of the solution.  
 
-\emph{To be written\dots}
+\begin{algorithmic}
+\Function{ITERATIVE-DEEPENING-SEARCH}{problem}
+\For{$depth = 0 \to \infty$}
+\State $results \gets$ DEPTH-LIMITED-SEARCH($problem, depth$)
+\If {$results \not= cutoff$}
+\State \Return $result$
+\EndIf
+\EndFor
+\EndFunction
+\\
+\Function{DEPTH-LIMITED-SEARCH}{problem, limit}
+\State \Return RECURSIVE-DLS(MAKE-NODE($problem, $INITAL-STATE)$,problem, limit$)
+\EndFunction
+\\
+\Function{RECURSIVE-DLS}{node, problem, limit}
+\If{$problem.$GOAL-TEST($node.$STATE)}
+\State \Return SOLUTION($node$)
+\ElsIf{$limit = 0$}
+\State \Return $cutoff$
+\Else
+\State $cutoff\_occured? \gets false$
+\ForAll{$action$ in $problem.$ACTIONS($node.$STATE)}
+\State $child \gets$ CHILD-NODE($problem, node, action$)
+\State $result \gets$ RECURSIVE-DLS($child, problem, Emit - 1$)
+\If{$result = cutoff$}
+\State $cutoff\_occured? \gets true$
+\ElsIf{$result \not= failure$}
+\State \Return $result$
+\EndIf
+\EndFor
+\If{$cutoff\_occured?$}
+\Return $cutoff$
+\Else
+\Return $failure$
+\EndIf
+\EndIf
+\EndFunction
+\end{algorithmic}
+
+
 
 % for each peg:
 %   estimate a weight
