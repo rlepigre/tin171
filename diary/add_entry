@@ -1,0 +1,10 @@
+#!/bin/sh
+DD=`stat -c=%y diary.txt | cut -d" " -f1 | cut -d= -f2`
+CD=`date +%F`
+
+if [ $DD != $CD ]
+then
+	echo `date +%F` >> diary.txt
+fi
+
+echo $@ >> diary.txt
