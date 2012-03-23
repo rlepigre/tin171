@@ -110,17 +110,23 @@ other players. While traditional two-player strategies can be used to
 play the game they are not going to be able to play it perfectly.
 
 \section{The central idea in your solution}
-Our solution will consist of an implementation of \emph{iterative deepening depth-first-search}(IDDFS)\cite{aimodern}.
-This will be combined with some heuristics function to form a kind of informed search. To improve the depth of
-our solution we will try and do some pruning of ``bad'' plys.
+Our solution will consist of an implementation of \emph{iterative
+  deepening depth-first-search} (IDDFS) \cite{aimodern}. This will be
+combined with a heuristic to form a kind of informed search. To
+improve the depth of our solution we will try and do some pruning of
+``bad'' plys.%%, e.g.~those that do not move the player any closer to the
+%% goal state.
 
 \subsection{Why do you think it will work?}
-Our solution will work because we think that \emph{IDDFS} closely relates to how a human would play the game. Starting by
-evaluating moves that are easily visible on the board and iteratively looking deeper(further) into what might happen.
+Our solution will work because we think that \emph{IDDFS} closely
+relates to how a human might play the game: first evaluating
+moves that are easily visible on the board and iteratively looking
+deeper (further) into what might happen.
 
-And even though they do not report any performance from the application of \emph{IDDFS} in \cite{Huang:2001:SGP:378593.378708}
-we know that it atleast has been used to some degree of success. Of course the performance of our solution will heavily
-on the choice of good heuristics.
+Even though \cite{Huang:2001:SGP:378593.378708} does not report on the
+performance of \emph{IDDFS} in we know that it at least has been used
+to some degree of success. The performance of our solution will of
+course depend heavily on finding good heuristics.
 
 \section{Define an instance of the problem. How will you measure the performance of your program?} 
 %%COMMENT:
@@ -140,16 +146,17 @@ is to count the number of moves a player is away from the goal state.
 \section{The scope of your work} 
 %%COMMENT:
 %%also, what interesting and related things are outside the scope of your proposal?
-The scope of our project will be to try and challenge a set of amateur human players. 
-Playing a perfect game must be outside our scope because it appears to
-be an open research problem.
+The scope of our project will be to try and challenge a set of amateur
+human players. Playing a perfect game must be outside our scope
+because it appears to be an open research problem.
 
 \chapter{First results}
 %%COMMENT:
 %%A small piece of pseudo-code for a key part of the solution.  
 \section{Iterative deepening depth-first-search}
-A central part of our solution will be the \emph{IDDFS} algorithm. Shown below are the 
-high-level pseudocode for that algorithm\cite{aimodern}.\\
+A central part of our solution will be the \emph{IDDFS} algorithm.
+Shown below is the 
+high-level pseudocode for that algorithm \cite{aimodern}.\\
 \begin{algorithmic}
 \Function{ITERATIVE-DEEPENING-SEARCH}{problem}
 \For{$depth = 0 \to \infty$}
@@ -189,11 +196,6 @@ high-level pseudocode for that algorithm\cite{aimodern}.\\
 \EndFunction
 \end{algorithmic}
 
-
-
-% for each peg:
-%   estimate a weight
-% pick move with biggest weight
 
 \chapter{Appendix}
 \section{List of project choices}
