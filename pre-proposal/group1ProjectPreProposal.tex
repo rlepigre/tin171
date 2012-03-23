@@ -160,39 +160,40 @@ A central part of our solution will be the \emph{IDDFS} algorithm.
 Shown below is the 
 high-level pseudocode for that algorithm \cite{aimodern}.\\
 \begin{algorithmic}
-\Function{ITERATIVE-DEEPENING-SEARCH}{problem}
-\For{$depth = 0 \to \infty$}
-\State $results \gets$ DEPTH-LIMITED-SEARCH($problem, depth$)
-\If {$results \not= cutoff$}
-\State \Return $result$
+\Function{ITERATIVE-DEEPENING-SEARCH}{\emph{problem}}
+\For{\emph{depth} $= 0 \to \infty$}
+\State \emph{results} $\gets$ DEPTH-LIMITED-SEARCH(\emph{problem, depth})
+\If {\emph{results} $\not=$ \emph{cutoff}}
+\State \Return \emph{results}
 \EndIf
 \EndFor
 \EndFunction
 \\
-\Function{DEPTH-LIMITED-SEARCH}{problem, limit}
-\State \Return RECURSIVE-DLS(MAKE-NODE($problem, $INITAL-STATE)$,problem, limit$)
+\Function{DEPTH-LIMITED-SEARCH}{\emph{problem, limit}}
+\State \Return RECURSIVE-DLS(MAKE-NODE(\emph{problem},INITAL-STATE), \\
+\hspace{50mm} \emph{problem, limit})
 \EndFunction
 \\
 \Function{RECURSIVE-DLS}{node, problem, limit}
-\If{$problem.$GOAL-TEST($node.$STATE)}
-\State \Return SOLUTION($node$)
-\ElsIf{$limit = 0$}
-\State \Return $cutoff$
+\If{\emph{problem}.GOAL-TEST(\emph{node}.STATE)}
+\State \Return SOLUTION(\emph{node})
+\ElsIf{\emph{limit} = 0}
+\State \Return \emph{cutoff}
 \Else
-\State $cutoff\_occured? \gets false$
-\ForAll{$action$ in $problem.$ACTIONS($node.$STATE)}
-\State $child \gets$ CHILD-NODE($problem, node, action$)
-\State $result \gets$ RECURSIVE-DLS($child, problem, Emit - 1$)
-\If{$result = cutoff$}
-\State $cutoff\_occured? \gets true$
-\ElsIf{$result \not= failure$}
-\State \Return $result$
+\State \emph{cutoff\_occured?} $\gets$ \emph{false}
+\ForAll{\emph{action} in \emph{problem}.ACTIONS(\emph{node}.STATE)}
+\State \emph{child} $\gets$ CHILD-NODE(\emph{problem, node, action})
+\State \emph{result} $\gets$ RECURSIVE-DLS(\emph{child, problem, Emit - 1})
+\If{\emph{result} = \emph{cutoff}}
+\State \emph{cutoff\_occured?} $\gets$ \emph{true}
+\ElsIf{\emph{result} $\not=$ \emph{failure}}
+\State \Return \emph{result}
 \EndIf
 \EndFor
-\If{$cutoff\_occured?$}
-\Return $cutoff$
+\If{\emph{cutoff\_occured?}}
+\Return \emph{cutoff}
 \Else
-\Return $failure$
+\ \Return \emph{failure}
 \EndIf
 \EndIf
 \EndFunction
@@ -204,7 +205,7 @@ high-level pseudocode for that algorithm \cite{aimodern}.\\
 \begin{itemize}
 \item NLP: Dialog system for the student helpdesk 
 \item ML: Recommender system for movies using content-based filtering
-\item Planning: Playing Chinese Checkers using iterative deepening depth-first search with heuristics
+\item Planning/Search: Playing Chinese Checkers using iterative deepening depth-first search with heuristics
 \end{itemize}
 %%COMMENT:
 %%The first 3 sections (excluding title page and references) are limited to 3 pages. Here, you can put in anything that didn't fit in there, but that you still think is essential.
