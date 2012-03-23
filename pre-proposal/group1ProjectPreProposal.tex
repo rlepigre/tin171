@@ -110,12 +110,17 @@ other players. While traditional two-player strategies can be used to
 play the game they are not going to be able to play it perfectly.
 
 \section{The central idea in your solution}
-
-\emph{To be written\dots}
+Our solution will consist of an implementation of \emph{iterative deepening depth-first-search}(IDDFS)\cite{aimodern}.
+This will be combined with some heuristics function to form a kind of informed search. To improve the depth of
+our solution we will try and do some pruning of ``bad'' plys.
 
 \subsection{Why do you think it will work?}
+Our solution will work because we think that \emph{IDDFS} closely relates to how a human would play the game. Starting by
+evaluating moves that are easily visible on the board and iteratively looking deeper(further) into what might happen.
 
-\emph{To be written\dots}
+And even though they do not report any performance from the application of \emph{IDDFS} in \cite{Huang:2001:SGP:378593.378708}
+we know that it atleast has been used to some degree of success. Of course the performance of our solution will heavily
+on the choice of good heuristics.
 
 \section{Define an instance of the problem. How will you measure the performance of your program?} 
 %%COMMENT:
@@ -135,14 +140,16 @@ is to count the number of moves a player is away from the goal state.
 \section{The scope of your work} 
 %%COMMENT:
 %%also, what interesting and related things are outside the scope of your proposal?
-
+The scope of our project will be to try and challenge a set of amateur human players. 
 Playing a perfect game must be outside our scope because it appears to
 be an open research problem.
 
 \chapter{First results}
 %%COMMENT:
 %%A small piece of pseudo-code for a key part of the solution.  
-
+\section{Iterative deepening depth-first-search}
+A central part of our solution will be the \emph{IDDFS} algorithm. Shown below are the 
+high-level pseudocode for that algorithm\cite{aimodern}.\\
 \begin{algorithmic}
 \Function{ITERATIVE-DEEPENING-SEARCH}{problem}
 \For{$depth = 0 \to \infty$}
