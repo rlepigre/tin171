@@ -1,6 +1,7 @@
 \documentclass[a4paper,11pt]{report}
 \usepackage[utf8]{inputenc}
 \usepackage{fancyhdr}
+\usepackage{algpseudocode}
 \setlength{\headheight}{11pt}
 \pagestyle{fancyplain}
 \renewcommand{\chaptermark}[1]{\markboth{#1}{}}
@@ -40,10 +41,10 @@
 %%no more than 10 lines!
 
 Chinese Checkers is a board game for up to six players. The fact that
-it's a multiplayer game makes it quite different from more widely
+it's a multi-player game makes it quite different from more widely
 explored two-player games like Chess. Writing a computer player for
 Chinese Checkers will allow us to explore search algorithms and
-heuristics. We hope to discover what makes a multiplayer game
+heuristics. We hope to discover what makes a multi-player game
 different from a two-player game and what effect this has on the
 quality of a computer player.
 
@@ -97,24 +98,35 @@ iterative-deepening search and experimented with heuristics.
 \emph{cheech} is a free software implementation of Chinese Checkers
 \cite{cheech}. It provides a graphical interface and a network
 protocol. It appears that we can make our own program connect to
-\emph{cheech} as a player and thereby use the existing multiplayer
+\emph{cheech} as a player and thereby use the existing multi-player
 functionality and graphics.
 
 \chapter{Key ideas and delimitations} 
 \section{Why is the problem interesting or significant?  What will a solution achieve?}
 
-An interesting aspect of Chinese Checkers is that it's a multiplayer
+An interesting aspect of Chinese Checkers is that it's a multi-player
 game. This means that players can form temporary coalitions against
 other players. While traditional two-player strategies can be used to
 play the game they are not going to be able to play it perfectly.
 
 \section{The central idea in your solution}
-
-\emph{To be written\dots}
+Our solution will consist of an implementation of \emph{iterative
+  deepening depth-first-search} (IDDFS) \cite{aimodern}. This will be
+combined with a heuristic to form a kind of informed search. To
+improve the depth of our solution we will try and do some pruning of
+``bad'' plys, e.g.~those that do not move the player any closer to the
+goal state.
 
 \subsection{Why do you think it will work?}
+Our solution will work because we think that \emph{IDDFS} closely
+relates to how a human might play the game: first evaluating
+moves that are easily visible on the board and iteratively looking
+deeper (further) into what might happen.
 
-\emph{To be written\dots}
+Even though \cite{Huang:2001:SGP:378593.378708} does not report on the
+performance of \emph{IDDFS} we know that it at least has been used to
+some degree of success. The performance of our solution will of course
+depend heavily on finding good heuristics.
 
 \section{Define an instance of the problem. How will you measure the performance of your program?} 
 %%COMMENT:
@@ -134,21 +146,66 @@ is to count the number of moves a player is away from the goal state.
 \section{The scope of your work} 
 %%COMMENT:
 %%also, what interesting and related things are outside the scope of your proposal?
-
-Playing a perfect game must be outside our scope because it appears to
-be an open research problem.
+The scope of our project will be to try and challenge a set of amateur
+human players. In developing the program we will explore how the
+dynamics of the game changes in multi-player games. Playing a perfect
+game must be outside our scope because it appears to be an open
+research problem.
 
 \chapter{First results}
 %%COMMENT:
 %%A small piece of pseudo-code for a key part of the solution.  
+\section{Iterative deepening depth-first-search}
+A central part of our solution will be the \emph{IDDFS} algorithm.
+Shown below is the 
+high-level pseudocode for that algorithm \cite{aimodern}.\\
+\begin{algorithmic}
+\Function{ITERATIVE-DEEPENING-SEARCH}{problem}
+\For{$depth = 0 \to \infty$}
+\State $results \gets$ DEPTH-LIMITED-SEARCH($problem, depth$)
+\If {$results \not= cutoff$}
+\State \Return $result$
+\EndIf
+\EndFor
+\EndFunction
+\\
+\Function{DEPTH-LIMITED-SEARCH}{problem, limit}
+\State \Return RECURSIVE-DLS(MAKE-NODE($problem, $INITAL-STATE)$,problem, limit$)
+\EndFunction
+\\
+\Function{RECURSIVE-DLS}{node, problem, limit}
+\If{$problem.$GOAL-TEST($node.$STATE)}
+\State \Return SOLUTION($node$)
+\ElsIf{$limit = 0$}
+\State \Return $cutoff$
+\Else
+\State $cutoff\_occured? \gets false$
+\ForAll{$action$ in $problem.$ACTIONS($node.$STATE)}
+\State $child \gets$ CHILD-NODE($problem, node, action$)
+\State $result \gets$ RECURSIVE-DLS($child, problem, Emit - 1$)
+\If{$result = cutoff$}
+\State $cutoff\_occured? \gets true$
+\ElsIf{$result \not= failure$}
+\State \Return $result$
+\EndIf
+\EndFor
+\If{$cutoff\_occured?$}
+\Return $cutoff$
+\Else
+\Return $failure$
+\EndIf
+\EndIf
+\EndFunction
+\end{algorithmic}
 
-\emph{To be written\dots}
 
-% for each peg:
-%   estimate a weight
-% pick move with biggest weight
-
-%\chapter{Appendix}
+\chapter{Appendix}
+\section{List of project choices}
+\begin{itemize}
+\item NLP: Dialog system for the student helpdesk 
+\item ML: Recommender system for movies using content-based filtering
+\item Planning: Playing Chinese Checkers using iterative deepening depth-first search with heuristics
+\end{itemize}
 %%COMMENT:
 %%The first 3 sections (excluding title page and references) are limited to 3 pages. Here, you can put in anything that didn't fit in there, but that you still think is essential.
 

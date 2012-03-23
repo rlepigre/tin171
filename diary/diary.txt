@@ -1,2 +1,22 @@
+2012-03-16
+The group is formed and we decide to have a meeting on Monday.
+2012-03-19
+Our first meeting is a success. We decide on three projects: NLP1, L1
+and S1. There are two ideas for what game to use with S1, but after
+some deliberation (and a coin flip) we choose Chinese Checkers.
+We have a meeting with a supervisor tomorrow.
+2012-03-20
+We meet with a supervisor and ask him about our project ideas. There
+do not appear to be any problems with them. We receive some useful
+information and decide on how to divide the work for the rest of the
+week. Emil will research movie recommendation systems, Rodolphe takes
+care the dialogue system (looking into Grammatical Framework and other
+options). Göran and Salvo search for literature on Chinese Checkers.
+2012-03-21
+Göran writes a draft of the pre-proposal for the Chinese Checkers
+project.
 2012-03-22
 Created the add_entry script
+2012-03-22
+We all meet to work on the pre-proposal.
+(Fill in more here)
