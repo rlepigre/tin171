@@ -18,5 +18,15 @@ project.
 2012-03-22
 Created the add_entry script
 2012-03-22
-We all meet to work on the pre-proposal.
-(Fill in more here)
+We all meet to work on the pre-proposal. Salvo and Rodolphe have been
+trying to get cheech to compile and also tried to find alternatives to
+cheech. Salvo tells us about an old Master's thesis on the subject of
+Chinese Checkers and we learn a few things from that. The pre-proposal
+is almost finished.
+2012-03-23
+Our last meeting before the pre-proposal deadline. Emil announces that
+he's started working on a Chinese Checkers server written in Erlang.
+The state of freely available Chinese Checkers programs is pretty
+deplorable, so having our own game server may turn out to be a good
+idea. Emil has filled in the few missing parts of the pre-proposal.
+Only some small problems remain, which we fix before submitting.
