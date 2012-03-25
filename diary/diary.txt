@@ -30,3 +30,6 @@ The state of freely available Chinese Checkers programs is pretty
 deplorable, so having our own game server may turn out to be a good
 idea. Emil has filled in the few missing parts of the pre-proposal.
 Only some small problems remain, which we fix before submitting.
+2012-03-25
+Rodolphe begin to write the survey about the dialog system (NLP) and
+is also looking for additional references.
