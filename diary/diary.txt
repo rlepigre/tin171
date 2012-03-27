@@ -23,6 +23,12 @@ trying to get cheech to compile and also tried to find alternatives to
 cheech. Salvo tells us about an old Master's thesis on the subject of
 Chinese Checkers and we learn a few things from that. The pre-proposal
 is almost finished.
+
+Salvo and Rodolphe tried to compile some chinese checkers clients such as
+cheech. Which unfortunately uses library calls that do not exist anymore and
+would require some time to be fixed (and additional time to learn the GTK
+front end for C++).
+
 2012-03-23
 Our last meeting before the pre-proposal deadline. Emil announces that
 he's started working on a Chinese Checkers server written in Erlang.
@@ -31,5 +37,11 @@ deplorable, so having our own game server may turn out to be a good
 idea. Emil has filled in the few missing parts of the pre-proposal.
 Only some small problems remain, which we fix before submitting.
 2012-03-25
-Rodolphe begin to write the survey about the dialog system (NLP) and
+Rodolphe began to write the survey about the dialog system (NLP) and
 is also looking for additional references.
+2012-03-27
+We have agreed on a way to represent the board using an unidimensional array.
+
+Salvo started a GUI client, that will use PyQT libraries. Managed to find a
+nice vectorial board image on wikipedia and a way to modify it according to the
+array representation that we have decided to use for the board.
