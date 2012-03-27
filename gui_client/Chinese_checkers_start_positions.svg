@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+	xmlns:svg="http://www.w3.org/2000/svg"
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	version="1.0"
+	viewBox="200 200 600 600">
+	<title>Chinese Checkers Start Positions</title>
+	<defs>
+		<linearGradient id="LinearGradientWhite">
+			<stop style="stop-color:#ffffff;stop-opacity:1" offset="0" />
+			<stop style="stop-color:#e8e8e8;stop-opacity:1" offset="0.8" />
+			<stop style="stop-color:#c0c0c0;stop-opacity:1" offset="1" />
+		</linearGradient>
+		<linearGradient id="LinearGradientRed">
+			<stop style="stop-color:#ff9999;stop-opacity:1" offset="0" />
+			<stop style="stop-color:#d32d2d;stop-opacity:1" offset="0.8" />
+			<stop style="stop-color:#b40000;stop-opacity:1" offset="1" />
+		</linearGradient>
+		<linearGradient id="LinearGradientOrange">
+			<stop style="stop-color:#ffe4c1;stop-opacity:1" offset="0" />
+			<stop style="stop-color:#ff9a19;stop-opacity:1" offset="0.72" />
+			<stop style="stop-color:#f08800;stop-opacity:1" offset="1" />
+		</linearGradient>
+		<linearGradient id="LinearGradientYellow">
+			<stop style="stop-color:#fffbc1;stop-opacity:1" offset="0" />
+			<stop style="stop-color:#e7dc29;stop-opacity:1" offset="0.75" />
+			<stop style="stop-color:#c8bc00;stop-opacity:1" offset="1" />
+		</linearGradient>
+		<linearGradient id="LinearGradientBlue">
+			<stop style="stop-color:#b9b9ff;stop-opacity:1" offset="0" />
+			<stop style="stop-color:#3131cf;stop-opacity:1" offset="0.8" />
+			<stop style="stop-color:#0000b4;stop-opacity:1" offset="1" />
+		</linearGradient>
+		<linearGradient id="LinearGradientGreen">
+			<stop style="stop-color:#00eb00;stop-opacity:1" offset="0" />
+			<stop style="stop-color:#00b600;stop-opacity:1" offset="0.5" />
+			<stop style="stop-color:#005000;stop-opacity:1" offset="1" />
+		</linearGradient>
+		<linearGradient id="LinearGradientPurple">
+			<stop style="stop-color:#ebcef2;stop-opacity:1" offset="0" />
+			<stop style="stop-color:#ac37c9;stop-opacity:1" offset="0.8" />
+			<stop style="stop-color:#79278d;stop-opacity:1" offset="1" />
+		</linearGradient>
+		<filter id="StoneDropShadow" x="-0.25" y="-0.25" width="1.5" height="1.5" color-interpolation-filters="sRGB">
+			<feGaussianBlur result="blur" stdDeviation="2" in="SourceAlpha" />
+			<feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.4 0 " type="matrix" result="bluralpha" />
+			<feOffset result="offsetBlur" dy="2" dx="2" in="bluralpha" />
+			<feMerge><feMergeNode in="offsetBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
+		</filter>
+		<radialGradient id="RadialGradientWhite" xlink:href="#LinearGradientWhite"
+			cx="0" cy="0" r="16" fx="8" fy="8" gradientUnits="userSpaceOnUse" />
+		<radialGradient id="RadialGradientRed" xlink:href="#LinearGradientRed"
+			cx="0" cy="0" r="16" fx="-6" fy="-6" gradientUnits="userSpaceOnUse" />
+		<radialGradient id="RadialGradientOrange" xlink:href="#LinearGradientOrange"
+			cx="0" cy="0" r="16" fx="-6" fy="-6" gradientUnits="userSpaceOnUse" />
+		<radialGradient id="RadialGradientYellow" xlink:href="#LinearGradientYellow"
+			cx="0" cy="0" r="16" fx="-6" fy="-6" gradientUnits="userSpaceOnUse" />
+		<radialGradient id="RadialGradientGreen" xlink:href="#LinearGradientGreen"
+			cx="0" cy="0" r="16" fx="-6" fy="-6" gradientUnits="userSpaceOnUse" />
+		<radialGradient id="RadialGradientBlue" xlink:href="#LinearGradientBlue"
+			cx="0" cy="0" r="16" fx="-6" fy="-6" gradientUnits="userSpaceOnUse" />
+		<radialGradient id="RadialGradientPurple" xlink:href="#LinearGradientPurple"
+			cx="0" cy="0" r="16" fx="-6" fy="-6" gradientUnits="userSpaceOnUse" />
+		<circle id="WhiteHole" cx="0" cy="0" r="16"
+			style="fill:url(#RadialGradientWhite);stroke:#cccccc;stroke-width:2" />
+		<circle id="RedBall" cx="0" cy="0" r="16"
+			style="fill:url(#RadialGradientRed);stroke:#999999;stroke-width:1;filter:url(#StoneDropShadow)" />
+		<circle id="OrangeBall" cx="0" cy="0" r="16"
+			style="fill:url(#RadialGradientOrange);stroke:#aaaaaa;stroke-width:1;filter:url(#StoneDropShadow)" />
+		<circle id="YellowBall" cx="0" cy="0" r="16"
+			style="fill:url(#RadialGradientYellow);stroke:#bbbbbb;stroke-width:1;filter:url(#StoneDropShadow)" />
+		<circle id="GreenBall" cx="0" cy="0" r="16"
+			style="fill:url(#RadialGradientGreen);stroke:#999999;stroke-width:1;filter:url(#StoneDropShadow)" />
+		<circle id="BlueBall" cx="0" cy="0" r="16"
+			style="fill:url(#RadialGradientBlue);stroke:#999999;stroke-width:1;filter:url(#StoneDropShadow)" />
+		<circle id="PurpleBall" cx="0" cy="0" r="16"
+			style="fill:url(#RadialGradientPurple);stroke:#999999;stroke-width:1;filter:url(#StoneDropShadow)" />
+	</defs>
+	<path id="Mainstar" style="fill:#e6e6e6;stroke:#808080;stroke-width:5;filter:url(#StoneDropShadow)"
+		d="m 258.55302,347.00013 c -11.77794,0 -17.88058,10.32639 -11.77795,20.4 L 313.3409,482.6955 c 6.93083,12.00455 6.93082,22.60469 0,34.60924 l -66.56583,115.29539 c -5.88897,10.19999 0,20.4 11.77795,20.4 l 133.13166,0 c 13.86164,0 23.04164,5.30007 29.97247,17.30462 l 66.5658,115.29538 c 5.94943,10.16486 17.66693,10.2 23.5559,0 l 66.56583,-115.29539 c 6.93082,-12.00455 16.11081,-17.30462 29.97247,-17.30462 l 133.13164,0 c 11.77794,0 17.66692,-10.20001 11.77795,-20.4 L 686.6609,517.30474 c -6.93082,-12.00455 -6.93083,-22.60469 0,-34.60924 l 66.56584,-115.29537 c 5.88897,-10.19999 0,-20.4 -11.77795,-20.4 l -133.13166,0 c -13.86165,0 -23.04165,-5.30007 -29.97248,-17.30462 l -66.5658,-115.29538 c -5.88897,-10.2 -17.66693,-10.2 -23.5559,0 l -66.56582,115.29539 c -6.93083,12.00455 -16.11082,17.30462 -29.97247,17.30462 z" />
+	<g id="GroupWhite">
+		<use xlink:href="#WhiteHole" transform="translate(352,500)" />
+		<use xlink:href="#WhiteHole" transform="translate(389,500)" />
+		<use xlink:href="#WhiteHole" transform="translate(426,500)" />
+		<use xlink:href="#WhiteHole" transform="translate(463,500)" />
+		<use xlink:href="#WhiteHole" transform="translate(500,500)" />
+		<use xlink:href="#WhiteHole" transform="translate(537,500)" />
+		<use xlink:href="#WhiteHole" transform="translate(574,500)" />
+		<use xlink:href="#WhiteHole" transform="translate(611,500)" />
+		<use xlink:href="#WhiteHole" transform="translate(648,500)" />
+		<use xlink:href="#WhiteHole" transform="translate(370.5,467.95706)" />
+		<use xlink:href="#WhiteHole" transform="translate(407.5,467.95706)" />
+		<use xlink:href="#WhiteHole" transform="translate(444.5,467.95706)" />
+		<use xlink:href="#WhiteHole" transform="translate(481.5,467.95706)" />
+		<use xlink:href="#WhiteHole" transform="translate(518.5,467.95706)" />
+		<use xlink:href="#WhiteHole" transform="translate(555.5,467.95706)" />
+		<use xlink:href="#WhiteHole" transform="translate(592.5,467.95706)" />
+		<use xlink:href="#WhiteHole" transform="translate(629.5,467.95706)" />
+		<use xlink:href="#WhiteHole" transform="translate(389,435.91412)" />
+		<use xlink:href="#WhiteHole" transform="translate(426,435.91412)" />
+		<use xlink:href="#WhiteHole" transform="translate(463,435.91412)" />
+		<use xlink:href="#WhiteHole" transform="translate(500,435.91412)" />
+		<use xlink:href="#WhiteHole" transform="translate(537,435.91412)" />
+		<use xlink:href="#WhiteHole" transform="translate(574,435.91412)" />
+		<use xlink:href="#WhiteHole" transform="translate(611,435.91412)" />
+		<use xlink:href="#WhiteHole" transform="translate(407.5,403.87118)" />
+		<use xlink:href="#WhiteHole" transform="translate(444.5,403.87118)" />
+		<use xlink:href="#WhiteHole" transform="translate(481.5,403.87118)" />
+		<use xlink:href="#WhiteHole" transform="translate(518.5,403.87118)" />
+		<use xlink:href="#WhiteHole" transform="translate(555.5,403.87118)" />
+		<use xlink:href="#WhiteHole" transform="translate(592.5,403.87118)" />
+		<use xlink:href="#WhiteHole" transform="translate(426,371.82824)" />
+		<use xlink:href="#WhiteHole" transform="translate(463,371.82824)" />
+		<use xlink:href="#WhiteHole" transform="translate(500,371.82824)" />
+		<use xlink:href="#WhiteHole" transform="translate(537,371.82824)" />
+		<use xlink:href="#WhiteHole" transform="translate(574,371.82824)" />
+		<use xlink:href="#WhiteHole" transform="translate(370.5,532.04294)" />
+		<use xlink:href="#WhiteHole" transform="translate(407.5,532.04294)" />
+		<use xlink:href="#WhiteHole" transform="translate(444.5,532.04294)" />
+		<use xlink:href="#WhiteHole" transform="translate(481.5,532.04294)" />
+		<use xlink:href="#WhiteHole" transform="translate(518.5,532.04294)" />
+		<use xlink:href="#WhiteHole" transform="translate(555.5,532.04294)" />
+		<use xlink:href="#WhiteHole" transform="translate(592.5,532.04294)" />
+		<use xlink:href="#WhiteHole" transform="translate(629.5,532.04294)" />
+		<use xlink:href="#WhiteHole" transform="translate(389,564.08588)" />
+		<use xlink:href="#WhiteHole" transform="translate(426,564.08588)" />
+		<use xlink:href="#WhiteHole" transform="translate(463,564.08588)" />
+		<use xlink:href="#WhiteHole" transform="translate(500,564.08588)" />
+		<use xlink:href="#WhiteHole" transform="translate(537,564.08588)" />
+		<use xlink:href="#WhiteHole" transform="translate(574,564.08588)" />
+		<use xlink:href="#WhiteHole" transform="translate(611,564.08588)" />
+		<use xlink:href="#WhiteHole" transform="translate(407.5,596.12882)" />
+		<use xlink:href="#WhiteHole" transform="translate(444.5,596.12882)" />
+		<use xlink:href="#WhiteHole" transform="translate(481.5,596.12882)" />
+		<use xlink:href="#WhiteHole" transform="translate(518.5,596.12882)" />
+		<use xlink:href="#WhiteHole" transform="translate(555.5,596.12882)" />
+		<use xlink:href="#WhiteHole" transform="translate(592.5,596.12882)" />
+		<use xlink:href="#WhiteHole" transform="translate(426,628.17176)" />
+		<use xlink:href="#WhiteHole" transform="translate(463,628.17176)" />
+		<use xlink:href="#WhiteHole" transform="translate(500,628.17176)" />
+		<use xlink:href="#WhiteHole" transform="translate(537,628.17176)" />
+		<use xlink:href="#WhiteHole" transform="translate(574,628.17176)" />
+	</g>
+	<g id="GroupRed">
+		<use xlink:href="#RedBall" transform="translate(555.5,660.2148)" />
+		<use xlink:href="#RedBall" transform="translate(518.5,660.2148)" />
+		<use xlink:href="#RedBall" transform="translate(481.5,660.2148)" />
+		<use xlink:href="#RedBall" transform="translate(444.5,660.2148)" />
+		<use xlink:href="#RedBall" transform="translate(537,692.25774)" />
+		<use xlink:href="#RedBall" transform="translate(500,692.25774)" />
+		<use xlink:href="#RedBall" transform="translate(463,692.25774)" />
+		<use xlink:href="#RedBall" transform="translate(518.5,724.30068)" />
+		<use xlink:href="#RedBall" transform="translate(481.5,724.30068)" />
+		<use xlink:href="#RedBall" transform="translate(500,756.34362)" />
+	</g>
+	<g id="GroupOrange">
+		<use xlink:href="#OrangeBall" transform="translate(666.5,532.04295)" />
+		<use xlink:href="#OrangeBall" transform="translate(648,564.08589)" />
+		<use xlink:href="#OrangeBall" transform="translate(629.5,596.12883)" />
+		<use xlink:href="#OrangeBall" transform="translate(611,628.17177)" />
+		<use xlink:href="#OrangeBall" transform="translate(685,564.08589)" />
+		<use xlink:href="#OrangeBall" transform="translate(666.5,596.12883)" />
+		<use xlink:href="#OrangeBall" transform="translate(648,628.17177)" />
+		<use xlink:href="#OrangeBall" transform="translate(703.5,596.12883)" />
+		<use xlink:href="#OrangeBall" transform="translate(685,628.17177)" />
+		<use xlink:href="#OrangeBall" transform="translate(722,628.17177)" />
+	</g>
+	<g id="GroupYellow">
+		<use xlink:href="#YellowBall" transform="translate(611,371.82824)" />
+		<use xlink:href="#YellowBall" transform="translate(629.5,403.87118)" />
+		<use xlink:href="#YellowBall" transform="translate(648,435.91412)" />
+		<use xlink:href="#YellowBall" transform="translate(666.5,467.95706)" />
+		<use xlink:href="#YellowBall" transform="translate(648,371.82824)" />
+		<use xlink:href="#YellowBall" transform="translate(666.5,403.87118)" />
+		<use xlink:href="#YellowBall" transform="translate(685,435.91412)" />
+		<use xlink:href="#YellowBall" transform="translate(685,371.82824)" />
+		<use xlink:href="#YellowBall" transform="translate(703.5,403.87118)" />
+		<use xlink:href="#YellowBall" transform="translate(722,371.82824)" />
+	</g>
+	<g id="GroupGreen">
+		<use xlink:href="#GreenBall" transform="translate(444.5,339.7853)" />
+		<use xlink:href="#GreenBall" transform="translate(481.5,339.7853)" />
+		<use xlink:href="#GreenBall" transform="translate(518.5,339.7853)" />
+		<use xlink:href="#GreenBall" transform="translate(555.5,339.7853)" />
+		<use xlink:href="#GreenBall" transform="translate(463,307.74236)" />
+		<use xlink:href="#GreenBall" transform="translate(500,307.74236)" />
+		<use xlink:href="#GreenBall" transform="translate(537,307.74236)" />
+		<use xlink:href="#GreenBall" transform="translate(481.5,275.69942)" />
+		<use xlink:href="#GreenBall" transform="translate(518.5,276.46937)" />
+		<use xlink:href="#GreenBall" transform="translate(500,243.65648)" />
+	</g>
+	<g id="GroupBlue">
+		<use xlink:href="#BlueBall" transform="translate(333.5,467.95705)" />
+		<use xlink:href="#BlueBall" transform="translate(352,435.91411)" />
+		<use xlink:href="#BlueBall" transform="translate(370.5,403.87117)" />
+		<use xlink:href="#BlueBall" transform="translate(389,371.82823)" />
+		<use xlink:href="#BlueBall" transform="translate(315,435.91411)" />
+		<use xlink:href="#BlueBall" transform="translate(333.5,403.87117)" />
+		<use xlink:href="#BlueBall" transform="translate(352,371.82823)" />
+		<use xlink:href="#BlueBall" transform="translate(296.5,403.87117)" />
+		<use xlink:href="#BlueBall" transform="translate(315,371.82823)" />
+		<use xlink:href="#BlueBall" transform="translate(278,371.82823)" />
+	</g>
+	<g id="GroupPurple">
+		<use xlink:href="#PurpleBall" transform="translate(388.99998,628.17177)" />
+		<use xlink:href="#PurpleBall" transform="translate(370.49998,596.12883)" />
+		<use xlink:href="#PurpleBall" transform="translate(351.99998,564.08589)" />
+		<use xlink:href="#PurpleBall" transform="translate(333.49998,532.04295)" />
+		<use xlink:href="#PurpleBall" transform="translate(351.99998,628.17177)" />
+		<use xlink:href="#PurpleBall" transform="translate(333.49998,596.12883)" />
+		<use xlink:href="#PurpleBall" transform="translate(314.99998,564.08589)" />
+		<use xlink:href="#PurpleBall" transform="translate(314.99998,628.17177)" />
+		<use xlink:href="#PurpleBall" transform="translate(296.49998,596.12883)" />
+		<use xlink:href="#PurpleBall" transform="translate(277.99998,628.17177)" />
+	</g>
+</svg>
