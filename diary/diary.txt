@@ -1,10 +1,12 @@
 2012-03-16
 The group is formed and we decide to have a meeting on Monday.
+
 2012-03-19
 Our first meeting is a success. We decide on three projects: NLP1, L1
 and S1. There are two ideas for what game to use with S1, but after
 some deliberation (and a coin flip) we choose Chinese Checkers.
 We have a meeting with a supervisor tomorrow.
+
 2012-03-20
 We meet with a supervisor and ask him about our project ideas. There
 do not appear to be any problems with them. We receive some useful
@@ -12,11 +14,14 @@ information and decide on how to divide the work for the rest of the
 week. Emil will research movie recommendation systems, Rodolphe takes
 care the dialogue system (looking into Grammatical Framework and other
 options). Göran and Salvo search for literature on Chinese Checkers.
+
 2012-03-21
 Göran writes a draft of the pre-proposal for the Chinese Checkers
 project.
+
 2012-03-22
 Created the add_entry script
+
 2012-03-22
 We all meet to work on the pre-proposal. Salvo and Rodolphe have been
 trying to get cheech to compile and also tried to find alternatives to
@@ -36,12 +41,60 @@ The state of freely available Chinese Checkers programs is pretty
 deplorable, so having our own game server may turn out to be a good
 idea. Emil has filled in the few missing parts of the pre-proposal.
 Only some small problems remain, which we fix before submitting.
-2012-03-25
-Rodolphe began to write the survey about the dialog system (NLP) and
-is also looking for additional references.
-2012-03-27
-We have agreed on a way to represent the board using an unidimensional array.
 
-Salvo started a GUI client, that will use PyQT libraries. Managed to find a
-nice vectorial board image on wikipedia and a way to modify it according to the
-array representation that we have decided to use for the board.
+2012-03-25
+Rodolphe begins to write the survey about the dialog system (NLP) and
+is also looking for additional references.
+
+2012-03-27
+We have a meeting with our supervisor, Birgit. In section 1.2 we write
+that "it is not clear how well [the algorithms] play against humans."
+We talk about having bots play against ourselves, against themselves
+and against existing bots.
+
+We should start by playing a two-player game and then extend it to
+three players, etc. It's a good idea to get it working for two
+players, in order to have something solid on which to improve. Then we
+can move on to the more difficult things.
+
+We show Birgit the diary. It gets a positive reaction. Rodolphe notes
+that the git changelog is complementary to the diary.
+
+Emil asks for advice on how to divide the work. We can work on
+different tasks; not everyone has to work on the surveys, and not
+everyone has to work on the proposal, etc. But we must of course all
+know what it is we are putting our names on. We must know the
+material.
+
+We need to read more in the literature. Göran asks about literature on
+games that might be similar. It seems difficult to find similar games.
+But the strategies used to play other games will likely work out here
+as well: alpha-beta, minmax, etc. For some games of chance people have
+used Markov chains and randomized Markov models. The most common is a
+tree search combined with heuristics. We'll need some sort of board
+state evaluation function. The thesis we're going to reference writes
+about these. We could try to form "strategies" and try to device a
+plan to take us to some nice board state. We could try to emulate what
+we think humans do.
+
+Göran asks how the pre-proposal needs to be improved in order to make
+it a proposal. First of all we need to find more literature and write
+about it (or convince Birgit that there is no more literature to be
+found). The sections in chapter 2 need to be longer and we need more
+details about the central idea of our solution. The pseudo code must
+be more specific to our own problem. We should be more precise about
+first playing a two-player game and then playing against more players
+and against other programs. One or two additional pages are needed.
+
+The surveys should focus on some particular problem, not on the whole
+field. In our case that would be the movie recommendation system and
+the helpdesk dialog system. We don't have to write pseudo code or
+write about how we would solve the problem. We might describe the
+methods that are normally used to solve it.
+
+After our meeting with Birgit we have a short informal meeting. Emil
+shows us a network protocol he's been working on and we give him some
+feedback on how to improve it. Salvo has been working on a GUI. Göran
+will start on the proposal and Rodolphe will be working on the NLP
+survey. Our next meeting is tomorrow.
+It was agreed a way to represent the board using an unidimensional array.
