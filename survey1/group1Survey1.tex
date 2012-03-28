@@ -8,7 +8,8 @@
 \rhead{}
 %\renewcommand{\headrulewidth}{0.0pt}
 
-\lfoot{Group X: Y survey}
+\lfoot{Group 1: NLP1 survey}
+%\lfoot{Group X: Y survey}
 %COMMENT: Y is the topic which has been assigned to you
 \cfoot{\thepage}
 \rfoot{}
@@ -27,55 +28,102 @@
 
 \begin{document}
 %-----------------------------------------------------------
-\title{
-(probably) The same title\\
-you used \\
-for your pre-proposal\\}
-\author{Group X: Author 1, Author 2, Author 3, Author 4}
+\title{Natural language processing\\
+in a dialog system for a student help-desk} % TODO title ?
+\author{Group 1: Emil Falk, Rodolphe Lepigre,\\
+        Salvatore Tomaselli, G\"oran Weinholt}
 \maketitle
 %-----------------------------------------------------------
 \begin{abstract}\centering
 %%COMMENT
-no more than 10 lines!
+Dialog systems are AI systems in which an agent is capable of interaction with
+an user through natural language. We give some hints of how to build such a
+system in the context of a student help-desk. More precisely, this system
+should allow an user (supposedly a student) to ask specific questions through
+a terminal, and get useful answers back from the system. To be able to build
+such a system we will use tools like the Grammatical Framework (GF) that is
+described in \cite{ranta-2011}.
 \end{abstract}
 
 \section{Introduction}
 \subsection{The problem or area you are interested in}
-(extract an accurate description of the problem from the project
-description or from your pre-proposal, or lift that material to a general problem specification)
+% Extract an accurate description of the problem from the project description or
+% from your pre-proposal, or lift that material to a general problem specificat-
+% ion.
+Natural language processing is a very wide topic. In this survey we only
+consider written natural language processing, but there exists plenty softwares
+that can recognise spoken language, or the mood of the user through its
+intonation. In our case, the user will interact with the machine by typing
+questions into a terminal using a ``chat'' format. The program will then parse
+the question and analyse its content in order to give an answer that is as
+relevant as possible.
 
 \subsection{Significance}
-(Why is the problem interesting or significant? What will a solution achieve?)
+% Why is the problem interesting or significant? What will a solution achieve?
+This problem seems interesting to us because it would give an alternative to
+the usual FAQ interface that most websites offer. The student help-desk example
+seems appropriate since there are plenty of data that we can use as a knowledge
+base for out system.
 
 \subsection{Aspects of the problem covered by this survey}
-(describe these briefly. You could write a small paragraph for each of them, highlighting keywords, and citing the relevant papers. The keywords could be used as sub-section headings in the survey proper, in section 3.)
+% Describe these briefly. You could write a small paragraph for each of them,
+% highlighting keywords, and citing the relevant papers. The keywords could be
+% used as sub-section headings in the survey proper, in section 3.)
+% TODO
+% I think we should only consider the grammar part, and a very simple grammar
+% (that does not allow a lot of questions).
 
 \subsection{Important aspects of the problem not covered here}
-(Aspects of the problem one must know to understand it completely, but not included in the discussion. Use this subsection to ensure a good coverage of the relevant literature without going through much detail)
+% Aspects of the problem one must know to understand it completely, but not
+% included in the discussion. Use this subsection to ensure a good coverage of
+% the relevant literature without going through much detail.
+% TODO
+% There we should talk about "syntax understanding", how the program "underst-
+% ands" a question.
 
 \section{Framework}
-(Here you describe which solution approach(es) you would have chosen if
-this would have been your course project. Use your own words, write down
-definitions, etc., )
+% Here you describe which solution approach(es) you would have chosen if this
+% would have been your course project. Use your own words, write down
+% definitions, etc., )
+% TODO
+% Here description of GF + a few things about the Haskell interface (abstract
+% syntax). How does it work together with the parser, ...
+
 \subsection{Define formally an instance of the problem}
-(Either mathematically, or using pseudo-code. Also, give an example)
+% Either mathematically, or using pseudo-code. Also, give an example.
+% TODO
+% This should be easy, just simulate a "chat" between the program and an user.
+
 \subsection{Benchmarks}
-(How would you measure the performance of a program that solves the problem?
-Find instances/benchmarks, or make your own).
+% How would you measure the performance of a program that solves the problem?
+% Find instances/benchmarks, or make your own).
+% TODO
+% I don't really know what should be here...
 
 \section{Survey}
 \subsection{Results from the literature}
-(describe briefly the scientific papers you found relevant to the problem.  Ideally, a commented summary of each paper, like an extended annotation.  Cite references. You could organize this section by keyword, one sub-section for each keyword you specified in 1.3).
+% Describe briefly the scientific papers you found relevant to the problem.
+% Ideally, a commented summary of each paper, like an extended annotation.
+% Cite references. You could organize this section by keyword, one sub-section
+% for each keyword you specified in 1.3.
+% TODO
+% I still have to find some references.
 
 \subsection{Tools and programs available for the problem, or for closely related ones}
-(describe these briefly. Say how they can be used, and how a solution to your problem can build on them, or differ from them).
+% Describe these briefly. Say how they can be used, and how a solution to your
+% problem can build on them, or differ from them.
+% TODO
+% Obviously some stuff about GF, and it would be nice to talk about other
+% sytems too.
 
-\section{References}
+% \section{References}
+\bibliographystyle{aiaa}
+\bibliography{refs}
 
-For instructions on how to handle references, please see the template for
-the project proposal.
-
-
-\section{Appendix}
-The previous sections (excluding title page and references) are limited to 6 pages. Here, you can put in anything that didn't fit in there, but that you still think is essential.
+% \section{Appendix}
+% The previous sections (excluding title page and references) are limited to 6
+% pages. Here, you can put in anything that didn't fit in there, but that you
+% still think is essential.
+% TODO
+% We probably won't need an apendix.
 \end{document}
