@@ -29,7 +29,7 @@
 \begin{document}
 %-----------------------------------------------------------
 \title{Fun With Chinese Checkers}
-\author{Group 1: Emil Falk, Rodolphe Lepigre, Salvatore Tomaselli, G\"oran Weinholt}
+\author{Group 1: Emil Falk, Rodolphe Lepigre, \\ Salvatore Tomaselli, G\"oran Weinholt}
 \maketitle
 %-----------------------------------------------------------
 \begin{abstract}\centering
@@ -65,64 +65,110 @@ objective is to move all pegs to the opposing corner.
 
 Sturtevant has explored the max$^n$ and paranoid algorithms in
 relation to Chinese Checkers
-\cite{springerlink:10.1007/978-3-540-40031-8_8}. Later on he also
+\cite{springerlink:10.1007/978-3-540-40031-8_8}. The max$^n$ algorithm
+is a generalisation of minimax to $n$-player games. The paranoid
+algorithm uses the idea that all other players have formed a coalition
+(which means there are only really two players). Later on he also
 evaluated the UCT algorithm
-\cite{springerlink:10.1007/978-3-540-87608-3_4}. The algorithms were
-pitted against each other and it is not clear how well they play
-against humans, but we will assume that they are adequate.
+\cite{springerlink:10.1007/978-3-540-87608-3_4}, which is described as
+``Monte-Carlo-like'' and quite effective against max$^n$, but
+requiring a lot of computation time.
 
 An interesting point that Sturtevant makes is that multi-player games
 (i.e.~Chinese Checkers) are difficult for computers for two reasons:
 search strategies are less effective than for two-player games and
 there is a need for opponent modelling which is normally not required.
 
-Research into programs that play games is likely to be geared towards
-producing strong programs that one day will be able to beat the best
-human players. Perhaps a weaker program would be just as suitable for
-our needs. Huang describes a contest in which he supervised students
-who wrote programs to play Chinese Checkers
-\cite{Huang:2001:SGP:378593.378708}. The students used
-iterative-deepening search and experimented with heuristics.
+Huang describes a contest in which he supervised students who wrote
+programs to play Chinese Checkers \cite{Huang:2001:SGP:378593.378708}.
+The students used iter\-ative-deep\-ening search and experimented with
+heuristics. We believe that this will be a good way of starting our
+project.
+
+Ulfhake reports on a program for two-player Chinese Checkers
+\cite{ulfhake}. The program has a variety of search algorithms
+available, including different variants of alphabeta and minimax
+search. Something particularly interesting to us is her description of
+the heuristics she used. The program was reported to play excellently
+against human players. Ulfhake also mentions that finding literature
+on computer programs playing Chinese Checkers was very difficult.
+
+%% Research into programs that play games is likely to be geared towards
+%% producing strong programs that one day will be able to beat the best
+%% human players. Perhaps a weaker program would be just as suitable for
+%% our needs.
 
 \subsection{What tools and programs are already available for the problem, or for closely related ones?}
-%(describe these briefly. Say how you can use them, and how your work will build on them, or differ from them). 
+%(describe these briefly. Say how you can use them, and how your work will build on them, or differ from them).
 
 \emph{cheech} is a free software implementation of Chinese Checkers
 \cite{cheech}. It provides a graphical interface and a network
-protocol. It appears that we can make our own program connect to
-\emph{cheech} as a player and thereby use the existing multi-player
-functionality and graphics.
+protocol. It initially appeared to us that we could make our own
+program connect to \emph{cheech} as a player and thereby use the
+existing multi-player functionality and graphics. Unfortunately the
+program has suffered significant bit rot. We evaluated half a dozen
+alternatives and found that none of them still work properly. That
+being said, we can copy the architectural ideas used in \emph{cheech}.
 
-\section{Key ideas and delimitations} 
+\section{Key ideas and delimitations}
 \subsection{Why is the problem interesting or significant?  What will a solution achieve?}
 
 An interesting aspect of Chinese Checkers is that it's a multi-player
 game. This means that players can form temporary coalitions against
 other players. While traditional two-player strategies can be used to
-play the game they are not going to be able to play it perfectly.
+play the game they are not going to be able to play it perfectly and
+in this sense Chinese Checkers is still an open problem. Working on an
+open problem is always interesting.
+
+The multi-player attribute will provide a good setting for objectively
+evaluating the performance of different algorithms and heuristics. The
+existing literature is somewhat sparse on how existing computer
+programs fare against humans in multi-player Chinese Checkers, and
+maybe we can give a more detailed account.
 
 \subsection{The central idea in your solution}
 
-Our solution will consist of an implementation of \emph{iterative
+The architecture of our solution will consist of three parts: a game
+server, a graphical game client and several autonomous game clients. A
+network protocol has been specified and the server and the graphical
+client are already well under way.
+
+Initially our program will be playing a two-player variant of Chinese
+Checkers. When it is working properly we will try with more players.
+We will be using an iterative development model that emphasizes
+getting the basics up and running quickly.
+
+Our first computer player will be an implementation of \emph{iterative
   deepening depth-first-search} (IDDFS) \cite{aimodern}. This will be
-combined with a heuristic to form a kind of informed search. To
-improve the depth of our solution we will try and do some pruning of
-``bad'' plys, e.g.~those that do not move the player any closer to the
-goal state.
+combined with heuristics to form a kind of informed search. To improve
+the depth of our solution we will try and do some pruning of ``bad''
+plys, e.g.~those that do not move the player any closer to the goal
+state. The heuristics described in \cite{ulfhake} will be very useful
+for this task. Our first heuristic can be simple: some board
+evaluation function based on how close pegs are to the goal, and a
+disincentive to leave pegs in the starting position.
+
+The literature describes algorithms that are more capable than
+\emph{IDDFS}. An iterative development model means that we will be
+making continual improvements to our program, and it is likely that we
+will attempt to use some of the more capable algorithms later on. Our
+first programs can be preserved for later programs to play against.
 
 \subsubsection{Why do you think it will work?}
 
 Our solution will work because we think that \emph{IDDFS} closely
-relates to how a human might play the game: first evaluating
-moves that are easily visible on the board and iteratively looking
-deeper (further) into what might happen.
+relates to how a human might play the game: first evaluating moves
+that are easily visible on the board and iteratively looking deeper
+(further) into what might happen.
 
 Even though \cite{Huang:2001:SGP:378593.378708} does not report on the
 performance of \emph{IDDFS} we know that it at least has been used to
 some degree of success. The performance of our solution will of course
-depend heavily on finding good heuristics.
+depend heavily on finding good heuristics. The first program might not
+win any contests but it will be able to play the game, because our
+heuristics can force it to make forward progress.
 
-\subsection{Define an instance of the problem. How will you measure the performance of your program?} 
+\subsection{Define an instance of the problem. How will you measure the performance of your program?}
 %(You must know this in advance, find instances /benchmarks, or make your own).
 
 The program should play a game in the same way a human would play: the
@@ -131,26 +177,32 @@ one instance of the problem, but from the perspective of analysing the
 game every intermediate state of the board may also be considered an
 instance.
 
-The \emph{cheech} program includes a number of bots that we can have
-play against our program. The program that wins the most games will
-clearly be the better program. Another metric, which Sturtevant used,
-is to count the number of moves a player is away from the goal state.
+We want to evaluate the program's performance by having it play
+against ourselves and other bots.
 
-\subsection{The scope of your work} 
+
+\subsection{The scope of your work}
 %(also, what interesting and related things are outside the scope of your proposal?)
 
-The scope of our project will be to try and challenge a set of amateur
-human players. In developing the program we will explore how the
-dynamics of the game changes in multi-player games. Playing a perfect
-game must be outside our scope because it appears to be an open
-research problem.
+The scope of our project will ultimately be to try and challenge a set
+of amateur human players. The first version of the program will play a
+two-player game and this will later be extended to a multi-player
+game. In developing the program we will explore how the dynamics of
+the game changes in the multi-player version. Our program will be able
+to play against itself, against humans, and against other programs. An
+evaluation of the different versions of the program will be written.
+
+Playing a perfect game must be outside our scope because it appears to
+be an open research problem.
 
 \section{First results}
 %(A small piece of pseudo-code for a key part of the solution. )
 
-\section{Iterative deepening depth-first-search}
+%% TODO: more specific to our own problem
+
+\subsection{Iterative deepening depth-first-search}
 A central part of our solution will be the \emph{IDDFS} algorithm.
-Shown below is the 
+Shown below is the
 high-level pseudocode for that algorithm \cite{aimodern}.\\
 \begin{algorithmic}
 \Function{ITERATIVE-DEEPENING-SEARCH}{\emph{problem}}
@@ -173,17 +225,17 @@ high-level pseudocode for that algorithm \cite{aimodern}.\\
 \ElsIf{\emph{limit} = 0}
 \State \Return \emph{cutoff}
 \Else
-\State \emph{cutoff\_occured?} $\gets$ \emph{false}
+\State \emph{cutoff\_occurred?} $\gets$ \emph{false}
 \ForAll{\emph{action} in \emph{problem}.ACTIONS(\emph{node}.STATE)}
 \State \emph{child} $\gets$ CHILD-NODE(\emph{problem, node, action})
 \State \emph{result} $\gets$ RECURSIVE-DLS(\emph{child, problem, Emit - 1})
 \If{\emph{result} = \emph{cutoff}}
-\State \emph{cutoff\_occured?} $\gets$ \emph{true}
+\State \emph{cutoff\_occurred?} $\gets$ \emph{true}
 \ElsIf{\emph{result} $\not=$ \emph{failure}}
 \State \Return \emph{result}
 \EndIf
 \EndFor
-\If{\emph{cutoff\_occured?}}
+\If{\emph{cutoff\_occurred?}}
 \Return \emph{cutoff}
 \Else
 \ \Return \emph{failure}
@@ -207,8 +259,8 @@ high-level pseudocode for that algorithm \cite{aimodern}.\\
 % and have the following three paragraphs:
 % \begin{enumerate}
 % \item Author(s) [year of publication], ``Title of paper'', Journal (or conference etc.), location data (i.e., volume numbers, etc. needed to find the item), a live www link if available.
-% \item A couple of lines saying what question the paper is attacking, and what the proposed solution is. Or what topic the reference deals with (your textbook has excellent examples in the sections entitled ``Bibilographical and Historical notes''). 
-% \item A pointer back to where you cite this reference. 
+% \item A couple of lines saying what question the paper is attacking, and what the proposed solution is. Or what topic the reference deals with (your textbook has excellent examples in the sections entitled ``Bibilographical and Historical notes'').
+% \item A pointer back to where you cite this reference.
 % \end{enumerate}
 
 % An example would look like this:
@@ -216,14 +268,14 @@ high-level pseudocode for that algorithm \cite{aimodern}.\\
 % [REF1]
 % \begin{enumerate}
 % \item Turing, A.M. (1936).`On Computable Numbers, with an Application to the Entscheidungsproblem". Proceedings of the London Mathematical Society. 2 42: 230Ð65.
-% \item The paper is about ... 
+% \item The paper is about ...
 % \item The most important reference to this paper in our document is in Section XYZ
 % \end{enumerate}
 
 % A reference to a specific topic in a book (or large survey article) has similar 2nd. and 3rd. paragraphs, but the first will look like this:
 % \begin{enumerate}
 % \item Author(s) [year of publication], ``Title of book'', Publisher, a live www link if available.
-% \textbf{Section numbers or page numbers in the book dealing with the material you are referring to}. 
+% \textbf{Section numbers or page numbers in the book dealing with the material you are referring to}.
 % \end{enumerate}
 
 % \section{Appendix}
