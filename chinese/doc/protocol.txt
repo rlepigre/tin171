@@ -1,0 +1,65 @@
+PROTOCOL FOR CHINESE CHECKERS SERVER:
+
+##LOGIN##
+
+{login, UserName}.     -> ok.
+                       -> {error, already_logged_in}.
+                       -> {error, user_exists}.
+
+IF YOU TRY TO DO ANYTHING WITHOUT FIRST LOGIN SERVER WILL REPLY:
+{error, login_first}
+
+##LOBBY##
+
+list_games.            -> {ok, [Game1, Game2, Game3, ...]}.
+
+HOST GAME:
+{host_game, GameName}. -> {ok, waiting_for_players}.
+                       -> {error, game_exists}.
+
+{join_game, GameName}  -> {waiting_to_start, GameName}.
+                       -> {error, game_doesnt_exist}.
+
+GAME START:
+start_game.            -> ok.
+                       -> {error, not_enough_players}
+                       -> {error, not_host}
+
+WHEN SOMEONE JOINS THE SERVER SENDS:
+{player_joined, [Player1, Player2, ...]}.
+
+WHEN SOMEONE LEAVES THE SERVER SENDS:
+{player_left, [Player1, Player2, ...]}.
+
+GAME:
+
+WHEN GAME STARTS SERVER SENDS: (YourNr are your identifier on the board)
+{game_start, YourNr, [Player1, Player2, ...], Board}.
+
+WHEN ITS YOUR YURN THE SERVER SENDS
+{your_turn, TimeOut, Board}.
+
+WHEN SOMEONE MOVE THE SERVER SENDS:
+{update, Player, [StartPos, Pos1, ..., Posn], Board}
+UNLESS SOMEONE WIN THEN:
+{won, Player, WinningBoard}.
+
+IF A PLAYER LEAVES DURING GAMEPLAY:
+{disconnect, [Player1, Player2, ...] , NewBoard}.
+
+DOING A MOVE:
+{move, [StartPos, Pos1, Pos2, ... Posn]}.      -> ok.
+                                               -> {error, not_your_turn}.
+                                               -> {error, illegal_move}.
+
+SPECTATORS:
+(LOGIN AS USUAL)
+{spectate, GameName}    -> {GameName, [Player1, Player2, ...], Board}
+                        -> {error, game_doesnt_exist}
+{unspectate, Gamename}  -> ok.
+                        -> {error, doesnt_spectate}
+
+When you are spectating you will receive:
+{update, Player, [StartPos, Pos1, ..., Posn], Board}
+{disconnect, [Player1, Player2, ...] , NewBoard}.
+{won, Player, WinningBoard}.
