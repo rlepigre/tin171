@@ -94,7 +94,16 @@ methods that are normally used to solve it.
 
 After our meeting with Birgit we have a short informal meeting. Emil
 shows us a network protocol he's been working on and we give him some
-feedback on how to improve it. Salvo has been working on a GUI. Göran
-will start on the proposal and Rodolphe will be working on the NLP
-survey. Our next meeting is tomorrow.
-It was agreed a way to represent the board using an unidimensional array.
+feedback on how to improve it. It agreed to represent the board using
+an unidimensional array. Salvo has been working on a GUI. Göran will
+start on the proposal and Rodolphe will be working on the NLP survey.
+Our next meeting is tomorrow.
+
+2012-03-28
+We have a meeting again. Emil works on the server and Salvo works on
+the GUI while Rodolphe and Göran search the literature.
+
+2012-03-29
+Salvo has worked on a QT widget that shows a board using vector graphics so that
+it can be resized. The image itself comes from wikipedia and is modified to show
+the marbles.
