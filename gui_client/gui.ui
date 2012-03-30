@@ -193,8 +193,8 @@
    <slot>connect_server()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>487</x>
-     <y>104</y>
+     <x>609</x>
+     <y>47</y>
     </hint>
     <hint type="destinationlabel">
      <x>558</x>
@@ -218,8 +218,93 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>cmdSpectate</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>spectate()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>485</x>
+     <y>442</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>714</x>
+     <y>34</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmdJoin</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>join()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>578</x>
+     <y>468</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>713</x>
+     <y>61</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmdHost</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>host()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>469</x>
+     <y>507</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>715</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmdStart</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>start()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>496</x>
+     <y>520</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>714</x>
+     <y>140</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmdDisconnect</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>socket_disconnected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>633</x>
+     <y>36</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>714</x>
+     <y>203</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>connect()</slot>
+  <slot>socket_disconnected()</slot>
+  <slot>spectate()</slot>
+  <slot>join()</slot>
+  <slot>host()</slot>
+  <slot>start()</slot>
  </slots>
 </ui>
