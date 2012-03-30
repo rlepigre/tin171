@@ -202,41 +202,31 @@ A central part of our solution will be the \emph{IDDFS} algorithm.
 Shown below is the
 high-level pseudocode for that algorithm \cite{aimodern}.\\
 \begin{algorithmic}
-\Function{ITERATIVE-DEEPENING-SEARCH}{\emph{problem}}
+\Function{ITERATIVE-DEEPENING-SEARCH}{\emph{initial-board, time-limit}} \\
+\textbf{global} \emph{best-move} \\
+\emph{best-move}.SCORE = 0 \\
+\emph{best-move}.MOVE = UNDEFINED \\
 \For{\emph{depth} $= 0 \to \infty$}
-\State \emph{results} $\gets$ DEPTH-LIMITED-SEARCH(\emph{problem, depth})
-\If {\emph{results} $\not=$ \emph{cutoff}}
-\State \Return \emph{results}
+\State DEPTH-LIMITED-SEARCH(\emph{initial-board, depth})
+\If {TIME-OUT(\emph{time-limit})}
+\State \Return \emph{best-move}
 \EndIf
 \EndFor
 \EndFunction
 \\
-\Function{DEPTH-LIMITED-SEARCH}{\emph{problem, limit}}
-\State \Return RECURSIVE-DLS(MAKE-NODE(\emph{problem}, INITIAL-STATE), \\
-\hspace{50mm} \emph{problem, limit})
+\Function{DEPTH-LIMITED-SEARCH}{\emph{initial-board, limit}}
+\State \Return RECURSIVE-DLS(MAKE-NODE(\emph{initial-board}), \emph{limit})
 \EndFunction
 \\
-\Function{RECURSIVE-DLS}{node, problem, limit}
-\If{\emph{problem}.GOAL-TEST(\emph{node}.STATE)}
-\State \Return SOLUTION(\emph{node})
-\ElsIf{\emph{limit} = 0}
-\State \Return \emph{cutoff}
-\Else
-\State \emph{cutoff\_occurred?} $\gets$ \emph{false}
-\ForAll{\emph{action} in \emph{problem}.ACTIONS(\emph{node}.STATE)}
-\State \emph{child} $\gets$ CHILD-NODE(\emph{problem, node, action})
-\State \emph{result} $\gets$ RECURSIVE-DLS(\emph{child, problem, Emit - 1})
-\If{\emph{result} = \emph{cutoff}}
-\State \emph{cutoff\_occurred?} $\gets$ \emph{true}
-\ElsIf{\emph{result} $\not=$ \emph{failure}}
-\State \Return \emph{result}
+\Function{RECURSIVE-DLS}{\emph{node, limit}}
+\If{\emph{limit} $>$ 0}
+\ForAll{\emph{move} in VALID-MOVES(\emph{node})}
+\If{\emph{move}.SCORE $>$ \emph{best-move}.SCORE}
+\State \emph{best-move} $=$ \emph{move}
 \EndIf
+\State \emph{child} $=$ CHILD-NODE(\emph{node, move})
+\State RECURSIVE-DLS(\emph{child, limit - 1})
 \EndFor
-\If{\emph{cutoff\_occurred?}}
-\Return \emph{cutoff}
-\Else
-\ \Return \emph{failure}
-\EndIf
 \EndIf
 \EndFunction
 \end{algorithmic}
