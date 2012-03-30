@@ -107,3 +107,8 @@ the GUI while Rodolphe and Göran search the literature.
 Salvo has worked on a QT widget that shows a board using vector graphics so that
 it can be resized. The image itself comes from wikipedia and is modified to show
 the marbles.
+
+2012-03-30
+We meet to finish up the proposal. We feel satisfied with what we have produced
+and submit the proposal. Salvo continues on the client. Emil will finish up the
+server during the easter(this weekend).
