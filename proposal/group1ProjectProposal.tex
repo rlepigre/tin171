@@ -230,20 +230,16 @@ A central part of our solution will be the \emph{IDDFS} algorithm.
 Shown below is the
 high-level pseudocode for that algorithm \cite{aimodern}.\\
 \begin{algorithmic}
-\Function{ITERATIVE-DEEPENING-SEARCH}{\emph{initial-board, time-limit}} \\
+\Function{ITERATIVE-DEEPENING-SEARCH}{\emph{board, time-limit}} \\
 \textbf{global} \emph{best-move} \\
 \emph{best-move}.SCORE = 0 \\
 \emph{best-move}.MOVE = UNDEFINED \\
 \For{\emph{depth} $= 0 \to \infty$}
-\State DEPTH-LIMITED-SEARCH(\emph{initial-board, depth})
+\State RECURSIVE-DLS(MAKE-NODE(\emph{board}), \emph{depth})
 \If {TIME-OUT(\emph{time-limit})}
 \State \Return \emph{best-move}
 \EndIf
 \EndFor
-\EndFunction
-\\
-\Function{DEPTH-LIMITED-SEARCH}{\emph{initial-board, limit}}
-\State \Return RECURSIVE-DLS(MAKE-NODE(\emph{initial-board}), \emph{limit})
 \EndFunction
 \\
 \Function{RECURSIVE-DLS}{\emph{node, limit}}
@@ -258,6 +254,11 @@ high-level pseudocode for that algorithm \cite{aimodern}.\\
 \EndIf
 \EndFunction
 \end{algorithmic}
+
+The algorithm works by iteratively deepening the search tree to find the best possible move in the given
+amount of time it has. It does so by recursive calls to RECURSIVE-DLS with an increased depth-limit to expand
+it's search tree. When the given time-limit is exceeded the algorithm will stop and return the best move it has
+found so far. The score of a move is computed using different heuristics.
 
 \bibliographystyle{aiaa}
 \bibliography{refs}
