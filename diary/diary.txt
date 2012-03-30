@@ -102,3 +102,8 @@ Our next meeting is tomorrow.
 2012-03-28
 We have a meeting again. Emil works on the server and Salvo works on
 the GUI while Rodolphe and Göran search the literature.
+
+2012-03-29
+Salvo has worked on a QT widget that shows a board using vector graphics so that
+it can be resized. The image itself comes from wikipedia and is modified to show
+the marbles.
