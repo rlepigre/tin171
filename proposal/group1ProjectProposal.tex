@@ -90,6 +90,8 @@ the heuristics she used. The program was reported to play excellently
 against human players. Ulfhake also mentions that finding literature
 on computer programs playing Chinese Checkers was very difficult.
 
+Hashavit and Markovitch \cite{hashavit} 
+
 %% Research into programs that play games is likely to be geared towards
 %% producing strong programs that one day will be able to beat the best
 %% human players. Perhaps a weaker program would be just as suitable for
@@ -98,14 +100,14 @@ on computer programs playing Chinese Checkers was very difficult.
 \subsection{What tools and programs are already available for the problem, or for closely related ones?}
 %(describe these briefly. Say how you can use them, and how your work will build on them, or differ from them).
 
-\emph{cheech} is a free software implementation of Chinese Checkers
-\cite{cheech}. It provides a graphical interface and a network
-protocol. It initially appeared to us that we could make our own
-program connect to \emph{cheech} as a player and thereby use the
-existing multi-player functionality and graphics. Unfortunately the
-program has suffered significant bit rot. We evaluated half a dozen
-alternatives and found that none of them still work properly. That
-being said, we can copy the architectural ideas used in \emph{cheech}.
+\emph{cheech} is a free software implementation of Chinese Checkers.
+It provides a graphical interface and a network protocol. It initially
+appeared to us that we could make our own program connect to
+\emph{cheech} as a player and thereby use the existing multi-player
+functionality and graphics. Unfortunately the program has suffered
+significant bit rot. We evaluated half a dozen alternatives and found
+that none of them still work properly. That being said, we can copy
+the architectural ideas used in \emph{cheech}.
 
 \section{Key ideas and delimitations}
 \subsection{Why is the problem interesting or significant?  What will a solution achieve?}
@@ -191,6 +193,32 @@ evaluation of the different versions of the program will be written.
 
 Playing a perfect game must be outside our scope because it appears to
 be an open research problem.
+
+\section{Notes on strategies}
+
+When we have the basic mechanics of the game and the computer player
+working there are some strategies that we should consider. Some of the
+strategies can be implemented by adjusting the heuristic function and
+some can be implemented \emph{ah hoc}. The following are some ideas
+for strategies.
+
+\textbf{Leave no man behind}. If this strategy is not used it is
+possible for the computer player to end up with a lot of pegs very far
+away from the goal. These pegs will be very costly to move toward the
+goal if it's late in the game, so a heuristic should take that into
+account.
+
+\textbf{Stay the path}. The center of the board is more likely to
+contain many paths towards the goal. Therefore if the heuristic gives
+a preference to moves that keep pegs in the middle then the game is
+likely to move faster and give more opportunities to jump long
+distances.
+
+\textbf{Forge ahead} or \textbf{the best offense is a good defense}.
+The computer player can either be aggressive and try to create long
+paths for moving fast and far, or it can be defensive and try to not
+give any other players opportunities to use its pegs as part of a
+path.
 
 \section{First results}
 %(A small piece of pseudo-code for a key part of the solution. )
