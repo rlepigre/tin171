@@ -6,33 +6,24 @@ from PyQt4 import QtSvg
 from BoardWidget import BoardWidget
 import gui
 
+class GameUI(QtGui.QMainWindow):
+    def __init__(self):
+        QtGui.QMainWindow.__init__(self)
+        self.ui = gui.Ui_MainWindow()
+        self.ui.setupUi(self)
+        self.svg = BoardWidget()
+        self.ui.boardLayout.addWidget(self.svg)
+        
+        a=[]
+        for i in xrange(300): a.append(0)
+        #a[79]=4
+        self.svg.setBoard(a)
+        
 
 if __name__ == "__main__":
-    
-    
     app = QtGui.QApplication(sys.argv)
     
-    MainWindow = QtGui.QMainWindow()
-    ui = gui.Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    
-    
-    svg = BoardWidget()
-    print ui,dir(svg)
-    svgPolicy = QtGui.QSizePolicy()
-    svgPolicy.setHeightForWidth(True)
-    svg.setSizePolicy(svgPolicy)
-    
-    
-    ui.boardLayout.addWidget(svg)
-    
-    
-    a=[]
-    for i in xrange(300): a.append(0)
-
-    svg.set_board(a)
-    
-    
+    MainWindow = GameUI()
     MainWindow.show()
     sys.exit(app.exec_())
 

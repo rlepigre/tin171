@@ -80,138 +80,24 @@
 	<path id="Mainstar" style="fill:#e6e6e6;stroke:#808080;stroke-width:5;filter:url(#StoneDropShadow)"
 		d="m 258.55302,347.00013 c -11.77794,0 -17.88058,10.32639 -11.77795,20.4 L 313.3409,482.6955 c 6.93083,12.00455 6.93082,22.60469 0,34.60924 l -66.56583,115.29539 c -5.88897,10.19999 0,20.4 11.77795,20.4 l 133.13166,0 c 13.86164,0 23.04164,5.30007 29.97247,17.30462 l 66.5658,115.29538 c 5.94943,10.16486 17.66693,10.2 23.5559,0 l 66.56583,-115.29539 c 6.93082,-12.00455 16.11081,-17.30462 29.97247,-17.30462 l 133.13164,0 c 11.77794,0 17.66692,-10.20001 11.77795,-20.4 L 686.6609,517.30474 c -6.93082,-12.00455 -6.93083,-22.60469 0,-34.60924 l 66.56584,-115.29537 c 5.88897,-10.19999 0,-20.4 -11.77795,-20.4 l -133.13166,0 c -13.86165,0 -23.04165,-5.30007 -29.97248,-17.30462 l -66.5658,-115.29538 c -5.88897,-10.2 -17.66693,-10.2 -23.5559,0 l -66.56582,115.29539 c -6.93083,12.00455 -16.11082,17.30462 -29.97247,17.30462 z" />
 	<g id="GroupWhite">
-		<use xlink:href="#WhiteHole" transform="translate(352,500)" />
-		<use xlink:href="#WhiteHole" transform="translate(389,500)" />
-		<use xlink:href="#WhiteHole" transform="translate(426,500)" />
-		<use xlink:href="#WhiteHole" transform="translate(463,500)" />
-		<use xlink:href="#WhiteHole" transform="translate(500,500)" />
-		<use xlink:href="#WhiteHole" transform="translate(537,500)" />
-		<use xlink:href="#WhiteHole" transform="translate(574,500)" />
-		<use xlink:href="#WhiteHole" transform="translate(611,500)" />
-		<use xlink:href="#WhiteHole" transform="translate(648,500)" />
-		<use xlink:href="#WhiteHole" transform="translate(370.5,467.95706)" />
-		<use xlink:href="#WhiteHole" transform="translate(407.5,467.95706)" />
-		<use xlink:href="#WhiteHole" transform="translate(444.5,467.95706)" />
-		<use xlink:href="#WhiteHole" transform="translate(481.5,467.95706)" />
-		<use xlink:href="#WhiteHole" transform="translate(518.5,467.95706)" />
-		<use xlink:href="#WhiteHole" transform="translate(555.5,467.95706)" />
-		<use xlink:href="#WhiteHole" transform="translate(592.5,467.95706)" />
-		<use xlink:href="#WhiteHole" transform="translate(629.5,467.95706)" />
-		<use xlink:href="#WhiteHole" transform="translate(389,435.91412)" />
-		<use xlink:href="#WhiteHole" transform="translate(426,435.91412)" />
-		<use xlink:href="#WhiteHole" transform="translate(463,435.91412)" />
-		<use xlink:href="#WhiteHole" transform="translate(500,435.91412)" />
-		<use xlink:href="#WhiteHole" transform="translate(537,435.91412)" />
-		<use xlink:href="#WhiteHole" transform="translate(574,435.91412)" />
-		<use xlink:href="#WhiteHole" transform="translate(611,435.91412)" />
-		<use xlink:href="#WhiteHole" transform="translate(407.5,403.87118)" />
-		<use xlink:href="#WhiteHole" transform="translate(444.5,403.87118)" />
-		<use xlink:href="#WhiteHole" transform="translate(481.5,403.87118)" />
-		<use xlink:href="#WhiteHole" transform="translate(518.5,403.87118)" />
-		<use xlink:href="#WhiteHole" transform="translate(555.5,403.87118)" />
-		<use xlink:href="#WhiteHole" transform="translate(592.5,403.87118)" />
-		<use xlink:href="#WhiteHole" transform="translate(426,371.82824)" />
-		<use xlink:href="#WhiteHole" transform="translate(463,371.82824)" />
-		<use xlink:href="#WhiteHole" transform="translate(500,371.82824)" />
-		<use xlink:href="#WhiteHole" transform="translate(537,371.82824)" />
-		<use xlink:href="#WhiteHole" transform="translate(574,371.82824)" />
-		<use xlink:href="#WhiteHole" transform="translate(370.5,532.04294)" />
-		<use xlink:href="#WhiteHole" transform="translate(407.5,532.04294)" />
-		<use xlink:href="#WhiteHole" transform="translate(444.5,532.04294)" />
-		<use xlink:href="#WhiteHole" transform="translate(481.5,532.04294)" />
-		<use xlink:href="#WhiteHole" transform="translate(518.5,532.04294)" />
-		<use xlink:href="#WhiteHole" transform="translate(555.5,532.04294)" />
-		<use xlink:href="#WhiteHole" transform="translate(592.5,532.04294)" />
-		<use xlink:href="#WhiteHole" transform="translate(629.5,532.04294)" />
-		<use xlink:href="#WhiteHole" transform="translate(389,564.08588)" />
-		<use xlink:href="#WhiteHole" transform="translate(426,564.08588)" />
-		<use xlink:href="#WhiteHole" transform="translate(463,564.08588)" />
-		<use xlink:href="#WhiteHole" transform="translate(500,564.08588)" />
-		<use xlink:href="#WhiteHole" transform="translate(537,564.08588)" />
-		<use xlink:href="#WhiteHole" transform="translate(574,564.08588)" />
-		<use xlink:href="#WhiteHole" transform="translate(611,564.08588)" />
-		<use xlink:href="#WhiteHole" transform="translate(407.5,596.12882)" />
-		<use xlink:href="#WhiteHole" transform="translate(444.5,596.12882)" />
-		<use xlink:href="#WhiteHole" transform="translate(481.5,596.12882)" />
-		<use xlink:href="#WhiteHole" transform="translate(518.5,596.12882)" />
-		<use xlink:href="#WhiteHole" transform="translate(555.5,596.12882)" />
-		<use xlink:href="#WhiteHole" transform="translate(592.5,596.12882)" />
-		<use xlink:href="#WhiteHole" transform="translate(426,628.17176)" />
-		<use xlink:href="#WhiteHole" transform="translate(463,628.17176)" />
-		<use xlink:href="#WhiteHole" transform="translate(500,628.17176)" />
-		<use xlink:href="#WhiteHole" transform="translate(537,628.17176)" />
-		<use xlink:href="#WhiteHole" transform="translate(574,628.17176)" />
+		%%0%%
 	</g>
 	<g id="GroupRed">
-		<use xlink:href="#RedBall" transform="translate(555.5,660.2148)" />
-		<use xlink:href="#RedBall" transform="translate(518.5,660.2148)" />
-		<use xlink:href="#RedBall" transform="translate(481.5,660.2148)" />
-		<use xlink:href="#RedBall" transform="translate(444.5,660.2148)" />
-		<use xlink:href="#RedBall" transform="translate(537,692.25774)" />
-		<use xlink:href="#RedBall" transform="translate(500,692.25774)" />
-		<use xlink:href="#RedBall" transform="translate(463,692.25774)" />
-		<use xlink:href="#RedBall" transform="translate(518.5,724.30068)" />
-		<use xlink:href="#RedBall" transform="translate(481.5,724.30068)" />
-		<use xlink:href="#RedBall" transform="translate(500,756.34362)" />
+		%%1%%
 	</g>
 	<g id="GroupOrange">
-		<use xlink:href="#OrangeBall" transform="translate(666.5,532.04295)" />
-		<use xlink:href="#OrangeBall" transform="translate(648,564.08589)" />
-		<use xlink:href="#OrangeBall" transform="translate(629.5,596.12883)" />
-		<use xlink:href="#OrangeBall" transform="translate(611,628.17177)" />
-		<use xlink:href="#OrangeBall" transform="translate(685,564.08589)" />
-		<use xlink:href="#OrangeBall" transform="translate(666.5,596.12883)" />
-		<use xlink:href="#OrangeBall" transform="translate(648,628.17177)" />
-		<use xlink:href="#OrangeBall" transform="translate(703.5,596.12883)" />
-		<use xlink:href="#OrangeBall" transform="translate(685,628.17177)" />
-		<use xlink:href="#OrangeBall" transform="translate(722,628.17177)" />
+        %%2%%
 	</g>
 	<g id="GroupYellow">
-		<use xlink:href="#YellowBall" transform="translate(611,371.82824)" />
-		<use xlink:href="#YellowBall" transform="translate(629.5,403.87118)" />
-		<use xlink:href="#YellowBall" transform="translate(648,435.91412)" />
-		<use xlink:href="#YellowBall" transform="translate(666.5,467.95706)" />
-		<use xlink:href="#YellowBall" transform="translate(648,371.82824)" />
-		<use xlink:href="#YellowBall" transform="translate(666.5,403.87118)" />
-		<use xlink:href="#YellowBall" transform="translate(685,435.91412)" />
-		<use xlink:href="#YellowBall" transform="translate(685,371.82824)" />
-		<use xlink:href="#YellowBall" transform="translate(703.5,403.87118)" />
-		<use xlink:href="#YellowBall" transform="translate(722,371.82824)" />
+        %%3%%
 	</g>
 	<g id="GroupGreen">
-		<use xlink:href="#GreenBall" transform="translate(444.5,339.7853)" />
-		<use xlink:href="#GreenBall" transform="translate(481.5,339.7853)" />
-		<use xlink:href="#GreenBall" transform="translate(518.5,339.7853)" />
-		<use xlink:href="#GreenBall" transform="translate(555.5,339.7853)" />
-		<use xlink:href="#GreenBall" transform="translate(463,307.74236)" />
-		<use xlink:href="#GreenBall" transform="translate(500,307.74236)" />
-		<use xlink:href="#GreenBall" transform="translate(537,307.74236)" />
-		<use xlink:href="#GreenBall" transform="translate(481.5,275.69942)" />
-		<use xlink:href="#GreenBall" transform="translate(518.5,276.46937)" />
-		<use xlink:href="#GreenBall" transform="translate(500,243.65648)" />
+        %%4%%
 	</g>
 	<g id="GroupBlue">
-		<use xlink:href="#BlueBall" transform="translate(333.5,467.95705)" />
-		<use xlink:href="#BlueBall" transform="translate(352,435.91411)" />
-		<use xlink:href="#BlueBall" transform="translate(370.5,403.87117)" />
-		<use xlink:href="#BlueBall" transform="translate(389,371.82823)" />
-		<use xlink:href="#BlueBall" transform="translate(315,435.91411)" />
-		<use xlink:href="#BlueBall" transform="translate(333.5,403.87117)" />
-		<use xlink:href="#BlueBall" transform="translate(352,371.82823)" />
-		<use xlink:href="#BlueBall" transform="translate(296.5,403.87117)" />
-		<use xlink:href="#BlueBall" transform="translate(315,371.82823)" />
-		<use xlink:href="#BlueBall" transform="translate(278,371.82823)" />
+        %%5%%
 	</g>
 	<g id="GroupPurple">
-		<use xlink:href="#PurpleBall" transform="translate(388.99998,628.17177)" />
-		<use xlink:href="#PurpleBall" transform="translate(370.49998,596.12883)" />
-		<use xlink:href="#PurpleBall" transform="translate(351.99998,564.08589)" />
-		<use xlink:href="#PurpleBall" transform="translate(333.49998,532.04295)" />
-		<use xlink:href="#PurpleBall" transform="translate(351.99998,628.17177)" />
-		<use xlink:href="#PurpleBall" transform="translate(333.49998,596.12883)" />
-		<use xlink:href="#PurpleBall" transform="translate(314.99998,564.08589)" />
-		<use xlink:href="#PurpleBall" transform="translate(314.99998,628.17177)" />
-		<use xlink:href="#PurpleBall" transform="translate(296.49998,596.12883)" />
-		<use xlink:href="#PurpleBall" transform="translate(277.99998,628.17177)" />
+        %%6%%
 	</g>
 </svg>

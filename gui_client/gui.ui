@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>560</width>
+    <height>388</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,20 +27,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPlainTextEdit" name="txtHostname">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>70</height>
-           </size>
-          </property>
-         </widget>
+         <widget class="QLineEdit" name="txtHostname"/>
         </item>
        </layout>
       </item>
@@ -54,20 +41,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPlainTextEdit" name="txtPort">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>70</height>
-           </size>
-          </property>
-         </widget>
+         <widget class="QLineEdit" name="txtPort"/>
         </item>
        </layout>
       </item>
@@ -133,7 +107,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>560</width>
      <height>20</height>
     </rect>
    </property>
