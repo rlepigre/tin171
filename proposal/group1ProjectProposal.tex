@@ -90,7 +90,12 @@ the heuristics she used. The program was reported to play excellently
 against human players. Ulfhake also mentions that finding literature
 on computer programs playing Chinese Checkers was very difficult.
 
-Hashavit and Markovitch \cite{hashavit} 
+Hashavit and Markovitch evaluated the Max-Prob algorithm
+\cite{Hashavit}. The algorithm is similar to max$^n$ and paranoid, but
+in Chinese Checkers it is significantly better. It computes at each
+step which move will be most likely to lead to a winning outcome. It
+computes this for all players and maximizes its own probability of
+winning.
 
 %% Research into programs that play games is likely to be geared towards
 %% producing strong programs that one day will be able to beat the best
@@ -128,9 +133,10 @@ maybe we can give a more detailed account.
 \subsection{The central idea in your solution}
 
 The architecture of our solution will consist of three parts: a game
-server, a graphical game client and several autonomous game clients. A
-network protocol has been specified and the server and the graphical
-client are already well under way.
+server written in Erlang, a graphical game client written in Python
+and several autonomous game clients. A network protocol has been
+specified and the server and the graphical client are already well
+under way.
 
 Initially our program will be playing a two-player variant of Chinese
 Checkers. When it is working properly we will try with more players.
