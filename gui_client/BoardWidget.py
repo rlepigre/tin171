@@ -43,14 +43,30 @@ class BoardWidget(QtSvg.QSvgWidget):
         self.setBoard(self.board)
         
     def setBoard(self,board):
+        '''Given an iterable containing the board, shows it in the widget.'''
         self.board=board
         xml=QtCore.QByteArray(gen_board(board))
         return self.load(xml)
+        
     def heightForWidth(self,w):
         return w
         
-    def mousePressEvent(self,ev):
+    def setMarble(self,pos,val):
+        '''sets the value val to the position pos, and then redraws the board'''
+        self.board[pos]=val
+        self.setBoard(self.board)
         
+    def getValueAt(self,pos):
+        '''returns the value contained at the given position in the board.'''
+        return self.board[pos]
+        
+    def getBoard(self):
+        '''Returns the board'''
+        return self.board
+        
+    def mousePressEvent(self,ev):
+        '''Internal method overriding mousePressEvent, used to emit the signal
+        when a click is made on a marble'''
         dist= lambda c1,c2: sqrt(((c1[0]-c2[0])**2) + ((c1[1]-c2[1])**2))
         
         #TODO those coordinates don't rescale
@@ -60,9 +76,5 @@ class BoardWidget(QtSvg.QSvgWidget):
                 #print _positions[i] ,
                 print i
                 self.clicked.emit(i)
-                
-                #TODO this is just for testing
-                self.board[i]= 1+(i%4)
-                self.setBoard(self.board)
                 return
         pass
