@@ -1,0 +1,30 @@
+Natural Language Processing (NLP)
+
+(NLP1) Dialog systems
+  - Build a system that handles parsing and semantic analysis.
+  - Existing dialog manager systems: Ravenclaw/Olympus.
+
+Domain: student help desk.
+
+NLP? Some examples:
+  - Conversion of speech or handwriting into plain-text, behavior
+    recognition,... (input recognition)
+  - Understanding the meaning of some text, part of speech tagging
+    (identification of verbal group, ...), parsing,...
+  - Text-to-speech engine, talking avatar,...
+  - A combination of these.
+  - ...
+
+References:
+  - Wikipedia, http://en.wikipedia.org/wiki/Dialog_system
+
+Other links:
+  - http://www.youtube.com/watch?v=1bfaYHWS6zU
+  - http://www.grammaticalframework.org/doc/tutorial/gf-tutorial.html
+  - http://wiki.speech.cs.cmu.edu/olympus/index.php/Olympus
+
+Question answering systems:
+  - http://start.csail.mit.edu/
+  - http://clair.si.umich.edu/~radev/papers/anlp00.pdf
+  - http://clair.si.umich.edu/~radev/papers/sigir00.pdf
+  - http://cs.jhu.edu/~ccb/publications/evaluating-question-answering-systems-using-faq-answer-injection.pdf
