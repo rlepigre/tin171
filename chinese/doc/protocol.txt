@@ -2,64 +2,66 @@ PROTOCOL FOR CHINESE CHECKERS SERVER:
 
 ##LOGIN##
 
-{login, UserName}.     -> ok.
-                       -> {error, already_logged_in}.
-                       -> {error, user_exists}.
+{login, UserName}.     -> ok
+                       -> {error, Error}
 
 IF YOU TRY TO DO ANYTHING WITHOUT FIRST LOGIN SERVER WILL REPLY:
 {error, login_first}
 
 ##LOBBY##
 
-list_games.            -> {ok, [Game1, Game2, Game3, ...]}.
+list_games.            -> {games, 
+                           [NewGame1, NewGame2, ..],
+                           [RunGame1, RunGame2,..]}
 
 HOST GAME:
-{host_game, GameName}. -> {ok, waiting_for_players}.
-                       -> {error, game_exists}.
+{host_game, GameName}. -> ok
+                       -> {error, Error}
+WHEN PLAYERS JOIN OR LEAVE THE HOST RECEIVES: (only before the game is started)
+{player_joined, [Player1, Player2, ...]}
+{player_left, [Player1, Player2, ...]}
 
-{join_game, GameName}  -> {waiting_to_start, GameName}.
-                       -> {error, game_doesnt_exist}.
+JOIN GAME:
+{join_game, GameName}  -> ok
+                       -> {error, Error}
 
 GAME START:
-start_game.            -> ok.
-                       -> {error, not_enough_players}
-                       -> {error, not_host}
+start_game.            -> ok
+                       -> {error, Error}
 
-WHEN SOMEONE JOINS THE SERVER SENDS:
-{player_joined, [Player1, Player2, ...]}.
-
-WHEN SOMEONE LEAVES THE SERVER SENDS:
-{player_left, [Player1, Player2, ...]}.
-
-GAME:
+##GAME##
 
 WHEN GAME STARTS SERVER SENDS: (YourNr are your identifier on the board)
-{game_start, YourNr, [Player1, Player2, ...], Board}.
+{game_start, YourIdentifier, 
+             [{Id1,Player1}, {Id2,Player2}, ...], Board}
 
 WHEN ITS YOUR YURN THE SERVER SENDS
-{your_turn, TimeOut, Board}.
+{your_turn, TimeOut, Board}
 
 WHEN SOMEONE MOVE THE SERVER SENDS:
-{update, Player, [StartPos, Pos1, ..., Posn], Board}
+{update, {Id, Player}, [StartPos, Pos1, ..., Posn], Board}
 UNLESS SOMEONE WIN THEN:
-{won, Player, WinningBoard}.
+{won, {Id, Player}, WinningBoard}
 
 IF A PLAYER LEAVES DURING GAMEPLAY:
-{disconnect, [Player1, Player2, ...] , NewBoard}.
+{game_state, [{Id1, Player1}, {Id2, Player2}, ...] , NewBoard}
 
 DOING A MOVE:
-{move, [StartPos, Pos1, Pos2, ... Posn]}.      -> ok.
-                                               -> {error, not_your_turn}.
-                                               -> {error, illegal_move}.
+{move, [StartPos, Pos1, Pos2, ... Posn]}.      -> ok
+                                               -> {error, Error}
 
-SPECTATORS:
+##SPECTATORS##
 (LOGIN AS USUAL)
-{spectate, GameName}    -> {GameName, [Player1, Player2, ...], Board}
-                        -> {error, game_doesnt_exist}
-{unspectate, Gamename}  -> ok.
-                        -> {error, doesnt_spectate}
+{spectate, GameName}    -> ok
+                        -> {error, Error}
 
 When you are spectating you will receive:
 {update, Player, [StartPos, Pos1, ..., Posn], Board}
-{disconnect, [Player1, Player2, ...] , NewBoard}.
-{won, Player, WinningBoard}.
+{game_state, [{Id1, Player1}, {Id2, Player2}, ...], Board}
+{won, Player, WinningBoard}
+
+##LEAVING##
+Sending leave to the server will result in disconnect dispite which
+state you are in. It's not possible (now atleast) to leave a game or stop
+spectating and revert to the lobby again. A leave is a complete disconnect
+from the server.

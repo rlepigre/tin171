@@ -1,0 +1,13 @@
+{application, cc,
+ [
+  {description, "A server application for chinese checkers"},
+  {vsn, "1"},
+  {modules, [cc_sup, cc_user_sup, cc_user, cc_lobby, cc_game_sup, cc_game]},
+  {registered, [chinese_sup, cc_user_sup, cc_lobby, cc_game_sup]},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { cc_app, []}},
+  {env, [{port, 8000}]}
+ ]}.
