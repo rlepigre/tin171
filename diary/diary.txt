@@ -112,3 +112,36 @@ the marbles.
 We meet to finish up the proposal. We feel satisfied with what we have produced
 and submit the proposal. Salvo continues on the client. Emil will finish up the
 server during the easter(this weekend).
+
+2012-04-17
+We're back from easter break and we have a meeting with our supervisor
+during which we receive feedback on the project proposal. The proposal
+was generally very good, but we could have written more details on
+heuristics.
+
+A hint for section 2.3 (measuring performance) is bounds: find bounds
+for the number of steps needed to reach the goal state. This could be
+what it would take to compute the number of steps needed when moving
+each peg only one step at a time. Another idea is "I can only use 100
+steps". Try to think of some simple bounds and then compare the bots
+with the bounds. The course book uses the sliding puzzle as an
+example. One bound there is the number of tiles in the wrong place.
+This gives a (bad) lower bound on the number of steps required. This
+is kind of what you do with approximation algorithms.
+
+Next we discussed the surveys. One tip is to look for the papers which
+are most widely cited in the literature. Notable programs on the web
+can also be cited.
+
+We can restrict the surveys to a specific domain, but writing about
+the wider field is good and shows that we've done research. Papers can
+be mentioned even if it's in just one or two sentences. The surveys
+are meant to make us study the wider field of AI, not just the part
+required for our project.
+
+The draft deadlines are meant to make us start working on the project
+report rather early. The draft should have more details on heuristics
+in particular and there should be more details in general.
+
+The surveys will be graded by two different people, so we should
+submit them in separate documents.
