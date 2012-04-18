@@ -145,3 +145,14 @@ in particular and there should be more details in general.
 
 The surveys will be graded by two different people, so we should
 submit them in separate documents.
+
+2012-04-18
+We meet in the library and make a plan for the rest of the week. Emil
+and Rodolphe will be working on surveys and Salvo will be working on
+the GUI. Göran will edit the surveys and also start writing a bot.
+
+Emil shows us the server and we try to use it. We discover some bugs
+but at the end of the day the server is working. The wire protocol for
+the server currently uses Erlang's data representation, and it looks
+like this might be difficult to use together with Python. A switch to
+JSON seems likely.
