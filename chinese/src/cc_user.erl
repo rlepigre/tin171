@@ -7,6 +7,9 @@
 %%% @end
 %%% Created : 28 Mar 2012 by Emil Falk <emil.falk.1988@gmail.com>
 %%%-------------------------------------------------------------------
+
+%% ADD MORE CHECKS TO USER INPUT
+
 -module(cc_user).
 -compile([debug_info]).
 -behaviour(gen_server).
@@ -105,10 +108,13 @@ handle_info({tcp, Socket, Str}, S) ->
             case S of
                 #pl{st = disconnected} ->
                     case Term of
-                        {login, PlayerName} ->
+                        {login, PlayerName} when is_list(PlayerName)->
                             cc_lobby:login(PlayerName),
                             send_term(Socket, ok),
                             {noreply, S#pl{st = logged_in}};
+                        {login, _} ->
+                            send_term(Socket, {error, wrong_command}),
+                            {noreply, S};                                
                         _OtherWise -> 
                             send_term(Socket, {error, log_in}),
                             {noreply, S}
@@ -117,7 +123,7 @@ handle_info({tcp, Socket, Str}, S) ->
                     case Term of
                         {host_game, GameName} ->
                             case cc_lobby:host_game(GameName) of
-                                waiting_for_players ->
+                                ok ->
                                     send_term(Socket, ok),
                                     {noreply, S#pl{st = in_game}};
                                 E -> 
@@ -161,10 +167,10 @@ handle_info({tcp, Socket, Str}, S) ->
                             send_term(Socket, {error, wrong_command}),
                             {noreply, S}
                     end;
-                #pl{st = {in_game, Game}} ->
+                #pl{st = {in_game, GamePid}} ->
                     case Term of
                         {move, Move} ->
-                            case cc_game:move(Game, Move) of
+                            case cc_game:move(GamePid, Move) of
                                 ok -> {noreply, S};
                                 E -> send_term(Socket, E),
                                      {noreply, S}

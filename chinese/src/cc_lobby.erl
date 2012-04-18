@@ -188,7 +188,7 @@ handle_call({join_game, GameName}, {PlayerPid,_Ref},
                 false -> {reply, error_event(game_doesnt_exist), S};
                 % It's a new game with slots
                 {new, Game=#game{num = Num}} when Num =< ?MAX_PLAYERS -> 
-                    player_joined(Game),
+                    player_joined(Player, Game),
                     {reply, ok, 
                      S#st{pls = set_in_game(Player, GameName, Players),
                           games = add_player(Player, Game, Games)}};
@@ -447,5 +447,5 @@ game_closed(Game) ->
     send(game_closed, Game#game.pls ++ Game#game.specs).
 
 % Player joined
-player_joined(Game=#game{pls = Players}) ->
-    send_host({player_joined, player_names(Players)}, Game).
+player_joined(Player, Game=#game{pls = Players}) ->
+    send_host({player_joined, player_names([Player|Players])}, Game).

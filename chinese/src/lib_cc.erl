@@ -60,11 +60,12 @@ remove_player(Board, Player) ->
 %% @end
 %%--------------------------------------------------------------------
 move(Board, Player, Moves = [Start|_Rest]) when length(Moves) > 1 ->
+    InRange = in_range(Moves),
     StartStatus = check_start(Board, Player, Start),
     Stop = lists:last(Moves),
     StopStatus = check_stop(Board, Player, Stop),
     AllOnBoard = all_on_board(Moves),
-    if StartStatus, StopStatus, AllOnBoard, Start =/= Stop ->
+    if InRange, StartStatus, StopStatus, AllOnBoard, Start =/= Stop ->
             case legal_move(Board,Moves) of
                 true ->
                     NewBoard = do_move(Board, Moves),
@@ -206,6 +207,10 @@ check_start(Board, Player, Peg) ->
 check_stop(Board, Player, Peg) ->
     get_peg(Board, Peg) =:= 0 andalso
         lists:member(Peg, possible_positions(Player)).
+
+in_range(Moves) ->
+    InRange = fun(Move) -> Move >= 0 andalso Move =< 288 end,
+    lists:all(InRange, Moves).
 
 %%--------------------------------------------------------------------
 %% @doc Check if a move is legal.

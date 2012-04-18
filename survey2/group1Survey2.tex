@@ -1,14 +1,15 @@
-\documentclass[a4paper,11pt]{article}
+\documentclass[a4paper,11pt]{report}
+\usepackage[utf8]{inputenc}
 \usepackage{fancyhdr}
+\usepackage{algpseudocode}
 \setlength{\headheight}{11pt}
 \pagestyle{fancyplain}
-%\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
 
 \lhead{ }
-\rhead{}
-%\renewcommand{\headrulewidth}{0.0pt}
+\renewcommand{\headrulewidth}{0.0pt}
 
-\lfoot{Group X: Y survey}
+\lfoot{Group 1: Machine Learning}
 %COMMENT: Y is the topic which has been assigned to you
 \cfoot{\thepage}
 \rfoot{}
@@ -24,14 +25,11 @@
 \newcommand\comp{\textsl{The Companion}}
 \newcommand\nss{\textsl{Not so Short}}
 
-
 \begin{document}
 %-----------------------------------------------------------
-\title{
-(probably) The same title\\
-you used \\
-for your pre-proposal\\}
-\author{Group X: Author 1, Author 2, Author 3, Author 4}
+\title{Survey: Recommender systems for movies}
+\author{Group : Emil Falk, Göran Weinholt, Salvo Tomaselli, Rodolphe Lepigre}
+
 \maketitle
 %-----------------------------------------------------------
 \begin{abstract}\centering
@@ -39,43 +37,92 @@ for your pre-proposal\\}
 no more than 10 lines!
 \end{abstract}
 
-\section{Introduction}
-\subsection{The problem or area you are interested in}
-(extract an accurate description of the problem from the project
-description or from your pre-proposal, or lift that material to a general problem specification)
+\chapter{Introduction}
+\section{Recommender Systems}
+A recommender system is a system that based on some data makes predictions on what a user might
+like and present these predictions to the user. Lets say you run a community for movies like IMDb.
+Every user has the possibility to rate different movies to their preference on a given scale. Based
+on the users ratings and information about all the movies the recommender system tries to find
+qualified guesses about which new movies to present to the user as good recommendations.
 
-\subsection{Significance}
-(Why is the problem interesting or significant? What will a solution achieve?)
+\section{Significance}
+The significance of this is gigantic in todays internet-based society. If you are running some sort 
+of service, be it for movies, music or food etc. Then the sole purpose of that site probably are that
+you want your users to expand their knowledge in that area somehow. Recommender Systems gives us the
+opportunity to supply the user with qualified guesses of what items the user might want to observe next.
 
-\subsection{Aspects of the problem covered by this survey}
-(describe these briefly. You could write a small paragraph for each of them, highlighting keywords, and citing the relevant papers. The keywords could be used as sub-section headings in the survey proper, in section 3.)
+If you on the other hand are selling something the significance becomes even more apparent. If
+you can provide a buyer with other items that it might like then you may very well be able to increase
+your profits.
 
-\subsection{Important aspects of the problem not covered here}
-(Aspects of the problem one must know to understand it completely, but not included in the discussion. Use this subsection to ensure a good coverage of the relevant literature without going through much detail)
+A recommender system is today almost standard on all large e-commerce sites and large content-based 
+communities like IMDb, Last.fm etc.
 
-\section{Framework}
-(Here you describe which solution approach(es) you would have chosen if
-this would have been your course project. Use your own words, write down
-definitions, etc., )
-\subsection{Define formally an instance of the problem}
-(Either mathematically, or using pseudo-code. Also, give an example)
-\subsection{Benchmarks}
-(How would you measure the performance of a program that solves the problem?
-Find instances/benchmarks, or make your own).
+\section{Aspects of the problem covered by this survey}
+The area of Recommender systems are roughly split into two different main approaches: Content-based filtering and
+Collaborative filtering. This is also what will be covered in this survey. As stated in NEEDREF the most successful
+approach to movie recommendation has been using collaborative filtering techniques. Thus most of the survery will
+cover collaborative filtering. A brief text on content-based filtering in this setting can be found in \ref{sec:results}.
 
-\section{Survey}
-\subsection{Results from the literature}
-(describe briefly the scientific papers you found relevant to the problem.  Ideally, a commented summary of each paper, like an extended annotation.  Cite references. You could organize this section by keyword, one sub-section for each keyword you specified in 1.3).
+We will describe how to model our data, extract features and learn the parameters to our prediction model.
+Keywords:
+Content-based filtering
+Collaborative filtering
+Data model
+Feature space
+Fitting
+Learning methods:
+  Neighbourhood methods
+  Matrix factorization
 
-\subsection{Tools and programs available for the problem, or for closely related ones}
-(describe these briefly. Say how they can be used, and how a solution to your problem can build on them, or differ from them).
+\section{Important aspects of the problem not covered here}
+There is a third approach called Hybrid systems which combine the two previously stated approaches into a new,
+more effective and powerful solution. This will not be covered in this survey.
 
-\section{References}
+\chapter{Framework}
 
-For instructions on how to handle references, please see the template for
-the project proposal.
+\section{Define formally an instance of the problem}
+We have a database of users and their ratings from a scale 1-5.
+We have a database of movies.
 
+SOME MATH.
 
-\section{Appendix}
+\section{Benchmarks}
+Measure performance, two refs about performance
+How does one measure performance? Cross-validation, prediction accuracy etc.
+
+\chapter{Survey}
+\section{Results from the literature}
+\label{sec:results}
+\subsection{Data model}
+Something about how to model the data
+
+\subsection{Feature space}
+Something about how to extract good features from our data. e.g genre, age-rating, director etc.
+
+\subsection{Content-based filtering}
+Something small about content-based filtering. Pros, cons.
+
+\subsection{Collaborative filtering}
+Something a bit bigger about collaborative filtering.
+\subsubsection{Neighbourhood methods}
+Something about early neighbourhood methods
+\subsubsection{Matrix factorization}
+Something about the more recent approach of matrix factorization
+
+\section{Tools and programs available for the problem, or for closely related ones}
+There exist several commercial tools for doing recommender systems, mostly targeting e-commerce. MATLAB\cite{matlab-ml} are by many considered
+the number one tool for doing all kinds for machine learning-related engineering. It has built-in support for alot of the constructs used in 
+machine learning and statistics. A free alternative to MATLAB are Octave\cite{octave} that is released under GNU. It does not have as good support
+as MATLAB but more than enough for most cases.
+
+Shogun\cite{shogun} is a toolbox for machine learning tasks contaning implementation of alot of relevant algorithms. It interfaces to both MATLAB
+and Octave to name a few.
+
+\chapter{Appendix}
 The previous sections (excluding title page and references) are limited to 6 pages. Here, you can put in anything that didn't fit in there, but that you still think is essential.
+
+\bibliographystyle{aiaa}
+\bibliography{refs}
+
 \end{document}
