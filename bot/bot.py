@@ -69,7 +69,13 @@ def main():
             print "Starting game with players:", players
         else:
             raise Exception("I don't know what happened", x)
-    play(c)
+    while True:
+        x = c.read_noerror()
+        if x[0] == A('game_start'):
+            print "The game starts."
+            play(c)
+            return
+
 
 if __name__ == "__main__":
     main()

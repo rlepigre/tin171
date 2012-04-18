@@ -156,3 +156,9 @@ but at the end of the day the server is working. The wire protocol for
 the server currently uses Erlang's data representation, and it looks
 like this might be difficult to use together with Python. A switch to
 JSON seems likely.
+
+2012-04-19
+Göran has written (in Python) a parser and formatter for the Erlang
+datums used by the server-client protocol. Along with this there is
+also a basic bot that can join or host a game, but it does not yet
+make any moves.
