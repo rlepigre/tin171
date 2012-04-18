@@ -117,7 +117,7 @@ handle_info({tcp, Socket, Str}, S) ->
                     case Term of
                         {host_game, GameName} ->
                             case cc_lobby:host_game(GameName) of
-                                waiting_for_players ->
+                                ok ->
                                     send_term(Socket, ok),
                                     {noreply, S#pl{st = in_game}};
                                 E -> 
