@@ -19,12 +19,14 @@
 # author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
 
 import sys
+import json
 
 from PyQt4 import QtCore, QtGui
 from PyQt4 import QtNetwork
 
 from BoardWidget import BoardWidget
 import gui
+
 
 class StateEnum:
     DISCONNECTED = 0
@@ -58,6 +60,8 @@ class GameUI(QtGui.QMainWindow):
         
         #TODO close the socket if it was trying to connect
         
+        
+        
         hostname = self.ui.txtHostname.text()
         port = self.ui.spinPort.value()
         
@@ -76,13 +80,26 @@ class GameUI(QtGui.QMainWindow):
         
     def new_data(self,msg):
         '''elaborates the messages from the server'''
+        msg=str(msg)
+        msg=msg.strip()
+        #TODO perhaps remove this
+        
+        
+        print "msg",self.state == StateEnum.WAITING_AUTH
         if self.state == StateEnum.WAITING_AUTH:
             if msg=="ok":
                 self.get_games()
+                
+                self.ui.cmdJoin.setEnabled(True)
+                print "AAA"
+                self.ui.cmdSpectate.setEnabled(True)
+                self.ui.cmdStart.setEnabled(True)
+                self.ui.cmdHost.setEnabled(True)
             else:
                 #TODO authentication failed...
                 pass
         elif self.state == StateEnum.WAITING_GAMES:
+            #{games,[31,a],[]}
             pass
     #CONNECTED = 1
     # = 2
@@ -93,7 +110,7 @@ class GameUI(QtGui.QMainWindow):
     
     def get_games(self):
         self.state=StateEnum.WAITING_GAMES
-        self.socket.write("list_games\n")
+        self.socket.write("list_games.\n")
     
     def authenticate(self):
         '''sends authentication to the server'''
@@ -106,7 +123,8 @@ class GameUI(QtGui.QMainWindow):
         
         #TODO username could be something else
         
-        self.socket.write("login %s\n" % username)
+        self.socket.write("{login,\"%s\"}.\n" % username)
+        self.state = StateEnum.WAITING_AUTH
     
     def socket_connected(self):
         
