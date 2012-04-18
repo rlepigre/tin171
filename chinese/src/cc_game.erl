@@ -54,8 +54,8 @@ spectate(Game) ->
 %% @doc Do a move when it's your turn.
 %% @end
 %%--------------------------------------------------------------------
-move(Game, Move) ->
-    gen_fsm:sync_send_event(Game#game.gpid, {move, Move}).
+move(GamePid, Move) ->
+    gen_fsm:sync_send_event(GamePid, {move, Move}).
 
 %%%===================================================================
 %%% gen_fsm callbacks
@@ -298,7 +298,7 @@ won(Player, BoardStr, #game{pls = Players, specs = Specs}) ->
 %%--------------------------------------------------------------------
 update(Player, Move, BoardStr, #game{pls = Players, specs = Specs}) ->
     Update = {update, {Player#player.id, Player#player.name}, Move, BoardStr},
-    broadcast(Update, [Players ++ Specs]).
+    broadcast(Update, Players ++ Specs).
 
 %%--------------------------------------------------------------------
 %% @doc Error-event. Sent when something is wrong.
