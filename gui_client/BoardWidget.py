@@ -91,6 +91,7 @@ class BoardWidget(QtSvg.QSvgWidget):
         #TODO those coordinates don't rescale
         coord=(ev.x()+200 , ev.y()+200)
         for i in _positions:
+            #TODO also that 20, should be proportionate to the size
             if dist(coord,_positions[i]) < 20:
                 #print _positions[i] ,
                 print i

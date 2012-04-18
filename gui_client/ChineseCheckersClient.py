@@ -26,6 +26,7 @@ from PyQt4 import QtNetwork
 
 from BoardWidget import BoardWidget
 import gui
+import protocol
 
 
 class StateEnum:
@@ -85,13 +86,11 @@ class GameUI(QtGui.QMainWindow):
         #TODO perhaps remove this
         
         
-        print "msg",self.state == StateEnum.WAITING_AUTH
         if self.state == StateEnum.WAITING_AUTH:
             if msg=="ok":
                 self.get_games()
                 
                 self.ui.cmdJoin.setEnabled(True)
-                print "AAA"
                 self.ui.cmdSpectate.setEnabled(True)
                 self.ui.cmdStart.setEnabled(True)
                 self.ui.cmdHost.setEnabled(True)
@@ -114,16 +113,7 @@ class GameUI(QtGui.QMainWindow):
     
     def authenticate(self):
         '''sends authentication to the server'''
-        self.state=StateEnum.WAITING_AUTH
-        
-        import os
-        import socket
-
-        username = os.getlogin() + "@" + socket.gethostname()
-        
-        #TODO username could be something else
-        
-        self.socket.write("{login,\"%s\"}.\n" % username)
+        self.socket.write(protocol.login_message())
         self.state = StateEnum.WAITING_AUTH
     
     def socket_connected(self):
@@ -161,6 +151,14 @@ class GameUI(QtGui.QMainWindow):
     def join(self):
         pass
     def host(self):
+        gname = QtGui.QInputDialog.getText(self,
+                    QtGui.QApplication.translate("Form", "Host game"),
+                    QtGui.QApplication.translate("Form", "Insert the name for the new game"),
+                    QtGui.QLineEdit.Normal,"")
+        if not gname[1]:
+            return
+        message= protocol.host_game_message(str(gname[0]))
+        self.socket.write(message)
         pass
     def start(self):
         pass
