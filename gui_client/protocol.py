@@ -40,7 +40,7 @@ def start_game():
     return "start_game.\n"
 
 def get_gui_board(b):
-    b=b.replace('#','0').replace(' ','0')
+    b=b.replace('#','9').replace(' ','0')
     r=[]
     for i in b:
         r.append(int(i))
