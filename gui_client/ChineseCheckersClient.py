@@ -171,7 +171,13 @@ class GameUI(QtGui.QMainWindow):
             #msg[2].pop()
             #for i in msg[2]:
             #    self.svg.setMarble(i,7)
-             
+        elif msg[0]== 'game_state':
+            self.board = protocol.get_gui_board(msg[2])
+            self.svg.setBoard(self.board)
+            self.pretty_players(msg[1])
+        elif msg[0] == 'won':
+            self.board = protocol.get_gui_board(msg[2])
+            self.svg.setBoard(self.board)
             
     def get_games(self):
         self.write("list_games.\n")
