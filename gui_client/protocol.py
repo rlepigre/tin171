@@ -21,7 +21,7 @@ def login_message():
     import os
     import socket
 
-    username = os.getlogin() + "@" + socket.gethostname()
+    username = "%s.%d@%s" % (os.getlogin(),os.getpid(),socket.gethostname())
     
     #TODO username could be something else
     
@@ -45,3 +45,6 @@ def get_gui_board(b):
     for i in b:
         r.append(int(i))
     return r
+
+def move(l):
+    return "{move,%s}.\n" % repr(l).replace(' ','')
