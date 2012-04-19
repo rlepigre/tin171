@@ -30,6 +30,8 @@ class Atom():
         return '"'+ repr(self.x)[1:-1] + '"'
     def __eq__(self,n):
         return str(self) == n
+    def __getitem__(self,n):
+        return str(self)[n]
 
 def A(x):
     if not x in atoms: atoms[x] = Atom(x)

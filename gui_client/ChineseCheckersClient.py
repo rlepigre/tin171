@@ -131,8 +131,10 @@ class GameUI(QtGui.QMainWindow):
                 self.ui.cmdHost.setEnabled(False)
         elif msg[0]=='error':
             if self.state == StateEnum.MOVE_WAIT:
+                self.state = -1
                 self.my_turn = True
                 self.steps=[]
+                self.board=list(self.prev_board)
                 self.svg.setBoard(self.board)
         elif msg[0]=="games":
             self.ui.lstGames.clear()
@@ -154,6 +156,7 @@ class GameUI(QtGui.QMainWindow):
             self.my_turn=True
             self.board = protocol.get_gui_board(msg[2])
             self.svg.setBoard(self.board)
+            self.prev_board=list(self.board)
         elif msg[0] == 'update':
             self.board = protocol.get_gui_board(msg[3])
             self.svg.setBoard(self.board)
@@ -213,7 +216,7 @@ class GameUI(QtGui.QMainWindow):
         
         self.steps.append(i)
         #TODO this is just for testing
-        self.svg.setMarble(i,7)#1+(i%6))
+        self.svg.setMarble(i,7)
         
         
         
