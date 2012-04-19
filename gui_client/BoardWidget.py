@@ -63,6 +63,25 @@ class BoardWidget(QtSvg.QSvgWidget):
         self.board=[]
         for i in xrange(300): self.board.append(0)
         self.setBoard(self.board)
+    def getColor(self,n):
+        '''Returns the QColor for the player'''
+        
+        
+        if n==1: #red
+            c=QtGui.QColor(255,0,0)
+        elif n==2: #orange
+            c=QtGui.QColor('orange')
+        elif n==3: #yellow
+            c=QtGui.QColor('yellow')
+        elif n==4: #green
+            c=QtGui.QColor(0,255,0)
+        elif n==5: #blue
+            c=QtGui.QColor(0,0,255)
+        elif n==6: #purple
+            c=QtGui.QColor('purple')
+        else:
+            c=QtGui.QColor(0,0,0)
+        return c
         
     def setBoard(self,board):
         '''Given an iterable containing the board, shows it in the widget.'''

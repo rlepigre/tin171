@@ -61,6 +61,7 @@ class GameUI(QtGui.QMainWindow):
         self.my_turn = False
         self.steps=[]
         
+        
         #connection to the server
         self.socket=QtNetwork.QTcpSocket()
         QtCore.QObject.connect(self.socket,QtCore.SIGNAL("readyRead()"), self.socket_event)
@@ -148,7 +149,12 @@ class GameUI(QtGui.QMainWindow):
         elif msg[0] == 'game_start':
             self.player_id = msg[1]
             
-            #TODO something about the players msg[2]
+            palette=QtGui.QPalette()
+            palette.setColor(9,self.svg.getColor(msg[1]))
+            self.ui.lstPlayers.setPalette(palette)
+            
+            self.ui.lstPlayers.clear()
+            self.pretty_players(msg[2])
             self.board = protocol.get_gui_board(msg[3])
             self.svg.setBoard(self.board)
         elif msg[0] == 'your_turn':
@@ -256,7 +262,38 @@ class GameUI(QtGui.QMainWindow):
     def write(self,message):
         #TODO return to original state if connection fails
         self.socket.write(message)
-        
+
+    def pretty_players(self,l):
+        self.ui.lstPlayers.clear()
+        for i in l:#msg[2]:
+            
+            item=QtGui.QListWidgetItem()
+                
+                
+            bcolor=self.svg.getColor(i[0])
+            #inverting
+            r=255 & ~bcolor.red()
+            g=255 & ~bcolor.green()
+            b=255 & ~bcolor.blue()
+            fcolor=QtGui.QColor(r,g,b)
+                
+                
+            bbrush=QtGui.QBrush()
+            fbrush=QtGui.QBrush()
+                
+            bbrush.setColor(bcolor)
+            fbrush.setColor(fcolor)
+                
+            bbrush.setStyle(1)
+            fbrush.setStyle(1)
+                
+            item.setBackground(bbrush)
+            item.setForeground(fbrush)
+                
+            item.setText(i[1])
+                
+            self.ui.lstPlayers.addItem(item)
+
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     
