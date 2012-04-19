@@ -27,6 +27,7 @@ from PyQt4 import QtNetwork
 from BoardWidget import BoardWidget
 import gui
 import protocol
+import parser
 
 
 class StateEnum:
@@ -52,6 +53,10 @@ class GameUI(QtGui.QMainWindow):
         self.ui.boardLayout.addWidget(self.svg)
         
         self.state = StateEnum.DISCONNECTED
+        self.parser = parser.Parser()
+        self.board = self.svg.getBoard()
+        self.player_id = -1
+        self.my_turn = False
         
         #connection to the server
         self.socket=QtNetwork.QTcpSocket()
@@ -79,7 +84,9 @@ class GameUI(QtGui.QMainWindow):
         '''Slot connected to the signal of the socket'''
         while self.socket.canReadLine():
             msg = self.socket.readLine()
-            print msg
+            #FIXME ugly hack
+            while str(msg).strip().endswith(','):
+                msg += self.socket.readLine()
             self.new_data(msg)
         
     def new_data(self,msg):
@@ -87,19 +94,9 @@ class GameUI(QtGui.QMainWindow):
         msg=str(msg)
         msg=msg.strip()
         
-        #TODO perhaps remove this
-        if msg.startswith("{games,"):
-            l=msg.split("[")
-            msg=[]
-            msg.append("games")
-            msg.append(l[1][:-2].replace('"','').split(","))
-            msg.append(l[2][:-2].replace('"','').split(","))
-        elif msg.startswith("{player_"):
-            l=msg.split("[")
-            msg=[]
-            msg.append(l[0][1:-1])
-            msg.append(l[1][:-2].replace('"','').split(","))
-        
+        print "---->",msg
+        msg=self.parser.input(msg)
+        print msg
         
         if msg=="ok":
             if self.state == StateEnum.WAITING_AUTH:
@@ -127,7 +124,22 @@ class GameUI(QtGui.QMainWindow):
             self.ui.lstPlayers.clear()
             for i in msg[1]:
                 self.ui.lstPlayers.addItem(i)
+        elif msg[0] == 'game_start':
+            self.player_id = msg[1]
             
+            #TODO something about the players msg[2]
+            self.board = protocol.get_gui_board(msg[3])
+            self.svg.setBoard(self.board)
+        elif msg[0] == 'your_turn':
+            #TODO timeout msg[1]
+            self.my_turn=True
+            self.board = protocol.get_gui_board(msg[2])
+            self.svg.setBoard(self.board)
+        elif msg[0] == 'update':
+            #TODO could animate the move instead...
+            
+            self.board = protocol.get_gui_board(msg[3])
+            self.svg.setBoard(self.board)
     #CONNECTED = 1
     # = 2
     #DISCONNECTED = 0
