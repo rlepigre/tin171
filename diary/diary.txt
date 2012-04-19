@@ -162,3 +162,10 @@ Göran has written (in Python) a parser and formatter for the Erlang
 datums used by the server-client protocol. Along with this there is
 also a basic bot that can join or host a game, but it does not yet
 make any moves.
+
+Salvo used the parser written by Göran in the GUI client, which can now be used
+to play a game and is practically completed.
+This led to the discovery of a bug in the server, when it has to decide which
+moves are correct.
+The QT widget that shows the board had to be updated to be able to use another
+color for marbles, used just to highlight.
