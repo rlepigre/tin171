@@ -40,6 +40,8 @@ class StateEnum:
     HOST_OK_WAIT = 6
     JOIN_OK_WAIT = 7
     START_WAIT = 8
+    MOVE_WAIT = 9
+    SPECTATE_WAIT = 10
     
 
 class GameUI(QtGui.QMainWindow):
@@ -57,6 +59,7 @@ class GameUI(QtGui.QMainWindow):
         self.board = self.svg.getBoard()
         self.player_id = -1
         self.my_turn = False
+        self.steps=[]
         
         #connection to the server
         self.socket=QtNetwork.QTcpSocket()
@@ -99,7 +102,14 @@ class GameUI(QtGui.QMainWindow):
         print msg
         
         if msg=="ok":
-            if self.state == StateEnum.WAITING_AUTH:
+            
+            if self.state == StateEnum.MOVE_WAIT:
+                last = self.steps[-1]
+                self.board[last] = self.player_id
+                self.svg.setMarble(last,self.player_id)
+                self.steps=[]
+            
+            elif self.state == StateEnum.WAITING_AUTH:
                 self.get_games()
                 
                 self.ui.cmdJoin.setEnabled(True)
@@ -114,7 +124,16 @@ class GameUI(QtGui.QMainWindow):
             elif self.state == StateEnum.START_WAIT:
                 self.ui.cmdStart.setEnabled(False)
                 self.state = StateEnum.GAME_STARTED
-                
+            elif self.state == StateEnum.SPECTATE_WAIT:
+                self.ui.cmdJoin.setEnabled(False)
+                self.ui.cmdSpectate.setEnabled(False)
+                self.ui.cmdStart.setEnabled(False)
+                self.ui.cmdHost.setEnabled(False)
+        elif msg[0]=='error':
+            if self.state == StateEnum.MOVE_WAIT:
+                self.my_turn = True
+                self.steps=[]
+                self.svg.setBoard(self.board)
         elif msg[0]=="games":
             self.ui.lstGames.clear()
             for i in msg[1]:
@@ -136,17 +155,15 @@ class GameUI(QtGui.QMainWindow):
             self.board = protocol.get_gui_board(msg[2])
             self.svg.setBoard(self.board)
         elif msg[0] == 'update':
-            #TODO could animate the move instead...
-            
             self.board = protocol.get_gui_board(msg[3])
             self.svg.setBoard(self.board)
-    #CONNECTED = 1
-    # = 2
-    #DISCONNECTED = 0
-    #WAITING_PLAYERS = 3
-     #= 4
-    #GAME_STARTED = 5
-    
+            
+            #TODO Highlights the jumps
+            #msg[2].pop()
+            #for i in msg[2]:
+            #    self.svg.setMarble(i,7)
+             
+            
     def get_games(self):
         self.write("list_games.\n")
     
@@ -180,8 +197,24 @@ class GameUI(QtGui.QMainWindow):
         self.ui.cmdDisconnect.setEnabled(False)
         
     def board_click(self,i):
+        if self.my_turn == False or self.board[i] not in (self.player_id,0,7):
+            return
+        
+        print i
+        
+        if len(self.steps)>0 and self.steps[-1]==i:
+            #Move made
+            message=protocol.move(self.steps)
+            self.write(message)
+            self.state = StateEnum.MOVE_WAIT
+            self.my_turn = False
+            return
+            pass
+        
+        self.steps.append(i)
         #TODO this is just for testing
-        self.svg.setMarble(i,1+(i%6))
+        self.svg.setMarble(i,7)#1+(i%6))
+        
         
         
         
@@ -191,7 +224,10 @@ class GameUI(QtGui.QMainWindow):
         self.write(message)
         pass
     def join(self):
-        message=protocol.join_game(self.ui.lstGames.currentItem().text())
+        item = self.ui.lstGames.currentItem()
+        if item == None: return
+        
+        message=protocol.join_game(item.text())
         self.write(message)
         self.state = StateEnum.JOIN_OK_WAIT
         pass
