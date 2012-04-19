@@ -28,4 +28,13 @@ def login_message():
     return "{login,\"%s\"}.\n" % username
 
 def host_game_message(name):
-    return "{host_game,\"%s\"}." % name
+    return "{host_game,\"%s\"}.\n" % name
+    
+def spectate_game(name):
+    return "{spectate,\"%s\"}.\n" % name
+    
+def join_game(name):
+    return "{join_game,\"%s\"}.\n" % name
+
+def start_game():
+    return "start_game.\n"

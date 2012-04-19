@@ -36,6 +36,9 @@ class StateEnum:
     WAITING_PLAYERS = 3
     WAITING_AUTH = 4
     GAME_STARTED = 5
+    HOST_OK_WAIT = 6
+    JOIN_OK_WAIT = 7
+    START_WAIT = 8
     
 
 class GameUI(QtGui.QMainWindow):
@@ -83,23 +86,48 @@ class GameUI(QtGui.QMainWindow):
         '''elaborates the messages from the server'''
         msg=str(msg)
         msg=msg.strip()
+        
         #TODO perhaps remove this
+        if msg.startswith("{games,"):
+            l=msg.split("[")
+            msg=[]
+            msg.append("games")
+            msg.append(l[1][:-2].replace('"','').split(","))
+            msg.append(l[2][:-2].replace('"','').split(","))
+        elif msg.startswith("{player_"):
+            l=msg.split("[")
+            msg=[]
+            msg.append(l[0][1:-1])
+            msg.append(l[1][:-2].replace('"','').split(","))
         
         
-        if self.state == StateEnum.WAITING_AUTH:
-            if msg=="ok":
+        if msg=="ok":
+            if self.state == StateEnum.WAITING_AUTH:
                 self.get_games()
                 
                 self.ui.cmdJoin.setEnabled(True)
                 self.ui.cmdSpectate.setEnabled(True)
                 self.ui.cmdStart.setEnabled(True)
                 self.ui.cmdHost.setEnabled(True)
-            else:
-                #TODO authentication failed...
-                pass
-        elif self.state == StateEnum.WAITING_GAMES:
-            #{games,[31,a],[]}
+            elif self.state in (StateEnum.HOST_OK_WAIT,StateEnum.JOIN_OK_WAIT):
+                self.ui.cmdJoin.setEnabled(False)
+                self.ui.cmdSpectate.setEnabled(False)
+                self.ui.cmdHost.setEnabled(False)
+                self.state = StateEnum.WAITING_PLAYERS
+            elif self.state == StateEnum.START_WAIT:
+                self.ui.cmdStart.setEnabled(False)
+                self.state = StateEnum.GAME_STARTED
+                
+        elif msg[0]=="games":
+            self.ui.lstGames.clear()
+            for i in msg[1]:
+                self.ui.lstGames.addItem(i)
             pass
+        elif msg[0] in ("player_joined","player_left"):
+            self.ui.lstPlayers.clear()
+            for i in msg[1]:
+                self.ui.lstPlayers.addItem(i)
+            
     #CONNECTED = 1
     # = 2
     #DISCONNECTED = 0
@@ -108,12 +136,11 @@ class GameUI(QtGui.QMainWindow):
     #GAME_STARTED = 5
     
     def get_games(self):
-        self.state=StateEnum.WAITING_GAMES
-        self.socket.write("list_games.\n")
+        self.write("list_games.\n")
     
     def authenticate(self):
         '''sends authentication to the server'''
-        self.socket.write(protocol.login_message())
+        self.write(protocol.login_message())
         self.state = StateEnum.WAITING_AUTH
     
     def socket_connected(self):
@@ -147,8 +174,14 @@ class GameUI(QtGui.QMainWindow):
         
         
     def spectate(self):
+        #TODO
+        message=protocol.spectate_game(self.ui.lstGames.currentItem().text())
+        self.write(message)
         pass
     def join(self):
+        message=protocol.join_game(self.ui.lstGames.currentItem().text())
+        self.write(message)
+        self.state = StateEnum.JOIN_OK_WAIT
         pass
     def host(self):
         gname = QtGui.QInputDialog.getText(self,
@@ -158,10 +191,21 @@ class GameUI(QtGui.QMainWindow):
         if not gname[1]:
             return
         message= protocol.host_game_message(str(gname[0]))
-        self.socket.write(message)
+        self.write(message)
+        self.state = StateEnum.HOST_OK_WAIT
+        self.get_games()
         pass
     def start(self):
+        self.state = StateEnum.START_WAIT
+        message = protocol.start_game()
+        self.write(message)
         pass
+    
+    
+    def write(self,message):
+        #TODO return to original state if connection fails
+        self.socket.write(message)
+        
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     

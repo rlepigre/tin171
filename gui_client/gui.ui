@@ -105,7 +105,7 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QListView" name="listView_2"/>
+          <widget class="QListWidget" name="lstPlayers"/>
          </item>
         </layout>
        </widget>
@@ -115,7 +115,21 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QListView" name="listView"/>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QListWidget" name="lstGames"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="refreshGames">
+             <property name="text">
+              <string>←</string>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <widget class="QPushButton" name="cmdSpectate">
@@ -128,22 +142,22 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="cmdJoin">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Join</string>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPushButton" name="cmdHost">
            <property name="enabled">
             <bool>false</bool>
            </property>
            <property name="text">
             <string>Host</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="cmdJoin">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Join</string>
            </property>
           </widget>
          </item>
@@ -231,8 +245,8 @@
    <slot>spectate()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>485</x>
-     <y>442</y>
+     <x>556</x>
+     <y>476</y>
     </hint>
     <hint type="destinationlabel">
      <x>714</x>
@@ -247,8 +261,8 @@
    <slot>join()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>578</x>
-     <y>468</y>
+     <x>649</x>
+     <y>530</y>
     </hint>
     <hint type="destinationlabel">
      <x>713</x>
@@ -263,8 +277,8 @@
    <slot>host()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>469</x>
-     <y>507</y>
+     <x>540</x>
+     <y>503</y>
     </hint>
     <hint type="destinationlabel">
      <x>715</x>
@@ -279,8 +293,8 @@
    <slot>start()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>496</x>
-     <y>520</y>
+     <x>567</x>
+     <y>557</y>
     </hint>
     <hint type="destinationlabel">
      <x>714</x>
@@ -304,6 +318,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>refreshGames</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>get_games()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>691</x>
+     <y>369</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>713</x>
+     <y>326</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>connect()</slot>
@@ -312,5 +342,6 @@
   <slot>join()</slot>
   <slot>host()</slot>
   <slot>start()</slot>
+  <slot>get_games()</slot>
  </slots>
 </ui>
