@@ -108,11 +108,11 @@ system.
 % Either mathematically, or using pseudo-code. Also, give an example.
 A student, lets call him Bob, is looking for informations about the application
 procedure to a Master program at Chalmers. He types the URL of the student help
-desk system and there he finds a text-field where he can ask his question. Let's
-say that his question is ``What is the application procedure for a Master
-program?''. The system should give him an answer directing him to the admission
-system. If the system cannot find an answer to the querry, the it must notify the
-user and ask him for a new question.
+desk system in his browser. A web page opens with a text-field where he can ask
+his question. Let's say that his question is ``What is the application procedure
+for a Master program?''. The system should give him an answer directing him to
+the admission system. If the system cannot find an answer to the querry, the it
+must notify the user and ask him for a new question.
 
 \subsection{Benchmarks}
 % How would you measure the performance of a program that solves the problem?
@@ -129,18 +129,17 @@ useful and relevant.
 % Ideally, a commented summary of each paper, like an extended annotation.
 % Cite references. You could organize this section by keyword, one sub-section
 % for each keyword you specified in 1.3.
+The course book (\cite{aimodern}) contains only a little paragraph on question
+answering systems, however it gives some hint on how to design natural language
+processing (NLP) systems in general.\\
 There are several papers that consider feeding data to a question system through
 frequently asked question (FAQ) data (see \cite{evaluatingqasusingfaq} and
-\cite{faqfindersys}). In some cases the system might have to choose between
-several possible answers. Ranking techniques for suspected answers to questions
-are discussed in \cite{rankingsuspected}. However this is not a crutial matter
-for closed-domain question answering systems.\\
-% \cite{surveyonqa}\\
-% \cite{aqua}\\
-% \cite{discoveryofinfrules}\\
-% \cite{newdirinqa}\\
-% \cite{qabypredannot}\\
-% TODO
+\cite{faqfindersys}).\\
+In some cases the system might have to choose between several possible answers.
+Ranking techniques for suspected answers to questions are discussed in
+\cite{rankingsuspected}. However this is not a crutial matter for closed-domain
+question answering systems.\\
+% TODO add some more, maybe find new ones
 
 \subsection{Tools and programs available for the problem, or for closely related ones}
 % Describe these briefly. Say how they can be used, and how a solution to your

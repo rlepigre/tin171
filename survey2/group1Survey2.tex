@@ -1,10 +1,9 @@
-\documentclass[a4paper,11pt]{report}
-\usepackage[utf8]{inputenc}
+\documentclass[a4paper,11pt]{article}
 \usepackage{fancyhdr}
-\usepackage{algpseudocode}
+\usepackage{amsmath}
 \setlength{\headheight}{11pt}
 \pagestyle{fancyplain}
-\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+%\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
 
 \lhead{ }
 \renewcommand{\headrulewidth}{0.0pt}
@@ -27,91 +26,169 @@
 
 \begin{document}
 %-----------------------------------------------------------
-\title{Survey: Recommender systems for movies}
-\author{Group : Emil Falk, Göran Weinholt, Salvo Tomaselli, Rodolphe Lepigre}
+\title{Recommender systems for movies using Collaborative filtering}
+\author{Group 1: Emil Falk, Göran Weinholt, Salvo Tomaselli, Rodolphe Lepigre}
 
 \maketitle
 %-----------------------------------------------------------
 \begin{abstract}\centering
 %%COMMENT
-no more than 10 lines!
+A recommender system for movies is a system that based on users
+ratings on different movies makes predictions on what new and unrated
+movies a user might like. The most common approach to this problem is
+collaborative filtering. In contrast to content-based filtering which
+uses features extracted from the movies to make predictions this method
+looks at other users preferences/ratings and tries to find users with 
+similar taste. Most commonly only a limited number of the best guesses
+are then returned to the user. In this survey we look at relevant papers
+that relates to this problem.
 \end{abstract}
 
-\chapter{Introduction}
-\section{Recommender Systems}
-A recommender system is a system that based on some data makes predictions on what a user might
-like and present these predictions to the user. Lets say you run a community for movies like IMDb.
-Every user has the possibility to rate different movies to their preference on a given scale. Based
-on the users ratings and information about all the movies the recommender system tries to find
-qualified guesses about which new movies to present to the user as good recommendations.
+\section{Introduction}
+\subsection{The problem or are you are intrested in}
+% Extract an accurate description of the problem from the project description or
+% from your pre-proposal, or lift that material to a general problem specificat-
+% ion.
+A recommender system in general is a system that contains a user database,
+an item database and a rating system. Each user might have different attributes
+(age, gender, occupation, etc) as do the items(title, genre, director, etc). 
+The users can rate an item according to a predefined rating system and all
+ratings are collected into the system.
 
-\section{Significance}
+The task of the recommender system is to find the unrated items that a user 
+might rate the highest in the future. This is done by using all the collective
+information from the system(user-data, item-data and ratings).
+
+The problem at hand is to build a recommender system that maximizes the usefulness
+or utility towards towards it's users.
+\subsection{Significance}
+% Why is the problem interesting or significant? What will a solution achieve?
 The significance of this is gigantic in todays internet-based society. If you are running some sort 
 of service, be it for movies, music or food etc. Then the sole purpose of that site probably are that
 you want your users to expand their knowledge in that area somehow. Recommender Systems gives us the
-opportunity to supply the user with qualified guesses of what items the user might want to observe next.
+opportunity to supply the user with qualified guesses of which items the user might want to be 
+intrested in.
 
 If you on the other hand are selling something the significance becomes even more apparent. If
-you can provide a buyer with other items that it might like then you may very well be able to increase
-your profits.
+you can provide a buyer with good targeted advertising for other items that it might like then
+you may very well be able to increase your profits.
 
-A recommender system is today almost standard on all large e-commerce sites and large content-based 
-communities like IMDb, Last.fm etc.
+\subsection{Aspects of the problem covered by this survey}
+% Describe these briefly. You could write a small paragraph for each of them,
+% highlighting keywords, and citing the relevant papers. The keywords could be
+% used as sub-section headings in the survey proper, in section 3.
+The area of Recommender systems are roughly split into two different main approaches\cite{1423975}:
+content-based filtering and \emph{collaborative filtering}.
 
-\section{Aspects of the problem covered by this survey}
-The area of Recommender systems are roughly split into two different main approaches: Content-based filtering and
-Collaborative filtering. This is also what will be covered in this survey. As stated in NEEDREF the most successful
-approach to movie recommendation has been using collaborative filtering techniques. Thus most of the survery will
-cover collaborative filtering. A brief text on content-based filtering in this setting can be found in \ref{sec:results}.
+Content-based approaches will try to compute a list of recommendations from the users previous ratings. 
+It will try to find movies that are simliar to other movies the user has liked in the past using some
+similarity measure. This approach is dependent on the content of the items. \emph{Collaborative filtering}
+on the other hand tries to find a list of recommendations for a user based on other users that has similar
+rating behaviour. It is assumed that if their previous ratings are simliar then unrated movies of one user
+may very well be rated the same by the other one. This approach requires no information regarding the content
+of the items but uses only relational data between the users.
 
-We will describe how to model our data, extract features and learn the parameters to our prediction model.
-Keywords:
-Content-based filtering
-Collaborative filtering
-Data model
-Feature space
-Fitting
-Learning methods:
-  Neighbourhood methods
-  Matrix factorization
+Both approaches of course has their pros and cons but four that is rather important in our case is
+the problems of introducing \emph{serendipity} to the system, dealing with \emph{sparsity} of the ratings data, the
+\emph{new user problem} and specific to \emph{collaborative filtering} the \emph{cold start problem}.
 
-\section{Important aspects of the problem not covered here}
+\emph{Collaborative filtering} are in turn split in two main parts: \emph{neighbourhood} or \emph{model\-based} methods.
+
+\subsection{Important aspects of the problem not covered here}
+% Aspects of the problem one must know to understand it completely, but not
+% included in the discussion. Use this subsection to ensure a good coverage of
+% the relevant literature without going through much detail.
 There is a third approach called Hybrid systems which combine the two previously stated approaches into a new,
 more effective and powerful solution. This will not be covered in this survey.
 
-\chapter{Framework}
+\section{Framework}
+% Here you describe which solution approach(es) you would have chosen if this
+% would have been your course project. Use your own words, write down
+% definitions, etc., )
+\subsection{Define formally an instance of the problem}
+% Either mathematically, or using pseudo-code. Also, give an example.
+$U : \{u_1, u_2, ..., u_n\}$ be the set of all users\\
+$M : \{m_1, m_2, ..., m_l\}$ be the set of all movies\\
+$S : \{1,2,3,4,5\}$ be the set of all possible ratings \\
+$R : \{r_{um} : \forall u \in U, \forall m \in M\}$ be the set of all ratings by all users\\
+$M_i : \{m_1, m_2, ..., m_k\}$ be the set of movies that user $i$ has rated \\
 
-\section{Define formally an instance of the problem}
-We have a database of users and their ratings from a scale 1-5.
-We have a database of movies.
+Thus rating $r_{ij}$ is the rating of user $i$ on movie $j$. Each rating can eiter be undefined
+or one of the elements of $S$. Then let: \\
 
-SOME MATH.
+$f(u,m) : U \times M \to S$ \\
 
-\section{Benchmarks}
-Measure performance, two refs about performance
-How does one measure performance? Cross-validation, prediction accuracy etc.
+be a function that predicts user $u$'s rating on movie $m$.
 
-\chapter{Survey}
-\section{Results from the literature}
-\label{sec:results}
-\subsection{Data model}
-Something about how to model the data
+With this function $f$ we want to find a movie $i$ such that $i \in M \setminus M_i$.
+We use function $f$ to find the best movie recommendation $i^{*}$(or the list of highest) to
+the user $u$ such that: \\
+\[ i^{*} = \operatorname*{arg\,max}_{j \in M_i \setminus M} f(u,j) \]
 
-\subsection{Feature space}
-Something about how to extract good features from our data. e.g genre, age-rating, director etc.
+This is the formal definition of a recommendation problem. But there is a central problem. The
+function $f$ are not defined over the whole set $U \times M$. Thus we will need to estimate
+the missing ratings. This estimation is done using collaborative filtering techniques.
 
-\subsection{Content-based filtering}
-Something small about content-based filtering. Pros, cons.
+We seldom only want to recommend one item and thus this problem is transformed into one that
+is roughly the same other than that we want to present a list of the $N$ best movie recommendations.
 
-\subsection{Collaborative filtering}
-Something a bit bigger about collaborative filtering.
+\subsection{Benchmarks}
+% How would you measure the performance of a program that solves the problem?
+% Find instances/benchmarks, or make your own).
+The performance of a recommender system can be evaluated using ordinary machine learning techniques.
+This involves splitting our set of ratings into two sets: $R_{train}$ and $R_{test}$. To test our system
+we train it using the set $R_{train}$. When we have a trained system we measure it's error on our test set
+$R_{test}$. Two measures of the magnitude of the error is \emph{Mean Absolute Error}(MAE) and
+\emph{Root Mean Squared Error}(RMSE).\cite{springerlink:10.1007/978-0-387-85820-3_1}
+Furthermore they show how to divide our rating set into two ``good'' sets in \cite{Herlocker:2004:ECF:963770.963772}
+including other various things to keep in mind when evaluating the performance of our system.
+
+Both papers also mentions two other central metrics called \emph{precision} and \emph{recall}. The precision
+measures the probability that an item is considered as relevant.\cite{Herlocker:2004:ECF:963770.963772}. And
+the recall measures the probability that an item is recommended.\cite{Herlocker:2004:ECF:963770.963772}
+
+\section{Survey}
+\subsection{Results from the literature}
+% Describe briefly the scientific papers you found relevant to the problem.
+% Ideally, a commented summary of each paper, like an extended annotation.
+% Cite references. You could organize this section by keyword, one sub-section
+% for each keyword you specified in 1.3.
+\subsubsection{Collaborative filtering}
+Collaborative filtering is one of the most used methods to predict the ratings in
+a recommender system. It is are covered extensively both in \cite{springerlink:10.1007/978-0-387-85820-3_1} and \cite{1423975}. This method has the advantages over content-based approaches that it need not care about the content of the recommended items\cite{1423975}. It only need rating data from the users to work properly. This approach is in turn divided into two sub-approaches: Neighbourhood- and model-based methods. Neighbourhood methods has been used alot in the past but today more complex model-based methods are often used such as \emph{Matrix Factorization}.
+ADD SOMETHING ABOUT ITEM-ITEM/USER-USER systems
+
+\subsubsection{Serendipity}
+One of the biggest problem with content-based filtering is that is very naive. If a user $a$ has rated alot of Quentin Tarantino movies high then the recommender system will probably recommend the rest of his movies to $a$. But since $a$ already liked Tarantino it is rather likely that the user would have found the recommended movies by itself. This is the problem of low serendipity in content-based systems.
+
+Collaborative filtering on the other hand will have good serendipity because it will not be influenced in this way. Of course there may be alot of users that are Quentin Tarantino fans but they will also have other movies rated which will in this scenario be good candidates to recommend to the user $a$.
+
+\subsubsection{Sparsity}
+Another problem when dealing with recommender system is that our data is often
+very sparse. A user might only have rated a few percent if even that of the total
+number of items. But since this is a common scenario we have to be able to make
+good predictions even in the presence of sparse data. Data sparsity are a big problem when using \emph{Neighbourhood methods}\cite{springerlink:10.1007/978-0-387-85820-3_1}. In both \cite{1423975} and \cite{springerlink:10.1007/978-0-387-85820-3_1} they suggest a few techniques to overcome this problem. A simple and common technique to overcome this problem is to fill in undefined values with a default value. The most promising seems to be a slightly modified version of \emph{Singular Value Decomposition}(SVD+), a common method for \emph{Matrix Factorization}.
+
+\subsubsection{New user problem}
+The new user problem exists in both content-based filtering and collaborative filtering. For collaborative filtering the problem is as follows: When a new user enter the system it doesn't have any ratings. Because it has no ratings it is impossible to find users with simliar rating behaviour and thus no recommendations can be done\cite{1423975}. Both \cite{1423975} and \cite{springerlink:10.1007/978-0-387-85820-3_1} explains methods for overcoming this problem. Most of the solutions are to make a hybrid system. If we use collaborative filtering and a user has no ratings then we revert to content-based filtering for example.
+
+\subsubsection{Cold start problem}
+The cold start arises in most collaborative filtering systems. The problem is that when the system is rather new there are alot of items/movies that are unrated. In a system using collaborative filtering unrated items will never be recommended.
+
 \subsubsection{Neighbourhood methods}
-Something about early neighbourhood methods
-\subsubsection{Matrix factorization}
-Something about the more recent approach of matrix factorization
+Neighbourhood methods are one of two main approaches to collaborative filtering. It's a very simple and elegant solution to this problem. The method tries cluster the users into neighbourhoods using some distance measure. The recommender system then recommends items unrated by the user in its neighbourhood. 
 
-\section{Tools and programs available for the problem, or for closely related ones}
-There exist several commercial tools for doing recommender systems, mostly targeting e-commerce. MATLAB\cite{matlab-ml} are by many considered
+It has in the past been very widely used due to its simplicity and rather good performance. But in recent year it has seen a decline in use in favor of model-based methods.
+
+\subsubsection{Model-based methods}
+
+
+\subsection{Tools and programs available for the problem, or for closely related ones}
+% Describe these briefly. Say how they can be used, and how a solution to your
+% problem can build on them, or differ from them.
+There exist alot of both commercial and free tools for doing recommender systems in various domains, mostly targeting e-commerce. 
+
+MATLAB\cite{matlab-ml} are by many considered
 the number one tool for doing all kinds for machine learning-related engineering. It has built-in support for alot of the constructs used in 
 machine learning and statistics. A free alternative to MATLAB are Octave\cite{octave} that is released under GNU. It does not have as good support
 as MATLAB but more than enough for most cases.
