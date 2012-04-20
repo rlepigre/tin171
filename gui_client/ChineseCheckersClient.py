@@ -132,12 +132,12 @@ class GameUI(QtGui.QMainWindow):
         elif msg[0]=="games":
             self.ui.lstGames.clear()
             for i in msg[1]:
-                self.ui.lstGames.addItem(i)
+                self.ui.lstGames.addItem(str(i))
             pass
         elif msg[0] in ("player_joined","player_left"):
             self.ui.lstPlayers.clear()
             for i in msg[1]:
-                self.ui.lstPlayers.addItem(i)
+                self.ui.lstPlayers.addItem(str(i))
         elif msg[0] == 'game_start':
             self.player_id = msg[1]
             
@@ -294,7 +294,7 @@ class GameUI(QtGui.QMainWindow):
                 
             item.setText(i[1])
                 
-            self.ui.lstPlayers.addItem(item)
+            self.ui.lstPlayers.addItem(str(item))
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
