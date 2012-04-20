@@ -111,6 +111,7 @@ class GameUI(QtGui.QMainWindow):
                 self.ui.cmdJoin.setEnabled(False)
                 self.ui.cmdSpectate.setEnabled(False)
                 self.ui.cmdHost.setEnabled(False)
+                self.ui.cmdStart.setEnabled(False)
                 self.state = StateEnum.WAITING_PLAYERS
             elif self.state == StateEnum.START_WAIT:
                 self.ui.cmdStart.setEnabled(False)
