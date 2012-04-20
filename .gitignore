@@ -1,0 +1,5 @@
+*.pyc
+chinese/ebin/
+*~
+*.pdf
+gui_client/gui.py
