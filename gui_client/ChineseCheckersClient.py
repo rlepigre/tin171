@@ -111,7 +111,8 @@ class GameUI(QtGui.QMainWindow):
                 self.ui.cmdJoin.setEnabled(False)
                 self.ui.cmdSpectate.setEnabled(False)
                 self.ui.cmdHost.setEnabled(False)
-                self.ui.cmdStart.setEnabled(False)
+                if self.state == StateEnum.JOIN_OK_WAIT:
+                    self.ui.cmdStart.setEnabled(False)
                 self.state = StateEnum.WAITING_PLAYERS
             elif self.state == StateEnum.START_WAIT:
                 self.ui.cmdStart.setEnabled(False)
@@ -212,10 +213,11 @@ class GameUI(QtGui.QMainWindow):
         self.ui.cmdDisconnect.setEnabled(False)
         
     def board_click(self,i):
+        print i
         if self.my_turn == False or self.board[i] not in (self.player_id,0,7):
             return
         
-        print i
+        
         
         if len(self.steps)==0 and self.board[i]==0:
             return
@@ -229,10 +231,7 @@ class GameUI(QtGui.QMainWindow):
             return
         
         self.steps.append(i)
-        #TODO this is just for testing
         self.svg.setMarble(i,7)
-        
-        
         
         
     def spectate(self):
