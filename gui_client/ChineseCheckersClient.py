@@ -71,10 +71,6 @@ class GameUI(QtGui.QMainWindow):
     def connect_server(self):
         '''slot connected to the event of button pressed'''
         
-        #TODO close the socket if it was trying to connect
-        
-        
-        
         hostname = self.ui.txtHostname.text()
         port = self.ui.spinPort.value()
         
@@ -82,7 +78,6 @@ class GameUI(QtGui.QMainWindow):
             self.socket.close()
         
         self.socket.connectToHost(hostname,port,QtNetwork.QAbstractSocket.ReadWrite)
-        #self.socket.connectToHost("localhost",9000,)
             
     def socket_event(self):
         '''Slot connected to the signal of the socket'''
@@ -98,19 +93,14 @@ class GameUI(QtGui.QMainWindow):
         msg=str(msg)
         msg=msg.strip()
         
-        print "---->",msg
+        #print "---->",msg
         msg=self.parser.input(msg)
-        print msg
+        #print msg
         
+        print msg,self.state
         if msg=="ok":
             
-            if self.state == StateEnum.MOVE_WAIT:
-                last = self.steps[-1]
-                self.board[last] = self.player_id
-                self.svg.setMarble(last,self.player_id)
-                self.steps=[]
-            
-            elif self.state == StateEnum.WAITING_AUTH:
+            if self.state == StateEnum.WAITING_AUTH:
                 self.get_games()
                 
                 self.ui.cmdJoin.setEnabled(True)
@@ -121,6 +111,8 @@ class GameUI(QtGui.QMainWindow):
                 self.ui.cmdJoin.setEnabled(False)
                 self.ui.cmdSpectate.setEnabled(False)
                 self.ui.cmdHost.setEnabled(False)
+                if self.state == StateEnum.JOIN_OK_WAIT:
+                    self.ui.cmdStart.setEnabled(False)
                 self.state = StateEnum.WAITING_PLAYERS
             elif self.state == StateEnum.START_WAIT:
                 self.ui.cmdStart.setEnabled(False)
@@ -159,11 +151,20 @@ class GameUI(QtGui.QMainWindow):
             self.svg.setBoard(self.board)
         elif msg[0] == 'your_turn':
             #TODO timeout msg[1]
+            self.steps=list()
+            self.ui.boardFrame.setTitle(QtGui.QApplication.translate("Form", "Make your move"))
             self.my_turn=True
             self.board = protocol.get_gui_board(msg[2])
             self.svg.setBoard(self.board)
             self.prev_board=list(self.board)
         elif msg[0] == 'update':
+            
+            if self.state == StateEnum.MOVE_WAIT:
+                self.state=-1
+                
+                self.steps=[]
+                self.ui.boardFrame.setTitle(QtGui.QApplication.translate("Form", "Board"))
+            
             self.board = protocol.get_gui_board(msg[3])
             self.svg.setBoard(self.board)
             
@@ -212,25 +213,25 @@ class GameUI(QtGui.QMainWindow):
         self.ui.cmdDisconnect.setEnabled(False)
         
     def board_click(self,i):
+        print i
         if self.my_turn == False or self.board[i] not in (self.player_id,0,7):
             return
         
-        print i
         
-        if len(self.steps)>0 and self.steps[-1]==i:
+        
+        if len(self.steps)==0 and self.board[i]==0:
+            return
+        
+        if len(self.steps)>1 and self.steps[-1]==i:
             #Move made
             message=protocol.move(self.steps)
             self.write(message)
             self.state = StateEnum.MOVE_WAIT
             self.my_turn = False
             return
-            pass
         
         self.steps.append(i)
-        #TODO this is just for testing
         self.svg.setMarble(i,7)
-        
-        
         
         
     def spectate(self):
@@ -266,6 +267,7 @@ class GameUI(QtGui.QMainWindow):
     
     
     def write(self,message):
+        print "---> %s" % message
         #TODO return to original state if connection fails
         self.socket.write(message)
 
@@ -275,15 +277,9 @@ class GameUI(QtGui.QMainWindow):
             
             item=QtGui.QListWidgetItem()
                 
-                
             bcolor=self.svg.getColor(i[0])
-            #inverting
-            r=255 & ~bcolor.red()
-            g=255 & ~bcolor.green()
-            b=255 & ~bcolor.blue()
-            fcolor=QtGui.QColor(r,g,b)
-                
-                
+            fcolor=self.svg.getColor(i[0],negated=True)
+            
             bbrush=QtGui.QBrush()
             fbrush=QtGui.QBrush()
                 

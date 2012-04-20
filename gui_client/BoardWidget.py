@@ -63,9 +63,8 @@ class BoardWidget(QtSvg.QSvgWidget):
         self.board=[]
         for i in xrange(300): self.board.append(0)
         self.setBoard(self.board)
-    def getColor(self,n):
+    def getColor(self,n,negated=False):
         '''Returns the QColor for the player'''
-        
         
         if n==1: #red
             c=QtGui.QColor(255,0,0)
@@ -81,6 +80,14 @@ class BoardWidget(QtSvg.QSvgWidget):
             c=QtGui.QColor('purple')
         else:
             c=QtGui.QColor(0,0,0)
+        
+        if negated:
+            #inverting
+            r=255 & ~c.red()
+            g=255 & ~c.green()
+            b=255 & ~c.blue()
+            return QtGui.QColor(r,g,b)
+        
         return c
         
     def setBoard(self,board):
@@ -110,13 +117,14 @@ class BoardWidget(QtSvg.QSvgWidget):
         when a click is made on a marble'''
         dist= lambda c1,c2: sqrt(((c1[0]-c2[0])**2) + ((c1[1]-c2[1])**2))
         
-        #TODO those coordinates don't rescale
-        coord=(ev.x()+200 , ev.y()+200)
+        size=self.size()
+        
+        coord=((ev.x() * 600/ size.width()) + 200,(ev.y() * 600/ size.height()) + 200)
+        
         for i in _positions:
             #TODO also that 20, should be proportionate to the size
             if dist(coord,_positions[i]) < 20:
                 #print _positions[i] ,
-                print i
                 self.clicked.emit(i)
                 return
         pass

@@ -21,7 +21,7 @@ def login_message():
     import os
     import socket
 
-    username = "%s.%d@%s" % (os.getlogin(),os.getpid(),socket.gethostname())
+    username = "%s.%d@%s" % (os.getenv("USER"),os.getpid(),socket.gethostname())
     
     #TODO username could be something else
     
