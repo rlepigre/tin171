@@ -117,11 +117,18 @@ must notify the user and ask him for a new question.
 \subsection{Benchmarks}
 % How would you measure the performance of a program that solves the problem?
 % Find instances/benchmarks, or make your own).
-There is no easy way to benchmark a program solving this problem. In fact, if it
-were possible to evaluate the relevance of an answer in a systematic way, we would
-have solved the problem exactly. A way to get an idea of how well the system works
-would be to include a user feedback system, asking the user if the answer was
-useful and relevant.
+
+There is no easy way to automatically benchmark a program solving this
+problem. In fact, if it were possible to evaluate the relevance of an
+answer in a systematic way, we would have solved the problem exactly.
+A way to get an idea of how well the system works would be to include
+a user feedback system, asking the user if the answer was useful and
+relevant. 
+
+In \cite{rankingsuspected} they have data on which answers are
+correct. They find out how the system ranked the correct answer
+and merely take the reciprocal of that. This can then be averaged
+over several answers to get a mean performance.
 
 \section{Survey}
 \subsection{Results from the literature}
@@ -151,7 +158,10 @@ is described in \cite{ranta-2011}. When a grammar is created for a choosen domai
 you get a parser and a natural language generator for free. Support for several
 languages is also possible without too much trouble. Natural language is interfaced to the
 Haskell language, for example, through an abstract syntax tree on which one can work
-to find out the meaning of a question.
+to find out the meaning of a question.\\
+In this project, we do no plan to support spoken language support. It would be
+possible to use Olympus (\cite{olympus}), which is a complete framework for implementing spoken
+dialog systems, to this end.
 % TODO add other stuff maybe Olympus / Ravenclaw
 
 % \section{References}
