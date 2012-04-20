@@ -19,7 +19,6 @@
 # author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
 
 import sys
-import json
 
 from PyQt4 import QtCore, QtGui
 from PyQt4 import QtNetwork
@@ -292,9 +291,9 @@ class GameUI(QtGui.QMainWindow):
             item.setBackground(bbrush)
             item.setForeground(fbrush)
                 
-            item.setText(i[1])
+            item.setText(str(i[1]))
                 
-            self.ui.lstPlayers.addItem(str(item))
+            self.ui.lstPlayers.addItem(item)
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
