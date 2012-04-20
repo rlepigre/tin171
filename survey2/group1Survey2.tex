@@ -80,26 +80,36 @@ you may very well be able to increase your profits.
 The area of recommender systems is roughly split into two different main approaches \cite{1423975}:
 content-based filtering and collaborative filtering.
 
-Content-based approaches will try to compute a list of recommendations based on previous user ratings.
+Content-based approaches will try to compute it's recommendations for user $i$ based on $i$'s previous ratings.
 It will try to find movies that are similar to other movies the user has liked in the past using some
 similarity measure. This approach is dependent upon the content of the items. Collaborative filtering
-on the other hand tries to find a list of recommendations for a user based on other users that have similar
-rating behaviour. It is assumed that if their previous ratings are similar then unrated movies of one user
-may very well be rated the same as by another user. This approach requires no information regarding the content
-of the items but uses only relational data between the users.
+on the other hand tries to find the recommendations for user $i$ based on other users that have similar
+rating behaviour as $i$. It is assumed that if two users previous ratings are similar then unrated
+movies for one of them may very well be rated the same by the other user. The more similar the users behaivor are
+the higher the probability that this is true. This approach requires no information regarding the content
+of the items but uses only relational data between the users. 
 
 Both approaches of course have their pros and cons but some that are rather important in our case are:
 introducing \emph{serendipity} into the system; dealing with \emph{sparsity} of the ratings data; the
 \emph{new user problem}; and the \emph{cold start problem} (which is specific to collaborative filtering).
 
 Collaborative filtering is in turn split in two main parts: \emph{neighbourhood} or \emph{model-based} methods.
+Neighbourhood models tries to divide the user-space into neighbourhoods based on some heuristic while model-based
+methods tries to learn a underlying model for the problem. 
+On top of this collaborative filtering comes in two flavors; item-item based and user-user based. We are intrested
+in the user-user case where we use the relationship between users to predict unrated movies. Item-item based on the
+other hand looks for similarities between the items a user has rated in the past and all other items to find good
+predictions. 
 
 \subsection{Important aspects of the problem not covered here}
 % Aspects of the problem one must know to understand it completely, but not
 % included in the discussion. Use this subsection to ensure a good coverage of
 % the relevant literature without going through much detail.
+We are not intrested in the item-item based collaborative filtering technique.
+
 There is a third approach called Hybrid systems which combine the two previously stated approaches into a new,
-more effective and powerful solution. This will not be covered in this survey.
+more effective and powerful solution. They solve alot of the problems that the the other approaches have while
+also making the recommendations better.
 
 \section{Framework}
 % Here you describe which solution approach(es) you would have chosen if this
@@ -126,7 +136,7 @@ the user $u$ such that: \\
 \[ i^{*} = \operatorname*{arg\,max}_{j \in M_i \setminus M} f(u,j) \]
 
 This is the formal definition of a recommendation problem. But there is a central problem. The
-function $f$ id not defined over the whole set $U \times M$. Thus we will need to estimate
+function $f$ is not defined over the whole set $U \times M$. Thus we will need to estimate
 the missing ratings. This estimation is done using collaborative filtering techniques.
 
 We seldom want to recommend only one item and thus this problem is commonly generalized to
@@ -145,7 +155,7 @@ including other various things to keep in mind when evaluating the performance o
 
 Both papers also mention two other central metrics: the \emph{precision}
 measures the probability that an item is considered as relevant and the
-\emph{recall} measures the probability that an item is recommended \cite{Herlocker:2004:ECF:963770.963772}.
+\emph{recall} measures the probability that an item is recommended \cite{Herlocker:2004:ECF:963770.963772}\cite{springerlink:10.1007/978-0-387-85820-3_1}.
 
 \section{Survey}
 \subsection{Results from the literature}
@@ -156,18 +166,17 @@ measures the probability that an item is considered as relevant and the
 \subsubsection{Collaborative filtering}
 Collaborative filtering is one of the most used methods to predict the ratings in
 a recommender system. It is covered extensively in both \cite{springerlink:10.1007/978-0-387-85820-3_1} and \cite{1423975}. This method has the advantage over content-based approaches that it need not care about the content of the recommended items \cite{1423975}. It only needs rating data from the users to work properly. This approach is in turn divided into two sub-approaches: neighbourhood- and model-based methods. Neighbourhood methods have been used a lot in the past but today more complex model-based methods are often used such as \emph{Matrix Factorization}.
-%% TODO: ADD SOMETHING ABOUT ITEM-ITEM/USER-USER systems
 
 \subsubsection{Serendipity}
-One of the biggest problems with content-based filters is that they are very na\"ive. If a user $A$ has given high ratings to a lot of Quentin Tarantino movies then the recommender system will probably recommend to $A$ the rest of his movies. But since $A$ already liked Tarantino it is rather likely that the user would have found the recommended movies by themselves. This is the problem of low serendipity in content-based systems.
+One of the biggest problems with content-based filters is that they are very na\"ive. If a user $A$ has given high ratings to a lot of Quentin Tarantino movies then the recommender system will probably recommend to $A$ the rest of his movies. But since $A$ has already liked Tarantino it is rather likely that the user would have found the recommended movies by themselves. This is the problem of low serendipity in content-based systems.
 
 Collaborative filtering on the other hand will have good serendipity because it will not be influenced in this way. Of course there may be a lot of users that are Quentin Tarantino fans, but they will also have other movies rated, which will in this scenario be good candidates to recommend to the user $A$.
 
 \subsubsection{Sparsity}
-Another problem when dealing with recommender system is that our data is often
-very sparse. A user might only have rated a few percent, if even that, of the total
-number of items. But since this is a common scenario we have to be able to make
-good predictions even in the presence of sparse data. Data sparsity is a big problem when using \emph{Neighbourhood methods} \cite{springerlink:10.1007/978-0-387-85820-3_1}. In both \cite{1423975} and \cite{springerlink:10.1007/978-0-387-85820-3_1} they suggest a few techniques to overcome this problem. A simple and common technique is to replace undefined values with a default value. The most promising seems to be a slightly modified version of \emph{Singular Value Decomposition} (SVD+), a common method for \emph{Matrix Factorization}.
+Another problem when dealing with recommender system and collaborative filtering in perticular
+is that our data is often very sparse\cite{hybridpaper}. A user might only have rated a few percent, 
+if even that, of the total number of items. But since this is a common scenario we have to be able to make
+good predictions even in the presence of sparse data. Data sparsity is a big problem when using \emph{Neighbourhood methods} \cite{springerlink:10.1007/978-0-387-85820-3_1}. In both \cite{1423975} and \cite{springerlink:10.1007/978-0-387-85820-3_1} they suggest a few techniques to overcome this problem. A simple and common technique is to replace undefined values with a default value. The most promising solution seems to be a slightly modified version of \emph{Singular Value Decomposition} (SVD+), a common method for \emph{Matrix Factorization}.
 
 \subsubsection{New user problem}
 The new user problem exists in both content-based filtering and collaborative filtering. For collaborative filtering the problem is that when new users enter the system they don't have any ratings and it is therefore impossible to find users with similar rating behaviour and thus no recommendations can be made \cite{1423975}. Both \cite{1423975} and \cite{springerlink:10.1007/978-0-387-85820-3_1} explain methods for overcoming this problem. Most of the solutions are to make a hybrid system. If we use collaborative filtering and a user has no ratings then we could revert to content-based filtering.
@@ -176,14 +185,20 @@ The new user problem exists in both content-based filtering and collaborative fi
 The cold start arises in most collaborative filtering systems. The problem is that when the system is rather new there are a lot of items that are unrated. In a system using collaborative filtering unrated items will never be recommended.
 
 \subsubsection{Neighbourhood methods}
-Neighbourhood methods are one of two main approaches to collaborative filtering. It's a very simple and elegant solution to this problem. The method tries to cluster the users into neighbourhoods using some distance measure. The recommender system then recommends items unrated by the user in its neighbourhood.
-%% TODO: the ``this problem'' reference is unclear (what problem? cold start?)
-%% TODO: the previous sentence makes no sense
+Neighbourhood methods are one of two main approaches to collaborative filtering \cite{factorin}.
+It's a very simple and elegant solution to finding good recommendations. The method tries to cluster
+users with similar rating patterns into neighbourhoods using some heuristic measure of similarity \cite{springerlink:10.1007/978-0-387-85820-3_1}.
+Then the recommender system tries to find movie recommendations to a user using it's neighbouring users.
 
-These methods have previously been very widely used due to their simplicity and rather good performance. But in recent years they have seen a decline in favor of model-based methods.
+These methods have previously been very widely used due to their simplicity and rather good performance.
+But in recent years they have seen a decline in favor of powerful and complex model-based methods.
 
 \subsubsection{Model-based methods}
+The other approach to collaborative filtering is model-based methods. They don't try to compute heuristic similarities
+but rather tries to learn an underlying model using machine learning techniques. In the recent years(since the NetFlix prize)
+the most favorable method is Matrix Factorization based on a modified Singlar Value Decomposition. But there are also others based on artificial neural networks, latent dircichlet allocation, etc \cite{factorin}\cite{springerlink:10.1007/978-0-387-85820-3_1}.
 
+In \cite{factorin} they go through the problem of using the NetFlix data and constructing a recommender system for it based on Matrix Factorization. It seems that this method is the one of the most favorable approaches today since it removes the problems of data sparsity and the algorithm is very scalable\cite{factorin}.
 
 \subsection{Tools and programs available for the problem, or for closely related ones}
 % Describe these briefly. Say how they can be used, and how a solution to your
