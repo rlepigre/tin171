@@ -71,10 +71,6 @@ class GameUI(QtGui.QMainWindow):
     def connect_server(self):
         '''slot connected to the event of button pressed'''
         
-        #TODO close the socket if it was trying to connect
-        
-        
-        
         hostname = self.ui.txtHostname.text()
         port = self.ui.spinPort.value()
         
@@ -82,7 +78,6 @@ class GameUI(QtGui.QMainWindow):
             self.socket.close()
         
         self.socket.connectToHost(hostname,port,QtNetwork.QAbstractSocket.ReadWrite)
-        #self.socket.connectToHost("localhost",9000,)
             
     def socket_event(self):
         '''Slot connected to the signal of the socket'''
@@ -98,9 +93,9 @@ class GameUI(QtGui.QMainWindow):
         msg=str(msg)
         msg=msg.strip()
         
-        print "---->",msg
+        #print "---->",msg
         msg=self.parser.input(msg)
-        print msg
+        #print msg
         
         if msg=="ok":
             
@@ -108,6 +103,7 @@ class GameUI(QtGui.QMainWindow):
                 last = self.steps[-1]
                 self.board[last] = self.player_id
                 self.svg.setMarble(last,self.player_id)
+                
                 self.steps=[]
             
             elif self.state == StateEnum.WAITING_AUTH:
@@ -159,6 +155,7 @@ class GameUI(QtGui.QMainWindow):
             self.svg.setBoard(self.board)
         elif msg[0] == 'your_turn':
             #TODO timeout msg[1]
+            self.steps=list()
             self.my_turn=True
             self.board = protocol.get_gui_board(msg[2])
             self.svg.setBoard(self.board)
@@ -216,6 +213,9 @@ class GameUI(QtGui.QMainWindow):
             return
         
         print i
+        
+        if len(self.steps)==0 and self.board[i]==0:
+            return
         
         if len(self.steps)>0 and self.steps[-1]==i:
             #Move made
