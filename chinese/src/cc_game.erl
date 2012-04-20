@@ -290,14 +290,14 @@ spec_game_state(Players, Board, Spectator) ->
 %%--------------------------------------------------------------------
 won(Player, BoardStr, #game{pls = Players, specs = Specs}) ->
     Won = {won, {Player#player.id, Player#player.name}, BoardStr},
-    broadcast(Won, [Players ++ Specs]).
+    broadcast(Won, Players ++ Specs).
 
 %%--------------------------------------------------------------------
 %% @doc Update-event. Sent when someone made a move
 %% @end
 %%--------------------------------------------------------------------
 update(Player, Move, BoardStr, #game{pls = Players, specs = Specs}) ->
-    Update = {update, {Player#player.id, Player#player.name}, Move, BoardStr},
+    Update = {update, {Player#player.id, Player#player.name}, list_to_tuple(Move), BoardStr},
     broadcast(Update, Players ++ Specs).
 
 %%--------------------------------------------------------------------
