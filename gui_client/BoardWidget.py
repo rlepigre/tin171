@@ -63,9 +63,8 @@ class BoardWidget(QtSvg.QSvgWidget):
         self.board=[]
         for i in xrange(300): self.board.append(0)
         self.setBoard(self.board)
-    def getColor(self,n):
+    def getColor(self,n,negated=False):
         '''Returns the QColor for the player'''
-        
         
         if n==1: #red
             c=QtGui.QColor(255,0,0)
@@ -81,6 +80,14 @@ class BoardWidget(QtSvg.QSvgWidget):
             c=QtGui.QColor('purple')
         else:
             c=QtGui.QColor(0,0,0)
+        
+        if negated:
+            #inverting
+            r=255 & ~c.red()
+            g=255 & ~c.green()
+            b=255 & ~c.blue()
+            return QtGui.QColor(r,g,b)
+        
         return c
         
     def setBoard(self,board):

@@ -277,15 +277,9 @@ class GameUI(QtGui.QMainWindow):
             
             item=QtGui.QListWidgetItem()
                 
-                
             bcolor=self.svg.getColor(i[0])
-            #inverting
-            r=255 & ~bcolor.red()
-            g=255 & ~bcolor.green()
-            b=255 & ~bcolor.blue()
-            fcolor=QtGui.QColor(r,g,b)
-                
-                
+            fcolor=self.svg.getColor(i[0],negated=True)
+            
             bbrush=QtGui.QBrush()
             fbrush=QtGui.QBrush()
                 
