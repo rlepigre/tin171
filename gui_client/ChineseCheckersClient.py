@@ -97,16 +97,10 @@ class GameUI(QtGui.QMainWindow):
         msg=self.parser.input(msg)
         #print msg
         
+        print msg,self.state
         if msg=="ok":
             
-            if self.state == StateEnum.MOVE_WAIT:
-                last = self.steps[-1]
-                self.board[last] = self.player_id
-                self.svg.setMarble(last,self.player_id)
-                
-                self.steps=[]
-            
-            elif self.state == StateEnum.WAITING_AUTH:
+            if self.state == StateEnum.WAITING_AUTH:
                 self.get_games()
                 
                 self.ui.cmdJoin.setEnabled(True)
@@ -156,11 +150,19 @@ class GameUI(QtGui.QMainWindow):
         elif msg[0] == 'your_turn':
             #TODO timeout msg[1]
             self.steps=list()
+            self.ui.boardFrame.setTitle(QtGui.QApplication.translate("Form", "Make your move"))
             self.my_turn=True
             self.board = protocol.get_gui_board(msg[2])
             self.svg.setBoard(self.board)
             self.prev_board=list(self.board)
         elif msg[0] == 'update':
+            
+            if self.state == StateEnum.MOVE_WAIT:
+                self.state=-1
+                
+                self.steps=[]
+                self.ui.boardFrame.setTitle(QtGui.QApplication.translate("Form", "Board"))
+            
             self.board = protocol.get_gui_board(msg[3])
             self.svg.setBoard(self.board)
             
@@ -217,14 +219,13 @@ class GameUI(QtGui.QMainWindow):
         if len(self.steps)==0 and self.board[i]==0:
             return
         
-        if len(self.steps)>0 and self.steps[-1]==i:
+        if len(self.steps)>1 and self.steps[-1]==i:
             #Move made
             message=protocol.move(self.steps)
             self.write(message)
             self.state = StateEnum.MOVE_WAIT
             self.my_turn = False
             return
-            pass
         
         self.steps.append(i)
         #TODO this is just for testing
@@ -266,6 +267,7 @@ class GameUI(QtGui.QMainWindow):
     
     
     def write(self,message):
+        print "---> %s" % message
         #TODO return to original state if connection fails
         self.socket.write(message)
 

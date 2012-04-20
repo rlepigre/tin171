@@ -89,7 +89,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="boardFrame">
        <property name="title">
         <string>Board</string>
        </property>
