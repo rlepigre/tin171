@@ -96,7 +96,7 @@ introducing \emph{serendipity} into the system; dealing with \emph{sparsity} of 
 Collaborative filtering is in turn split in two main parts: \emph{neighbourhood} or \emph{model-based} methods.
 Neighbourhood models tries to divide the user-space into neighbourhoods based on some heuristic while model-based
 methods tries to learn a underlying model for the problem. 
-On top of this collaborative filtering comes in two flavors; item-item based and user-user based. We are intrested
+On top of this collaborative filtering comes in two flavors; item-item based and user-user based. We are interested
 in the user-user case where we use the relationship between users to predict unrated movies. Item-item based on the
 other hand looks for similarities between the items a user has rated in the past and all other items to find good
 predictions. 
@@ -105,10 +105,10 @@ predictions.
 % Aspects of the problem one must know to understand it completely, but not
 % included in the discussion. Use this subsection to ensure a good coverage of
 % the relevant literature without going through much detail.
-We are not intrested in the item-item based collaborative filtering technique.
+We are not interested in the item-item based collaborative filtering technique.
 
 There is a third approach called Hybrid systems which combine the two previously stated approaches into a new,
-more effective and powerful solution. They solve alot of the problems that the the other approaches have while
+more effective and powerful solution. They solve a lot of the problems that the the other approaches have while
 also making the recommendations better.
 
 \section{Framework}
@@ -174,7 +174,7 @@ Collaborative filtering on the other hand will have good serendipity because it 
 
 \subsubsection{Sparsity}
 Another problem when dealing with recommender system and collaborative filtering in perticular
-is that our data is often very sparse\cite{hybridpaper}. A user might only have rated a few percent, 
+is that our data is often very sparse \cite{hybridpaper}. A user might only have rated a few percent, 
 if even that, of the total number of items. But since this is a common scenario we have to be able to make
 good predictions even in the presence of sparse data. Data sparsity is a big problem when using \emph{Neighbourhood methods} \cite{springerlink:10.1007/978-0-387-85820-3_1}. In both \cite{1423975} and \cite{springerlink:10.1007/978-0-387-85820-3_1} they suggest a few techniques to overcome this problem. A simple and common technique is to replace undefined values with a default value. The most promising solution seems to be a slightly modified version of \emph{Singular Value Decomposition} (SVD+), a common method for \emph{Matrix Factorization}.
 
@@ -195,10 +195,10 @@ But in recent years they have seen a decline in favor of powerful and complex mo
 
 \subsubsection{Model-based methods}
 The other approach to collaborative filtering is model-based methods. They don't try to compute heuristic similarities
-but rather tries to learn an underlying model using machine learning techniques. In the recent years(since the NetFlix prize)
-the most favorable method is Matrix Factorization based on a modified Singlar Value Decomposition. But there are also others based on artificial neural networks, latent dircichlet allocation, etc \cite{factorin}\cite{springerlink:10.1007/978-0-387-85820-3_1}.
+but rather tries to learn an underlying model using machine learning techniques. In the recent years (since the NetFlix prize)
+the most favorable method is Matrix Factorization based on a modified Singlar Value Decomposition. But there are also others based on artificial neural networks, latent Dircichlet allocation, etc \cite{factorin}\cite{springerlink:10.1007/978-0-387-85820-3_1}.
 
-In \cite{factorin} they go through the problem of using the NetFlix data and constructing a recommender system for it based on Matrix Factorization. It seems that this method is the one of the most favorable approaches today since it removes the problems of data sparsity and the algorithm is very scalable\cite{factorin}.
+In \cite{factorin} they go through the problem of using the NetFlix data and constructing a recommender system for it based on Matrix Factorization. It seems that this method is the one of the most favorable approaches today since it removes the problems of data sparsity and the algorithm is very scalable \cite{factorin}.
 
 \subsection{Tools and programs available for the problem, or for closely related ones}
 % Describe these briefly. Say how they can be used, and how a solution to your
