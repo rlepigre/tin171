@@ -173,7 +173,9 @@ class Client():
         self.send_ok(A('leave'))
 
     def move(self, positions):
-        self.send_ok((A('move', positions)))
+        """Make a move and return an update."""
+        self.send((A('move'), positions))
+        return self.read_noerror()
 
 
 tests = [('ok',                   A('ok')),
