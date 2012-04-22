@@ -20,18 +20,22 @@ import random
 
 import protocol
 from protocol import A
+from board import *
 
-def make_move(c, timeout, board):
-    ## TODO: merely write the bot
-    c.leave()
+def make_move(c, timeout, board, peg_id):
+    # Just pick the longest move sequence. :)
+    moves = list(all_moves(board, peg_id))
+    moves.sort(key=len, reverse=True)
+    print moves
+    c.move(moves[0])
 
-def play(c):
+def play(c, peg_id):
     """Play until someone wins... or something goes wrong."""
     while True:
         x = c.read_noerror()
         if x[0] == A('your_turn'):
             (_, timeout, board) = x
-            make_move(c, timeout, board)
+            make_move(c, timeout, board, peg_id)
         elif x[0] == A('won'):
             print "A winner was announced:", x
             return
@@ -73,7 +77,8 @@ def main():
         x = c.read_noerror()
         if x[0] == A('game_start'):
             print "The game starts."
-            play(c)
+            (_, peg_id, players, board) = x
+            play(c, peg_id)
             return
 
 
