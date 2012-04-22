@@ -169,3 +169,7 @@ This led to the discovery of a bug in the server, when it has to decide which
 moves are correct.
 The QT widget that shows the board had to be updated to be able to use another
 color for marbles, used just to highlight.
+
+2012-04-20
+We meet to finalize the surveys. We also play Chinese Checkers with
+Salvo's GUI client for the first time.
