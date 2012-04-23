@@ -25,7 +25,7 @@
 %% @end
 %%--------------------------------------------------------------------
 new_board() ->
-    Arr = array:new([{size,288},{default,off_board}]),
+    Arr = array:new([{size,289},{default,off_board}]),
     lists:foldl(fun(N, Acc) -> array:set(N,0, Acc) 
                 end, Arr, whole_board()).
 
