@@ -61,7 +61,7 @@ class BoardWidget(QtSvg.QSvgWidget):
         self.setSizePolicy(svgPolicy)
         
         self.board=[]
-        for i in xrange(300): self.board.append(0)
+        for i in xrange(288): self.board.append(0)
         self.setBoard(self.board)
     def getColor(self,n,negated=False):
         '''Returns the QColor for the player'''

@@ -267,10 +267,13 @@ class GameUI(QtGui.QMainWindow):
     
     def write(self,message):
         print "---> %s" % message
-        #TODO return to original state if connection fails
+        #TODO return to initial state if connection fails
         self.socket.write(message)
 
     def pretty_players(self,l):
+        '''Fills the list of players, colorizing it
+        l is a list of tuples in the form id,player_name
+        '''
         self.ui.lstPlayers.clear()
         for i in l:#msg[2]:
             
