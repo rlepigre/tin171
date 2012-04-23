@@ -173,3 +173,8 @@ color for marbles, used just to highlight.
 2012-04-20
 We meet to finalize the surveys. We also play Chinese Checkers with
 Salvo's GUI client for the first time.
+
+2012-04-23
+Salvo wrote function that returns the total distance of all the marbles from the
+target. It can also be used to check when a player wins, because the distance
+will be 0 in that case.

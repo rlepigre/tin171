@@ -19,12 +19,57 @@
 # author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
 # author Göran Weinholt
 
+from math import sqrt
+
 BOARD_LENGTH = 17*17
 PEG_IDS = "x123456"
 INVALID = '#'
 EMPTY = ' '
 NEIGHBORS = [ +1, -1, -18, -17, +18, +17 ]
 FULL_BOARD = '####1################11###############111##############1111#########3333     5555#####333      555######33       55#######3        5########         ########6        4#######66       44######666      444#####6666     4444#########2222##############222###############22################2###'
+REVERSED_FULL_BOARD = {' ': [72, 73, 74, 75, 76, 89, 90, 91, 92, 93, 94, 106, 107, 108, 109, 110, 111, 112, 123, 124, 125, 126, 127, 128, 129, 130, 140, 141, 142, 143, 144, 145, 146, 147, 148, 158, 159, 160, 161, 162, 163, 164, 165, 176, 177, 178, 179, 180, 181, 182, 194, 195, 196, 197, 198, 199, 212, 213, 214, 215, 216], '#': [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 59, 60, 61, 62, 63, 64, 65, 66, 67, 81, 82, 83, 84, 85, 98, 99, 100, 101, 102, 103, 115, 116, 117, 118, 119, 120, 121, 132, 133, 134, 135, 136, 137, 138, 139, 149, 150, 151, 152, 153, 154, 155, 156, 167, 168, 169, 170, 171, 172, 173, 185, 186, 187, 188, 189, 190, 203, 204, 205, 206, 207, 221, 222, 223, 224, 225, 226, 227, 228, 229, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 285, 286, 287], '1': [4, 21, 22, 38, 39, 40, 55, 56, 57, 58], '3': [68, 69, 70, 71, 86, 87, 88, 104, 105, 122], '2': [230, 231, 232, 233, 248, 249, 250, 266, 267, 284], '5': [77, 78, 79, 80, 95, 96, 97, 113, 114, 131], '4': [166, 183, 184, 200, 201, 202, 217, 218, 219, 220], '6': [157, 174, 175, 191, 192, 193, 208, 209, 210, 211]}
+
+def distance(a,b):
+    '''Distance between two points on the board, not sure if this is the most
+    effective distance function possible, but it should work.
+    
+    It respects the 3 properties of a distance function
+    '''
+    coord = lambda p : ((p-p%17)/17, p%17)
+    dist= lambda c1,c2: sqrt(((c1[0]-c2[0])**2) + ((c1[1]-c2[1])**2))
+    
+    a=coord(a)
+    b=coord(b)
+    
+    return dist (a,b)
+
+def distance_from_target(board,player,target):
+    '''Returns the total distance of all the marbles to the target.
+    Marbles on the target return 0
+    
+    Board is a linear array representing the board
+    Player is an int indicating the id of the player, it can be an int or a
+    string of 1 byte
+    
+    Target is the id of the target positions (refer to REVERSED_FULL_BOARD
+    to better understand that).
+    It can be an int or a string of 1 byte
+    '''
+    
+    target = list(REVERSED_FULL_BOARD[str(target)])
+    marbles=[]
+    for i in xrange(len(board)):
+        if board[i] == str(player):
+            if i not in target:
+                marbles.append(i)
+            else: 
+                target.remove(i)
+    
+    
+    return reduce ((lambda a,b:a+b),map(distance,marbles,target),0.0)
+    
+    pass
+
 
 def is_on_board(n):
     """True if position n is inside the board."""
