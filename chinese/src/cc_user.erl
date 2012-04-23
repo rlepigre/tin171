@@ -11,7 +11,7 @@
 %% ADD MORE CHECKS TO USER INPUT
 
 -module(cc_user).
--compile([debug_info]).
+
 -behaviour(gen_server).
 
 -import(erl_scan).
@@ -108,13 +108,10 @@ handle_info({tcp, Socket, Str}, S) ->
             case S of
                 #pl{st = disconnected} ->
                     case Term of
-                        {login, PlayerName} when is_list(PlayerName)->
+                        {login, PlayerName} ->
                             cc_lobby:login(PlayerName),
                             send_term(Socket, ok),
                             {noreply, S#pl{st = logged_in}};
-                        {login, _} ->
-                            send_term(Socket, {error, wrong_command}),
-                            {noreply, S};                                
                         _OtherWise -> 
                             send_term(Socket, {error, log_in}),
                             {noreply, S}
@@ -140,7 +137,7 @@ handle_info({tcp, Socket, Str}, S) ->
                                     {noreply, S}
                             end;
                         {spectate, GameName} ->
-                            case cc_lobby:spectate(GameName) of
+                            case cc_lobby:spectate_game(GameName) of
                                 ok ->
                                     send_term(Socket, ok),
                                     {noreply, S};

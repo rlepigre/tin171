@@ -210,8 +210,9 @@ handle_call({spectate, GameName}, {PlayerPid, _Ref},
             case find_game(GameName, Games) of
                 % Can't spectate an unexisting game!
                 false -> {reply, error_event(game_doesnt_exist), S};
-                {running, Game} ->
-                    cc_game:spectate(Game),
+                {running, #game{ gpid = GamePid}} ->
+                    NewPlayer = Player#player{st = {spectating, GameName}},
+                    cc_game:spectate(GamePid, NewPlayer),
                     {reply, ok, 
                      S#st{pls = set_spectating(Player, GameName, Players)}};
                 {new, Game} ->

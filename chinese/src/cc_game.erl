@@ -20,7 +20,7 @@
 
 %% API
 -export([start_link/1]).
--export([leave_game/2, move/2, spectate/1]).
+-export([leave_game/2, move/2, spectate/2]).
 
 %% gen_fsm callbacks
 -export([init/1, play/3, handle_event/3,
@@ -44,11 +44,11 @@ start_link(Game) ->
 %% @doc Leave a game
 %% @end
 %%--------------------------------------------------------------------
-leave_game(Game, Player) ->
-    gen_fsm:sync_send_all_state_event(Game#game.gpid, {leave, Player}).
+leave_game(GamePid, Player) ->
+    gen_fsm:sync_send_all_state_event(GamePid, {leave, Player}).
 
-spectate(Game) ->
-    gen_fsm:sync_send_all_state_event(Game#game.gpid, spectate).
+spectate(GamePid, Player) ->
+    gen_fsm:sync_send_all_state_event(GamePid, {spectate, Player}).
 
 %%--------------------------------------------------------------------
 %% @doc Do a move when it's your turn.
@@ -119,8 +119,8 @@ play({move, Move}, {_PlayerPid, _Ref},
 %% Spectate a game
 handle_sync_event({spectate, Player}, _LobbyPid, play,
                   S=#game{board = Board, pls = Players, specs = Specs}) ->
-    spec_game_state(Players, Board, Player),
-    {reply, ok, add_spectator(Player, S)};
+    spec_game_state(Players, lib_cc:board_to_string(Board), Player),
+    {reply, ok, play, S#game{ specs = [Player|Specs] }};
 %% Leave a game; not enough players to continue
 handle_sync_event({leave, Player}, _LobbyPid, play,
                   S=#game{num = 2, pls = Players, specs = Specs}) ->
@@ -131,9 +131,9 @@ handle_sync_event({leave, Player}, _LobbyPid, play,
             % Player is a spectator
             case cc_lobby:find_player(PlayerPid, Specs) of
                 false -> 
-                    {reply, error_event(not_in_game), S};
+                    {reply, error_event(not_in_game), play, S};
                 _P    -> 
-                    {reply, ok,
+                    {reply, ok, play,
                      S#game{specs = cc_lobby:remove_player(PlayerPid, Specs)}}
             end;
         Player ->
@@ -142,7 +142,7 @@ handle_sync_event({leave, Player}, _LobbyPid, play,
             [LastPlayer] = cc_lobby:remove_player(Player, Players),
             send(error_event(game_over), LastPlayer),
             notify_lobby(S),
-            {stop, game_over, S#game{pls = [LastPlayer], num = 1}}
+            {stop, ok, game_over, S#game{pls = [LastPlayer], num = 1}}
     end;
 handle_sync_event({leave, Player}, _LobbyPid, play,
                   S=#game{num = Num, pls = Players, 
@@ -151,9 +151,9 @@ handle_sync_event({leave, Player}, _LobbyPid, play,
     case cc_lobby:find_player(PlayerPid, Players) of
         false ->
             case cc_lobby:find_player(PlayerPid, Specs) of
-                false -> {reply, error_event(not_in_game), S};
+                false -> {reply, error_event(not_in_game), play, S};
                 _P -> 
-                    {reply, ok,
+                    {reply, ok, play,
                      S#game{specs = cc_lobby:remove_player(PlayerPid, Specs)}}
             end;
         #player{id = PlayerId} ->
@@ -163,7 +163,7 @@ handle_sync_event({leave, Player}, _LobbyPid, play,
                     your_turn(Board, hd(NewPlayers))
             end,
             NewBoard = lib_cc:remove_player(Board, PlayerId),
-            game_state(NewPlayers, Board),
+            game_state(NewPlayers, lib_cc:board_to_string(Board), NewPlayers ++ Specs),
             {reply, ok, play, S#game{num = Num - 1, pls = NewPlayers,
                                      board = NewBoard}}
     end.
@@ -224,7 +224,7 @@ init_state(S=#game{pls = Players, num = Num}) ->
 %% a your_turn-event.
 %% @end
 %%--------------------------------------------------------------------
-send_game_start(#game{pls = Players, board = Board}) ->
+send_game_start(#game{pls = Players, board = Board, specs = Specs}) ->
     BoardStr = lib_cc:board_to_string(Board),
     lists:foreach(fun(Player) ->
                           PlayerId = Player#player.id,
@@ -232,6 +232,7 @@ send_game_start(#game{pls = Players, board = Board}) ->
                                Player)
                   end, Players),
     NextPlayer = hd(Players),
+    game_state(Players, BoardStr, Specs),
     your_turn(Board, NextPlayer).
 
 %% COMMUNICATION WITH PLAYER
@@ -275,12 +276,12 @@ your_turn(Board, Player) ->
 game_start(PlayerId, Players, BoardStr) ->
     {game_start, PlayerId, player_ids(Players), BoardStr}.
 
-game_state(Players, Board) ->
-    GS = {game_state, player_ids(Players), lib_cc:board_to_string(Board)},
-    broadcast(GS, Players).
+game_state(Players, BoardStr, To) ->
+    GS = {game_state, player_ids(Players), BoardStr},
+    broadcast(GS, To).
 
-spec_game_state(Players, Board, Spectator) ->
-    GS = {game_state, player_ids(Players), lib_cc:board_to_string(Board)},
+spec_game_state(Players, BoardStr, Spectator) ->
+    GS = {game_state, player_ids(Players), BoardStr},
     send(GS, Spectator).
 
 %%--------------------------------------------------------------------
@@ -333,7 +334,3 @@ next_player([Prev|Rest]) ->
     NewPlayers = Rest ++ [Prev],
     Next = hd(NewPlayers),
     {Next, NewPlayers}.
-
-
-add_spectator(Spec, G=#game{specs=Specs}) ->
-    G#game{specs=[Spec|Specs]}.
