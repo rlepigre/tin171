@@ -441,9 +441,39 @@ int main(int argc, char **argv){
         printf("Spectate error, received: %s", buffer);
       }
 
-      printf("Waiting for an update...\n");
-      // TODO waiting for update, game_state, won
-      // can leave
+      // Game loop
+      end = 0;
+      do{
+        printf("Waiting for input...\n");
+        bzero(buffer, BUFLEN);
+        read(socket_fd, buffer, BUFLEN);
+
+        msg = strtok(&buffer[1], ",");
+        if(verbose)
+          printf("Message received : %s\n", msg);
+
+        if(strcmp(msg, "update") == 0){
+          printf("Board updated:\n");
+          ind = (char*) memchr(buffer, '#', BUFLEN);
+          print_board(ind);
+          // FIXME give more info
+        }else if(strcmp(msg, "game_state") == 0){
+          printf("Board updated:\n");
+          ind = (char*) memchr(buffer, '#', BUFLEN);
+          print_board(ind);
+          // FIXME give more info
+        }else if(strcmp(msg, "won") == 0){
+          char *winner = strtok(NULL, ",");
+          printf("Player %s won the game.\n", winner);
+          ind = (char*) memchr(buffer, '#', BUFLEN);
+          print_board(ind);
+          end = 1;
+        }else{
+          fprintf(stderr, "Error, unknown message...\n");
+          exit(-1);
+        }
+      }while(end == 0);
+      // TODO leave
       break;
     default:
       break; // should never be there..
