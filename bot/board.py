@@ -36,7 +36,7 @@ def pretty_print(board):
         if i %17==0: print
 
 
-def distance(a,b):
+def euclidean_distance(a,b):
     '''Distance between two points on the board, not sure if this is the most
     effective distance function possible, but it should work.
     
@@ -50,7 +50,7 @@ def distance(a,b):
     
     return dist (a,b)
 
-def distance_from_target(board,player,target=None):
+def euclidean_distance_from_target(board,player,target=None):
     '''Returns the total distance of all the marbles to the target.
     Marbles on the target return 0
     
@@ -75,7 +75,7 @@ def distance_from_target(board,player,target=None):
             else: 
                 target.remove(i)
     
-    return reduce ((lambda a,b:a+b),map(distance,marbles,target),0.0)
+    return reduce ((lambda a,b:a+b),map(euclidean_distance,marbles,target),0.0)
     
     pass
 

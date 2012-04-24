@@ -24,8 +24,7 @@ from board import *
 
 
 def trivial_bot(c, timeout, board, peg_id):
-    def key(move):
-        return distance_from_target(update_board(board, move), peg_id)
+    key=lambda x:euclidean_distance_from_target(update_board(board, x), peg_id)
     # Just pick the longest move sequence. :)
     moves = list(all_moves(board, peg_id))
     moves.sort(key=key)
