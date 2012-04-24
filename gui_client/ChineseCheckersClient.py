@@ -128,6 +128,10 @@ class GameUI(QtGui.QMainWindow):
                 self.steps=[]
                 self.board=list(self.prev_board)
                 self.svg.setBoard(self.board)
+            elif self.state == StateEnum.SPECTATE_WAIT:
+                #TODO can't spectate, show some error
+                pass
+                
         elif msg[0]=="games":
             self.ui.lstGames.clear()
             for i in msg[1]:
@@ -241,10 +245,9 @@ class GameUI(QtGui.QMainWindow):
         
         
     def spectate(self):
-        #TODO
+        self.state = SPECTATE_WAIT
         message=protocol.spectate_game(self.ui.lstGames.currentItem().text())
         self.write(message)
-        pass
     def join(self):
         item = self.ui.lstGames.currentItem()
         if item == None: return
@@ -252,7 +255,6 @@ class GameUI(QtGui.QMainWindow):
         message=protocol.join_game(item.text())
         self.write(message)
         self.state = StateEnum.JOIN_OK_WAIT
-        pass
     def host(self):
         gname = QtGui.QInputDialog.getText(self,
                     QtGui.QApplication.translate("Form", "Host game"),
@@ -264,12 +266,10 @@ class GameUI(QtGui.QMainWindow):
         self.write(message)
         self.state = StateEnum.HOST_OK_WAIT
         self.get_games()
-        pass
     def start(self):
         self.state = StateEnum.START_WAIT
         message = protocol.start_game()
         self.write(message)
-        pass
     
     
     def write(self,message):
