@@ -101,7 +101,8 @@ def is_empty(board, n):
 def is_valid_stop(n, peg_id):
     """True if peg_id is allowed to stop at position n."""
     ## TODO: should this use the initial board that the server created?
-    return FULL_BOARD[n] in (PEG_IDS[peg_id], EMPTY)
+    return FULL_BOARD[n] in (PEG_IDS[peg_id], EMPTY,
+                             PEG_IDS[OPPOSITES[peg_id]])
 
 def peg_positions(board, peg_id):
     """The positions of all pegs with the given id."""
