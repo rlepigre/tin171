@@ -178,3 +178,11 @@ Salvo's GUI client for the first time.
 Salvo wrote function that returns the total distance of all the marbles from the
 target. It can also be used to check when a player wins, because the distance
 will be 0 in that case.
+
+2012-04-24
+We had the supervision time and a meeting.
+In the meeting we modified the bot so that it can use the distance function
+implemented yesterday.
+The bot was also modified to use function pointers, to be able to select
+different algorithms in the future.
+The graphical client can now show when a game is lost or won.
