@@ -144,7 +144,6 @@ class GameUI(QtGui.QMainWindow):
             palette.setColor(9,self.svg.getColor(msg[1]))
             self.ui.lstPlayers.setPalette(palette)
             
-            self.ui.lstPlayers.clear()
             self.pretty_players(msg[2])
             self.board = protocol.get_gui_board(msg[3])
             self.svg.setBoard(self.board)
@@ -176,6 +175,14 @@ class GameUI(QtGui.QMainWindow):
             self.svg.setBoard(self.board)
             self.pretty_players(msg[1])
         elif msg[0] == 'won':
+            
+            self.pretty_players(msg[1])
+            
+            if msg[1][0] == self.player_id:
+                self.ui.boardFrame.setTitle(QtGui.QApplication.translate("Form", "You won!"))
+            else:
+                self.ui.boardFrame.setTitle(QtGui.QApplication.translate("Form", "GAME OVER"))
+            
             self.board = protocol.get_gui_board(msg[2])
             self.svg.setBoard(self.board)
             
