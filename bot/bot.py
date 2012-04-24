@@ -79,16 +79,27 @@ def main():
                       action='callback',callback=list_personalities)
     parser.add_option('-g','--game',help='name of the game to join',action='store',
                       dest='game',default=None)
+    parser.add_option('-H','--host',help='name of the game to host',action='store',
+                      dest='host',default=None)
     (opts, args) = parser.parse_args()
     
     
     c = protocol.Client(socket.create_connection((opts.server, opts.port)).makefile())
     
+    if (opts.game==None and opts.host!=None) or (opts.game!=None and opts.host==None):
+        print "can't host and join at the same time"
+        sys.exit(0)
+    
     if opts.nick==None:
         opts.nick='Bot-%s-%d'% (personality[opts.bot].func_name,random.randint(100,999))
     
+    
     c.do_login(opts.nick)
     print "I am", opts.nick
+    
+    if opts.host != None:
+        c.host_game(opts.host)
+    
     (new, running) = c.list_games()
     if new:
         if opts.game == None:
