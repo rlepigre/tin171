@@ -148,7 +148,7 @@ class GameUI(QtGui.QMainWindow):
                 
                 item.setText(str(i))
                 
-                self.ui.lstPlayers.addItem(item)
+                self.ui.lstGames.addItem(item)
                 
             pass
         elif msg[0] in ("player_joined","player_left"):
