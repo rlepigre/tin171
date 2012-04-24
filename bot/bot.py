@@ -22,7 +22,8 @@ import protocol
 from protocol import A
 from board import *
 
-def make_move(c, timeout, board, peg_id):
+
+def trivial_bot(c, timeout, board, peg_id):
     def key(move):
         return distance_from_target(update_board(board, move), peg_id)
     # Just pick the longest move sequence. :)
@@ -32,7 +33,8 @@ def make_move(c, timeout, board, peg_id):
     print "moves", moves
     c.move(moves[0])
 
-def play(c, peg_id):
+    
+def play(c, peg_id,make_move):
     """Play until someone wins... or something goes wrong."""
     while True:
         x = c.read_noerror()
@@ -43,6 +45,19 @@ def play(c, peg_id):
             print "A winner was announced:", x
             return
 
+def list_personalities(*stuff):
+    '''Prints a list of strings with all the available personalities for the
+    bot'''
+    import sys
+    r=[]
+    for i in personality:
+        r.append(i.func_name)
+    
+    for i in xrange(len(r)):
+        print '%d\t\t%s' % (i,r[i])
+    sys.exit(0)
+    return r
+    
 def main():
     import socket, optparse
 
@@ -56,8 +71,13 @@ def main():
     parser.add_option('-n','--nick',help='Client nick name',
                       action='store',
                       dest='nick', default='Bot-'+str(random.randint(100,999)))
+    parser.add_option('-b','--bot',default=0,help='Personality id',
+                      action='store',dest='bot',type='int')
+    parser.add_option('-l','--list-personalities',help='lists all the available personalities for the bot',
+                      action='callback',callback=list_personalities)
     (opts, args) = parser.parse_args()
-
+    
+    
     c = protocol.Client(socket.create_connection((opts.server, opts.port)).makefile())
     c.do_login(opts.nick)
     print "I am", opts.nick
@@ -81,9 +101,13 @@ def main():
         if x[0] == A('game_start'):
             print "The game starts."
             (_, peg_id, players, board) = x
-            play(c, peg_id)
+            play(c, peg_id,personality[opts.bot])
             return
 
+
+
+    
+personality = (trivial_bot,)
 
 if __name__ == "__main__":
     main()
