@@ -245,7 +245,7 @@ class GameUI(QtGui.QMainWindow):
         
         
     def spectate(self):
-        self.state = SPECTATE_WAIT
+        self.state = StateEnum.SPECTATE_WAIT
         message=protocol.spectate_game(self.ui.lstGames.currentItem().text())
         self.write(message)
     def join(self):
