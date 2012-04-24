@@ -23,8 +23,11 @@ from protocol import A
 from board import *
 
 
-def trivial_bot(c, timeout, board, peg_id):
-    key=lambda x:euclidean_distance_from_target(update_board(board, x), peg_id)
+def static_distance_bot(c,timeout,board,player_id):
+    return trivial_bot(c,timeout,board,player_id,static_distance_from_target)
+
+def trivial_bot(c, timeout, board, peg_id,distance_function=euclidean_distance_from_target):
+    key=lambda x:distance_function(update_board(board, x), peg_id)
     # Just pick the longest move sequence. :)
     moves = list(all_moves(board, peg_id))
     moves.sort(key=key)
@@ -69,7 +72,7 @@ def main():
                       dest='port', default=8000)
     parser.add_option('-n','--nick',help='Client nick name',
                       action='store',
-                      dest='nick', default='Bot-'+str(random.randint(100,999)))
+                      dest='nick', default=None)
     parser.add_option('-b','--bot',default=0,help='Personality id',
                       action='store',dest='bot',type='int')
     parser.add_option('-l','--list-personalities',help='lists all the available personalities for the bot',
@@ -80,6 +83,10 @@ def main():
     
     
     c = protocol.Client(socket.create_connection((opts.server, opts.port)).makefile())
+    
+    if opts.nick==None:
+        opts.nick='Bot-%s-%d'% (personality[opts.bot].func_name,random.randint(100,999))
+    
     c.do_login(opts.nick)
     print "I am", opts.nick
     (new, running) = c.list_games()
@@ -111,7 +118,7 @@ def main():
 
 
     
-personality = (trivial_bot,)
+personality = (trivial_bot,static_distance_bot)
 
 if __name__ == "__main__":
     main()
