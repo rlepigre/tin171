@@ -48,3 +48,6 @@ def get_gui_board(b):
 
 def move(l):
     return "{move,%s}.\n" % repr(l).replace(' ','')
+
+def list_games():
+    return "list_games.\n"
