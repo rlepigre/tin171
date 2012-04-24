@@ -41,6 +41,7 @@ class StateEnum:
     START_WAIT = 8
     MOVE_WAIT = 9
     SPECTATE_WAIT = 10
+    SPECTATING = 11
     
 
 class GameUI(QtGui.QMainWindow):
@@ -117,6 +118,7 @@ class GameUI(QtGui.QMainWindow):
                 self.ui.cmdStart.setEnabled(False)
                 self.state = StateEnum.GAME_STARTED
             elif self.state == StateEnum.SPECTATE_WAIT:
+                self.state =StateEnum.SPECTATING
                 self.ui.cmdJoin.setEnabled(False)
                 self.ui.cmdSpectate.setEnabled(False)
                 self.ui.cmdStart.setEnabled(False)
@@ -180,9 +182,9 @@ class GameUI(QtGui.QMainWindow):
             self.svg.setBoard(self.board)
             self.pretty_players(msg[1])
         elif msg[0] == 'won':
-            self.pretty_players(msg[1])
-            
-            if msg[1][0] == self.player_id:
+            if self.state ==StateEnum.SPECTATING:
+                self.ui.boardFrame.setTitle(QtGui.QApplication.translate("Form", "Someone won"))
+            elif msg[1][0] == self.player_id:
                 self.ui.boardFrame.setTitle(QtGui.QApplication.translate("Form", "You won!"))
             else:
                 self.ui.boardFrame.setTitle(QtGui.QApplication.translate("Form", "GAME OVER"))
