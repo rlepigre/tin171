@@ -138,6 +138,18 @@ class GameUI(QtGui.QMainWindow):
             self.ui.lstGames.clear()
             for i in msg[1]:
                 self.ui.lstGames.addItem(str(i))
+                
+            brush=QtGui.QBrush()
+            brush.setStyle(1)
+            brush.setColor(QtGui.QColor(255,0,0))
+            for i in msg[2]:    
+                item=QtGui.QListWidgetItem()
+                item.setForeground(brush)
+                
+                item.setText(str(i))
+                
+                self.ui.lstPlayers.addItem(item)
+                
             pass
         elif msg[0] in ("player_joined","player_left"):
             self.ui.lstPlayers.clear()
