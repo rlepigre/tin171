@@ -79,6 +79,12 @@ def distance_from_target(board,player,target=None):
     
     pass
 
+def update_board(board, move):
+    l = list(board)
+    tmp = l[move[0]]
+    l[move[0]] = EMPTY
+    l[move[-1]] = tmp
+    return ''.join(l)
 
 def is_on_board(n):
     """True if position n is inside the board."""

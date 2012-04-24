@@ -23,10 +23,13 @@ from protocol import A
 from board import *
 
 def make_move(c, timeout, board, peg_id):
+    def key(move):
+        return distance_from_target(update_board(board, move), peg_id)
     # Just pick the longest move sequence. :)
     moves = list(all_moves(board, peg_id))
-    moves.sort(key=len, reverse=True)
-    print moves
+    moves.sort(key=key)
+    #moves.sort(key=len, reverse=True)
+    print "moves", moves
     c.move(moves[0])
 
 def play(c, peg_id):
