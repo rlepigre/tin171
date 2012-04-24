@@ -74,6 +74,8 @@ def main():
                       action='store',dest='bot',type='int')
     parser.add_option('-l','--list-personalities',help='lists all the available personalities for the bot',
                       action='callback',callback=list_personalities)
+    parser.add_option('-g','--game',help='name of the game to join',action='store',
+                      dest='game',default=None)
     (opts, args) = parser.parse_args()
     
     
@@ -82,7 +84,10 @@ def main():
     print "I am", opts.nick
     (new, running) = c.list_games()
     if new:
-        game = new[0]
+        if opts.game == None:
+            game = new[0]
+        else:
+            game = opts.game
         print "Joining game", game
         c.join_game(game)
     else:
