@@ -56,7 +56,7 @@ def distance_from_target(board,player,target=None):
     to better understand that).
     It can be an int or a string of 1 byte
     '''
-    if target=None:
+    if target==None:
         target=OPPOSITES[int(player)]
     
     target = list(REVERSED_FULL_BOARD[str(target)])
