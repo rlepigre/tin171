@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import random
+import sys
 
 import protocol
 from protocol import A
@@ -50,7 +51,6 @@ def play(c, peg_id,make_move):
 def list_personalities(*stuff):
     '''Prints a list of strings with all the available personalities for the
     bot'''
-    import sys
     r=[]
     for i in personality:
         r.append(i.func_name)
@@ -81,12 +81,14 @@ def main():
                       dest='game',default=None)
     parser.add_option('-H','--host',help='name of the game to host',action='store',
                       dest='host',default=None)
+    parser.add_option('-y','--players',help='number of players to in the match before starting the game. Ignored when not hosting a game',
+                      type='int',action='store',dest='players',default=2)
     (opts, args) = parser.parse_args()
     
     
     c = protocol.Client(socket.create_connection((opts.server, opts.port)).makefile())
     
-    if (opts.game==None and opts.host!=None) or (opts.game!=None and opts.host==None):
+    if opts.game!=None and opts.host!=None:
         print "can't host and join at the same time"
         sys.exit(0)
     
@@ -99,25 +101,36 @@ def main():
     
     if opts.host != None:
         c.host_game(opts.host)
-    
-    (new, running) = c.list_games()
-    if new:
-        if opts.game == None:
-            game = new[0]
-        else:
-            game = opts.game
-        print "Joining game", game
-        c.join_game(game)
+        
+        count=opts.players-1
+        
+        while count>0:
+            x = c.read_noerror()
+            if x[0] == A('player_joined'):
+                count-=1
+        c.start_game()
+        
     else:
-        game = 'Game-'+str(random.randint(100,999))
-        print "There are no new games. Hosting game",game,"and waiting for a player"
-        c.host_game(game)
-        (msg, players) = c.read_noerror()
-        if msg == A('player_joined'):
-            c.start_game()
-            print "Starting game with players:", players
+        (new, running) = c.list_games()
+        if new:
+            if opts.game == None:
+                game = new[0]
+            else:
+                game = opts.game
+            print "Joining game", game
+            c.join_game(game)
         else:
-            raise Exception("I don't know what happened", x)
+            game = 'Game-'+str(random.randint(100,999))
+            print "There are no new games. Hosting game",game,"and waiting for a player"
+            c.host_game(game)
+            (msg, players) = c.read_noerror()
+            if msg == A('player_joined'):
+                c.start_game()
+                print "Starting game with players:", players
+            else:
+                raise Exception("I don't know what happened", x)
+    
+    
     while True:
         x = c.read_noerror()
         if x[0] == A('game_start'):
