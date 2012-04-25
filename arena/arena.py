@@ -23,8 +23,10 @@ from protocol import A
 
 import subprocess
 import random
+import os
+import socket
 
-def run_match(server,port,path,bots):
+def run_match(server,port,path,bots,max_updates=1000):
     '''Runs a match between bots
     server:     server's hostname
     port:       server's port
@@ -33,27 +35,61 @@ def run_match(server,port,path,bots):
     
     This function should collect some stats on the game
     '''
+    results= {}
+    results['boards']=[]
+    
+    c = protocol.Client(socket.create_connection((server,port)).makefile())
     
     game_name = 'automated-match-%u' % random.randint(0,7000000)
+    
+    logdir='/tmp/%s' % game_name
+    os.mkdir(logdir)
+    print logdir
+    
     
     gladiators=[]
 
     #Launches 1st bot and creates the game
-    host_gladiator = subprocess.Popen([path,'-s',server,'-p',str(port),'-H',game_name,'-y',str(len(bots)),'-b',str(bots[0])])
+    logfile=open('%s/Log-%s'%(logdir,str(bots[0])),'w')
+    host_gladiator = subprocess.Popen([path,'-s',server,'-p',str(port),'-H',game_name,'-y',str(len(bots)),'-b',str(bots[0])],
+                                      stdout=logfile,stderr=logfile)
     gladiators.append(host_gladiator)
+
+    #Spectate the game
+    for count in xrange(60):
+        if count>50:
+            print "Game can't be spectated"
+            gladiators[0].kill()
+            sys.exit(1)
+        x=c.list_games()
+        if game_name in x[0]:
+            break
+    c.do_login("watcher-%s" % game_name)
+    c.spectate(game_name)
     
-    #TODO spectate match here
-    import time
-    time.sleep(30)
-    
+    #Launch all the other bots
     for i in bots[1:]:
-        proc=subprocess.Popen([path,'-s',server,'-p',str(port),'-g',game_name,'-b',str(i)])
+        logfile=open('%s/Log-%s'%(logdir,str(i)),'w')
+        proc=subprocess.Popen([path,'-s',server,'-p',str(port),'-g',game_name,'-b',str(i)],
+                              stdout=logfile,stderr=logfile)
         gladiators.append(proc)
     
+    
+    for count in xrange(max_updates):
+        x = c.read_noerror()
+        if x[0]=='won':
+            print "won"
+            results['winner'] = x[1]
+            results['boards'].append(x[2])
+            break
+        elif x[0]=='update':
+            print "update"
+            results['boards'].append(x[3])
     #TODO collect all updates and won here
     
     for i in gladiators:
+        i.kill()
         i.wait()
-    
-    pass
+        
+    return results
 
