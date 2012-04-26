@@ -86,8 +86,8 @@ def euclidean_distance_from_target(board,player,target=None):
                 marbles.append(i)
             else: 
                 target.remove(i)
-    
-    return reduce ((lambda a,b:a+b),map(euclidean_distance,marbles,target),0.0)
+    dist=lambda a,b: euclidean_distance(a,b)**2
+    return reduce ((lambda a,b:a+b),map(dist,marbles,target),0.0)
     
     pass
 
