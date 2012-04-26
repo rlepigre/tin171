@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <signal.h>
 #include "board.h"
 
 #define BUFLEN 512
@@ -25,12 +26,25 @@
  */
 void print_help(char* pname);
 
+/*
+ * Function executed on interuption signal.
+ */
+void interupt(int s);
+
+/*
+ * Socket file descriptor.
+ */
+int socket_fd;
+
+/*
+ * Buffer for the network interaction.
+ */
+char buffer[BUFLEN];
+
+
 int main(int argc, char **argv){
-  int socket_fd;
   struct sockaddr_in serv_addr;
   struct hostent *server;
-
-  char buffer[BUFLEN];
 
   int mode = MODE_UNDEF;
   char opt;
@@ -230,6 +244,9 @@ int main(int argc, char **argv){
   }else{
     printf("Login error, received: %s", buffer);
   }
+
+  // catch interuption...
+  signal(SIGINT, interupt);
 
   // All go !
   switch(mode){
@@ -507,4 +524,22 @@ void print_help(char* pname){
   printf("  -P         List players on the server.\n");
   printf("  -v         Verbose mode.\n");
   printf("  -h         Display this help section.\n");
+}
+
+/*
+ * Function executed on interuption signal.
+ */
+void interupt(int s){
+  printf("  Interuption signal caught.\nNoticing the server...\n");
+
+  // Leaving
+  bzero(buffer, BUFLEN);
+  snprintf(buffer, BUFLEN, "leave.\n");
+  write(socket_fd, buffer, strlen(buffer));
+
+  printf("Exiting...\n");
+
+  // Closing
+  close(socket_fd);
+  exit(0);
 }
