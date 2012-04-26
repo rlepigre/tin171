@@ -18,6 +18,7 @@
 
 import random
 import sys
+import time
 
 import protocol
 from protocol import A
@@ -27,23 +28,62 @@ from board import *
 def static_distance_bot(c,timeout,board,player_id):
     return trivial_bot(c,timeout,board,player_id,static_distance_from_target)
 
-def trivial_bot(c, timeout, board, peg_id,distance_function=euclidean_distance_from_target):
-    key=lambda x:distance_function(update_board(board, x), peg_id)
-    # Just pick the longest move sequence. :)
-    moves = list(all_moves(board, peg_id))
+def trivial_bot(c, timeout, board, player_id,distance_function=euclidean_distance_from_target):
+    key=lambda x:distance_function(update_board(board, x), player_id)
+    moves = list(all_moves(board, player_id))
     moves.sort(key=key)
-    #moves.sort(key=len, reverse=True)
     print "moves", moves
     c.move(moves[0])
 
-    
-def play(c, peg_id,make_move):
+def iddfs_bot(c, timeout, board, player_id,distance_function=euclidean_distance_from_target):
+    def board_evaluation(board, player_id):
+        # The bot tries to minimize the distance.
+        return -distance_function(board, player_id)
+
+    def recursive_dls(first_move, board, limit, depth, best, stoptime):
+        # Depth-limited search.
+        score = board_evaluation(board, player_id)
+        if score > best[1] or (score == best[1] and depth < best[2]):
+            # Maximize the board evaluation function. If a move is
+            # just as good as another move, but it arrives at the
+            # better outcome sooner (lower depth), it is given
+            # preference.
+            print "The move", (first_move, score, depth), "is better than", best
+            best[0] = first_move
+            best[1] = score
+            best[2] = depth
+
+        if (time.time() >= stoptime and best[0] != []) or limit <= 0:
+            return
+
+        for move in all_moves(board, player_id):
+            nboard = update_board(board, move)
+            recursive_dls(first_move, nboard, limit - 1, depth + 1, best, stoptime)
+
+    best = [[], -2**24, 2**24]
+    stoptime = time.time() + timeout / 1000.0
+
+    # Iterative deepening.
+    for depth in xrange(1, 2**24):
+        for move in all_moves(board, player_id):
+            print "# Considering move", move, "at depth limit", depth
+            recursive_dls(move, update_board(board, move), depth, 0, best, stoptime)
+        if time.time() >= stoptime and best[0] != []:
+            break
+
+    print "best", best
+    c.move(best[0])
+
+def static_iddfs_bot(c, timeout, board, player_id):
+    return iddfs_bot(c, timeout, board, player_id, static_distance_from_target)
+
+def play(c, player_id,make_move):
     """Play until someone wins... or something goes wrong."""
     while True:
         x = c.read_noerror()
         if x[0] == A('your_turn'):
             (_, timeout, board) = x
-            make_move(c, timeout, board, peg_id)
+            make_move(c, timeout, board, player_id)
         elif x[0] == A('won'):
             print "A winner was announced:", x
             return
@@ -54,12 +94,12 @@ def list_personalities(*stuff):
     r=[]
     for i in personality:
         r.append(i.func_name)
-    
+
     for i in xrange(len(r)):
         print '%d\t\t%s' % (i,r[i])
     sys.exit(0)
     return r
-    
+
 def main():
     import socket, optparse
 
@@ -84,32 +124,32 @@ def main():
     parser.add_option('-y','--players',help='number of players to in the match before starting the game. Ignored when not hosting a game',
                       type='int',action='store',dest='players',default=2)
     (opts, args) = parser.parse_args()
-    
-    
+
+
     c = protocol.Client(socket.create_connection((opts.server, opts.port)).makefile())
-    
+
     if opts.game!=None and opts.host!=None:
         print "can't host and join at the same time"
         sys.exit(0)
-    
+
     if opts.nick==None:
         opts.nick='Bot-%s-%d'% (personality[opts.bot].func_name,random.randint(100,999))
-    
-    
+
+
     c.do_login(opts.nick)
     print "I am", opts.nick
-    
+
     if opts.host != None:
         c.host_game(opts.host)
-        
+
         count=opts.players-1
-        
+
         while count>0:
             x = c.read_noerror()
             if x[0] == A('player_joined'):
                 count-=1
         c.start_game()
-        
+
     else:
         (new, running) = c.list_games()
         if new:
@@ -129,20 +169,20 @@ def main():
                 print "Starting game with players:", players
             else:
                 raise Exception("I don't know what happened", x)
-    
-    
+
+
     while True:
         x = c.read_noerror()
         if x[0] == A('game_start'):
             print "The game starts."
-            (_, peg_id, players, board) = x
-            play(c, peg_id,personality[opts.bot])
+            (_, player_id, players, board) = x
+            play(c, player_id,personality[opts.bot])
             return
 
 
 
-    
-personality = (trivial_bot,static_distance_bot)
+
+personality = (trivial_bot,static_distance_bot,iddfs_bot,static_iddfs_bot)
 
 if __name__ == "__main__":
     main()
