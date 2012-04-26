@@ -199,3 +199,7 @@ achieve the goal and makes random moves in the end.
 2012-04-25
 Salvo started to write some code that can run some bots on a match, and for now
 only collects all the moves, and the winner.
+
+2012-04-26
+Göran writes a bot function that uses the iterative-deepening depth
+first search algorithm. It seems to be better than the trivial bot.
