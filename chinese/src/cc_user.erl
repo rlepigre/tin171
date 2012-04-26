@@ -168,7 +168,8 @@ handle_info({tcp, Socket, Str}, S) ->
                     case Term of
                         {move, Move} ->
                             case cc_game:move(GamePid, Move) of
-                                ok -> {noreply, S};
+                                ok -> send_term(Socket, ok),
+                                      {noreply, S};
                                 E -> send_term(Socket, E),
                                      {noreply, S}
                             end;
@@ -218,4 +219,5 @@ read_term(String) ->
     end.                                                      
 
 send_term(Socket, Term) ->
-    gen_tcp:send(Socket, io_lib:format("~p~n", [Term])).
+    Msg = lists:filter(fun(X) -> X =/= 10 end, lists:flatten(io_lib:format("~p", [Term]))) ++ "\n",
+    gen_tcp:send(Socket, Msg).
