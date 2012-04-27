@@ -78,6 +78,7 @@ handle_cast({GamePid, GS={game_start,_,_,_}}, S=#pl{socket = Socket}) ->
     send_term(Socket, GS),
     {noreply, S#pl{st = {in_game, GamePid}}};
 handle_cast(Event, S=#pl{socket = Socket}) ->
+    io:format("Player: ~s Sending: ~n~p~n", [S#pl.name, Event]),
     send_term(Socket, Event),
     {noreply, S}.
 
@@ -111,7 +112,7 @@ handle_info({tcp, Socket, Str}, S) ->
                         {login, PlayerName} ->
                             cc_lobby:login(PlayerName),
                             send_term(Socket, ok),
-                            {noreply, S#pl{st = logged_in}};
+                            {noreply, S#pl{name = PlayerName, st = logged_in}};
                         _OtherWise -> 
                             send_term(Socket, {error, log_in}),
                             {noreply, S}
