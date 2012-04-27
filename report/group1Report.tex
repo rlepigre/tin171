@@ -36,11 +36,11 @@
 %%COMMENT (re-use from project proposal and modify if needed)
 Chinese Checkers is a board game for up to six players. The fact that
 it's a multi-player game makes it quite different from more widely
-explored two-player games like Chess. We explore search algorithms and
-heuristics to Write a computer player for Chinese Checkers. Our aim is
-to highlight the ways in which a multi-player games differ form a
-two-player games, and see what effect this has on the effectiveness of
-a computer player.
+explored two-player games like Chess. In writing a computer player for
+Chinese Checkers we explored search algorithms and heuristics. Our aim
+is to highlight the ways in which multi-player games differ from
+two-player games, and what effect this has on the effectiveness of a
+computer player.
 \end{abstract}
 
 \section{Introduction and Background}
@@ -61,9 +61,9 @@ objective is to move all pegs to the opposing corner.
 % (Re-use from project proposal, add changes, refinements,
 % extensions. If there has been major changes since the project
 % proposal, describe and motivate.)
-We tried to implement a computer program capable of playing Chinese
-Checkers. Our goal was to create a program that could beat an human
-(but not expert) player.
+We have implemented a computer program capable of playing Chinese
+Checkers. Our goal was to create a program that could beat a novice
+human player.
 
 \subsection{Results from the literature}
 % (Re-use form project proposal, extend with furhter findings from
@@ -95,7 +95,7 @@ Hashavit and Markovitch evaluated the Max-Prob algorithm
 \cite{Hashavit}. The algorithm is similar to max$^n$ and paranoid, but
 in Chinese Checkers it is significantly better. It computes at each
 step which move will be most likely to lead to a winning outcome. It
-computes this for all players and maximizes its own probability of
+does this for all players and maximizes its own probability of
 winning.
 
 Ulfhake reports on a program for two-player Chinese Checkers
@@ -121,9 +121,10 @@ It provides a graphical interface and a network protocol. It initially
 appeared to us that we could make our own program connect to
 \emph{cheech} as a player and thereby use the existing multi-player
 functionality and graphics. Unfortunately the program has suffered
-significant bit rot. We evaluated half a dozen alternatives and found
-that none of them still work properly. That being said, we can copy
-the architectural ideas used in \emph{cheech}.
+significant bit rot and we were unable to compile it. We evaluated
+half a dozen alternatives and found that none of them still work
+properly. That being said, we did copy the server-client model of
+\emph{cheech}.
 
 \section{The central idea in your solution}
 % (Re-use the content and structure of subsections from project
@@ -146,26 +147,36 @@ maybe we can give a more detailed account.
 
 \subsection{The central idea in your solution}
 
-The architecture of our solution will consist of three parts: a game
+The architecture of our solution consists of three parts: a game
 server written in Erlang, a graphical game client written in Python
 and several autonomous game clients. A network protocol has been
-specified and the server and the graphical client are already well
-under way.
+specified that supports multiple running games. The server coordinates
+the game and tells each player what is happening to the board and
+prompts players to make their move. The server verifies that the moves
+are legal and checks if there is a winner. The graphical client can
+connect either as a player or a spectator. It shows a graphical
+representation of the board and lets the user make moves.
 
-Initially our program will be playing a two-player variant of Chinese
-Checkers. When it is working properly we will try with more players.
-We will be using an iterative development model that emphasizes
-getting the basics up and running quickly.
+%% Initially our program will be playing a two-player variant of Chinese
+%% Checkers. When it is working properly we will try with more players.
+%% We will be using an iterative development model that emphasizes
+%% getting the basics up and running quickly.
 
-Our first computer player will be an implementation of \emph{iterative
-  deepening depth-first-search} (IDDFS) \cite{aimodern}. This will be
-combined with heuristics to form a kind of informed search. To improve
-the depth of our solution we will try and do some pruning of ``bad''
-plys, e.g.~those that do not move the player any closer to the goal
-state. The heuristics described in \cite{ulfhake} will be very useful
-for this task. Our first heuristic can be simple: some board
-evaluation function based on how close pegs are to the goal, and a
-disincentive to leave pegs in the starting position.
+Our first computer player is an implementation of \emph{iterative
+  deepening depth-first-search} (IDDFS) \cite{aimodern}. This has been
+combined with heuristics to form a kind of informed search. We
+currently have two heuristics based on distance functions. The first
+is the sum of the Euclidean distance of all pegs from the goal. The
+second is a hand-tuned function that tries to penalize the bot when it
+is leaving pegs behind and attempts to keep pegs in the middle of the
+board, where it is more likely that good paths towards the goal will
+be formed. The heuristics described in \cite{ulfhake} will be very
+useful for our continued work.
+
+%% To improve
+%% the depth of our solution we will try and do some pruning of ``bad''
+%% plys, e.g.~those that do not move the player any closer to the goal
+%% state.
 
 The literature describes algorithms that are more capable than
 \emph{IDDFS}. An iterative development model means that we will be
@@ -173,76 +184,76 @@ making continual improvements to our program, and it is likely that we
 will attempt to use some of the more capable algorithms later on. Our
 first programs can be preserved for later programs to play against.
 
-\subsubsection{Why do you think it will work?}% Not in the report template
+%% \subsubsection{Why do you think it will work?}% Not in the report template
 
-Our solution will work because we think that \emph{IDDFS} closely
-relates to how a human might play the game: first evaluating moves
-that are easily visible on the board and iteratively looking deeper
-(further) into what might happen.
+%% Our solution will work because we think that \emph{IDDFS} closely
+%% relates to how a human might play the game: first evaluating moves
+%% that are easily visible on the board and iteratively looking deeper
+%% (further) into what might happen.
 
-Even though \cite{Huang:2001:SGP:378593.378708} does not report on the
-performance of \emph{IDDFS} we know that it at least has been used to
-some degree of success. The performance of our solution will of course
-depend heavily on finding good heuristics. The first program might not
-win any contests but it will be able to play the game, because our
-heuristics can force it to make forward progress.
+%% Even though \cite{Huang:2001:SGP:378593.378708} does not report on the
+%% performance of \emph{IDDFS} we know that it at least has been used to
+%% some degree of success. The performance of our solution will of course
+%% depend heavily on finding good heuristics. The first program might not
+%% win any contests but it will be able to play the game, because our
+%% heuristics can force it to make forward progress.
 
-\subsection{Define an instance of the problem. How will you measure the performance of your program?}% Not in the report template
-%(You must know this in advance, find instances /benchmarks, or make your own).
+%% \subsection{Define an instance of the problem. How will you measure the performance of your program?}% Not in the report template
+%% %(You must know this in advance, find instances /benchmarks, or make your own).
 
-The program should play a game in the same way a human would play: the
-program waits its turn and makes a move. The initial board setup is
-one instance of the problem, but from the perspective of analysing the
-game every intermediate state of the board may also be considered an
-instance.
+%% The program should play a game in the same way a human would play: the
+%% program waits its turn and makes a move. The initial board setup is
+%% one instance of the problem, but from the perspective of analysing the
+%% game every intermediate state of the board may also be considered an
+%% instance.
 
-We want to evaluate the program's performance by having it play
-against ourselves and other bots.
+%% We want to evaluate the program's performance by having it play
+%% against ourselves and other bots.
 
 
-\subsection{The scope of your work}% Not in the report template
-%(also, what interesting and related things are outside the scope of your proposal?)
+%% \subsection{The scope of your work}% Not in the report template
+%% %(also, what interesting and related things are outside the scope of your proposal?)
 
-The scope of our project will ultimately be to try and challenge a set
-of amateur human players. The first version of the program will play a
-two-player game and this will later be extended to a multi-player
-game. In developing the program we will explore how the dynamics of
-the game changes in the multi-player version. Our program will be able
-to play against itself, against humans, and against other programs. An
-evaluation of the different versions of the program will be written.
+%% The scope of our project will ultimately be to try and challenge a set
+%% of amateur human players. The first version of the program will play a
+%% two-player game and this will later be extended to a multi-player
+%% game. In developing the program we will explore how the dynamics of
+%% the game changes in the multi-player version. Our program will be able
+%% to play against itself, against humans, and against other programs. An
+%% evaluation of the different versions of the program will be written.
 
-Playing a perfect game must be outside our scope because it appears to
-be an open research problem.
+%% Playing a perfect game must be outside our scope because it appears to
+%% be an open research problem.
 
-\subsection{Notes on strategies}% not in the report template
+%% \subsection{Notes on strategies}% not in the report template
 
-When we have the basic mechanics of the game and the computer player
-working there are some strategies that we should consider. Some of the
-strategies can be implemented by adjusting the heuristic function and
-some can be implemented \emph{ah hoc}. The following are some ideas
-for strategies.
+%% When we have the basic mechanics of the game and the computer player
+%% working there are some strategies that we should consider. Some of the
+%% strategies can be implemented by adjusting the heuristic function and
+%% some can be implemented \emph{ah hoc}. The following are some ideas
+%% for strategies.
 
-\textbf{Leave no man behind}. If this strategy is not used it is
-possible for the computer player to end up with a lot of pegs very far
-away from the goal. These pegs will be very costly to move toward the
-goal if it's late in the game, so a heuristic should take that into
-account.
+%% \textbf{Leave no man behind}. If this strategy is not used it is
+%% possible for the computer player to end up with a lot of pegs very far
+%% away from the goal. These pegs will be very costly to move toward the
+%% goal if it's late in the game, so a heuristic should take that into
+%% account.
 
-\textbf{Stay the path}. The center of the board is more likely to
-contain many paths towards the goal. Therefore if the heuristic gives
-a preference to moves that keep pegs in the middle then the game is
-likely to move faster and give more opportunities to jump long
-distances.
+%% \textbf{Stay the path}. The center of the board is more likely to
+%% contain many paths towards the goal. Therefore if the heuristic gives
+%% a preference to moves that keep pegs in the middle then the game is
+%% likely to move faster and give more opportunities to jump long
+%% distances.
 
-\textbf{Forge ahead} or \textbf{the best offense is a good defense}.
-The computer player can either be aggressive and try to create long
-paths for moving fast and far, or it can be defensive and try to not
-give any other players opportunities to use its pegs as part of a
-path.
+%% \textbf{Forge ahead} or \textbf{the best offense is a good defense}.
+%% The computer player can either be aggressive and try to create long
+%% paths for moving fast and far, or it can be defensive and try to not
+%% give any other players opportunities to use its pegs as part of a
+%% path.
 
 \section{Overview of the architecture}
 % (Desribe the different parts of your program suite in detail.)
-\subsection{Running modules }
+\subsection{Running modules}
 \subsection{Modules designed but not implemented}
 \subsection{Modules a future continuation may have}
 
@@ -279,6 +290,9 @@ high-level pseudocode for that algorithm \cite{aimodern}.\\
 \EndIf
 \EndFunction
 \end{algorithmic}
+
+[The pseudo code above has not been updated to reflect the current
+  IDDFS algorithm we're using.]
 
 \section{Discussion and Conclusions}
 %(Sum up your project, suggest future extensions and improvements.)
