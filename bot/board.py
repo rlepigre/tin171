@@ -32,8 +32,9 @@ OPPOSITES=[None,2,1,4,3,6,5]
 
 def pretty_print(board):
     for i in range(len(board)):
-        print board[i],
         if i %17==0: print
+        print board[i],
+        
 
 def static_distance_from_target(board,player):
     
@@ -86,7 +87,7 @@ def euclidean_distance_from_target(board,player,target=None):
                 marbles.append(i)
             else: 
                 target.remove(i)
-    dist=lambda a,b: euclidean_distance(a,b)**2
+    dist=lambda a,b: euclidean_distance(a,b)#**2
     return reduce ((lambda a,b:a+b),map(dist,marbles,target),0.0)
     
     pass
