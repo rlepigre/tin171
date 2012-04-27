@@ -98,9 +98,9 @@ play({move, Move}, {_PlayerPid, _Ref},
               your_turn(NewBoard, NextPlayer),
               {reply, ok, play, S#game{pls = NewPlayers, board = NewBoard}};
         % Winning move; send won-message, notify lobby and terminate
-        won -> won(Player, BoardStr, S),
-               notify_lobby(S),
-               {stop, won, S};
+        won -> notify_lobby(Player, BoardStr, S),
+               self() ! stop,
+               {reply, ok, play, S};
         % Illegal move; try again!
         illegal_move -> {reply, error_event(illegal_move), play, S}
     end.
@@ -141,7 +141,7 @@ handle_sync_event({leave, Player}, _LobbyPid, play,
             % then notify the lobby and terminate
             [LastPlayer] = cc_lobby:remove_player(Player, Players),
             send(error_event(game_over), LastPlayer),
-            notify_lobby(S),
+            %%notify_lobby(S),
             {stop, ok, game_over, S#game{pls = [LastPlayer], num = 1}}
     end;
 handle_sync_event({leave, Player}, _LobbyPid, play,
@@ -193,8 +193,8 @@ code_change(_OldVsn, StateName, State, _Extra) ->
 handle_event(Event, StateName,S) ->
     {stop, {not_used, Event, StateName, S}, S}.
 
-handle_info(Info, StateName, S) ->
-    {stop, {not_used, Info, StateName, S}, S}.
+handle_info(stop, _StateName, S) ->
+    {stop, stopping, S}.
 
 wait(Event, S) ->
     {stop, {not_used, Event, S}, S}.
@@ -213,8 +213,12 @@ play(Event, S) ->
 %%--------------------------------------------------------------------
 init_state(S=#game{pls = Players, num = Num}) ->
     Board = lib_cc:new_board(),
+    PlayerIds = case Num of
+                    3 -> [1,3,5];
+                    _ -> lists:seq(1,Num)
+                end,
     NewPlayers = lists:map(fun({Player, Id}) -> set_id(Player, Id) end,
-                           lists:zip(Players, lists:seq(1,Num))),
+                           lists:zip(Players, PlayerIds)),
     NewBoard = lists:foldl(fun(Player, BoardAcc) -> 
                                    lib_cc:add_player(BoardAcc,Player#player.id) end, Board, NewPlayers),
     S#game{pls = NewPlayers, board = NewBoard}.
@@ -256,8 +260,9 @@ send(Event, Player) ->
 %% @doc Notify the lobby that the game has started.
 %% @end
 %%--------------------------------------------------------------------
-notify_lobby(#game{name = GameName}) ->
-    gen_server:cast(cc_lobby, {game_over, GameName}).
+notify_lobby(Player, BoardStr, Game) ->
+    Won = {won, {Player#player.id, Player#player.name}, BoardStr},
+    gen_server:cast(cc_lobby, {Won, Game}).
 
 %% EVENTS
 

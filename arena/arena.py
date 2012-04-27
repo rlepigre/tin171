@@ -18,15 +18,20 @@
 # 
 # author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
 
-import protocol
-from protocol import A
-
 import subprocess
 import random
 import os
 import socket
+from time import sleep
+from multiprocessing import Process, Queue
 
-def run_match(server,port,path,bots,max_updates=1000):
+import protocol
+from protocol import A
+import board
+
+
+
+def run_match(server,port,path,bots,max_updates=1000,pause=0):
     '''Runs a match between bots
     server:     server's hostname
     port:       server's port
@@ -35,17 +40,21 @@ def run_match(server,port,path,bots,max_updates=1000):
     
     This function should collect some stats on the game
     '''
+    
+    game_name = 'automated-match-%u' % random.randint(0,7000000)
+    
     results= {}
     results['boards']=[]
+    results['players'] = {}
+    results['game_name'] = game_name
     
     c = protocol.Client(socket.create_connection((server,port)).makefile())
     
-    game_name = 'automated-match-%u' % random.randint(0,7000000)
+    
     
     logdir='/tmp/%s' % game_name
     os.mkdir(logdir)
     print logdir
-    
     
     gladiators=[]
 
@@ -67,6 +76,8 @@ def run_match(server,port,path,bots,max_updates=1000):
     c.do_login("watcher-%s" % game_name)
     c.spectate(game_name)
     
+    sleep(pause)
+    
     #Launch all the other bots
     for i in bots[1:]:
         logfile=open('%s/Log-%s'%(logdir,str(i)),'w')
@@ -83,13 +94,46 @@ def run_match(server,port,path,bots,max_updates=1000):
             results['boards'].append(x[2])
             break
         elif x[0]=='update':
+            results['players'][x[1][0]] = x[1][1]
             print "update"
             results['boards'].append(x[3])
-    #TODO collect all updates and won here
+    
     
     for i in gladiators:
         i.kill()
         i.wait()
         
+    return results
+
+def evaluate_match(server,port,path,bots,max_updates=1000,pause=0,queue=None):
+    result = run_match(server,port,path,bots,max_updates,pause)
+    print result['players']
+    result['stats']=[None]
+    for i in result['players']:
+        result['stats'].append(board.euclidean_distance_from_target(result['boards'][-1],i))
+        
+    print result['stats']
+    
+    #TODO collect all updates and won here
+    if queue==None:
+        return result
+    queue.put(result)
+
+
+def parallel_matches(server,port,path,bots,max_updates=1000,pause=0):
+    
+    matches=[]
+    queues=[]
+    results=[]
+    for b in bots:
+        q = Queue()
+        p = Process(target = evaluate_match, args=(server,port,path,b,max_updates,pause,q))
+        p.start()
+        matches.append(p)
+        queues.append(q)
+    print "ALL LAUNCHED"
+    for i in xrange(len(matches)):
+        results.append(queues[i].get())
+        matches[i].join()
     return results
 
