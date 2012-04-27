@@ -23,7 +23,7 @@ int main(int argc, char **argv){
         else
           printf(", -1");
         counter++;
-      }else if(c >= 'A' && c <= 'Z'){
+      }else if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')){
         if(counter == 0)
           printf("%i", c - 'A');
         else
