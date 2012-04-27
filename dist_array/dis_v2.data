@@ -1,0 +1,120 @@
+     1
+  3 . . 5
+   . . .
+  6 . . 4
+     2
+
+1:
+                - - - - Z - - - - - - - - - - - -
+               - - - - Y Y - - - - - - - - - - -
+              - - - - X X X - - - - - - - - - -
+             - - - - W W W W - - - - - - - - -
+            o o o o L L L L L o o o o - - - -
+           - o o o L K K K K L o o o - - - -
+          - - o o K K J J J K K o o - - - -
+         - - - o K J J I I J J K o - - - -
+        - - - - K I I H H H I I K - - - -
+       - - - - o H H G G G G H H o - - -
+      - - - - o o H G F F F G H o o - -
+     - - - - o o o F E E E E F o o o -
+    - - - - o o o o E E E E E o o o o
+   - - - - - - - - - D D D D - - - -
+  - - - - - - - - - - C C C - - - -
+ - - - - - - - - - - - B B - - - -
+- - - - - - - - - - - - A - - - -
+
+2:
+                - - - - A - - - - - - - - - - - -
+               - - - - B B - - - - - - - - - - -
+              - - - - C C C - - - - - - - - - -
+             - - - - D D D D - - - - - - - - -
+            o o o o E E E E E o o o o - - - -
+           - o o o F E E E E F o o o - - - -
+          - - o o H G F F F G H o o - - - -
+         - - - o H H G G G G H H o - - - -
+        - - - - K I I H H H I I K - - - -
+       - - - - o K J J I I J J K o - - -
+      - - - - o o K K J J J K K o o - -
+     - - - - o o o L K K K K L o o o -
+    - - - - o o o o L L L L L o o o o
+   - - - - - - - - - W W W W - - - -
+  - - - - - - - - - - X X X - - - -
+ - - - - - - - - - - - Y Y - - - -
+- - - - - - - - - - - - Z - - - -
+
+3:
+                - - - - o - - - - - - - - - - - -
+               - - - - o o - - - - - - - - - - -
+              - - - - o o o - - - - - - - - - -
+             - - - - o o o o - - - - - - - - -
+            Z Y X W L L K K K o o o o - - - -
+           - Y X W L K K J I H o o o - - - -
+          - - X W L K J J I H H o o - - - -
+         - - - W L K J I H G G F o - - - -
+        - - - - L K J I H G F E E - - - -
+       - - - - o L K J H G F E E D - - -
+      - - - - o o K J I G F E E D C - -
+     - - - - o o o K I H G E E D C B -
+    - - - - o o o o K H H F E D C B A
+   - - - - - - - - - o o o o - - - -
+  - - - - - - - - - - o o o - - - -
+ - - - - - - - - - - - o o - - - -
+- - - - - - - - - - - - o - - - -
+
+4:
+                - - - - o - - - - - - - - - - - -
+               - - - - o o - - - - - - - - - - -
+              - - - - o o o - - - - - - - - - -
+             - - - - o o o o - - - - - - - - -
+            A B C D E F H H K o o o o - - - -
+           - B C D E E G H I K o o o - - - -
+          - - C D E E F G I J K o o - - - -
+         - - - D E E F G H J K L o - - - -
+        - - - - E E F G H I J K L - - - -
+       - - - - o F G G H I J K L W - - -
+      - - - - o o H H I J J K L W X - -
+     - - - - o o o H I J K K L W X Y -
+    - - - - o o o o K K K L L W X Y Z
+   - - - - - - - - - o o o o - - - -
+  - - - - - - - - - - o o o - - - -
+ - - - - - - - - - - - o o - - - -
+- - - - - - - - - - - - o - - - -
+
+5:
+                - - - - o - - - - - - - - - - - -
+               - - - - o o - - - - - - - - - - -
+              - - - - o o o - - - - - - - - - -
+             - - - - o o o o - - - - - - - - -
+            o o o o K K K L L W X Y Z - - - -
+           - o o o H I J K K L W X Y - - - -
+          - - o o H H I J J K L W X - - - -
+         - - - o F G G H I J K L W - - - -
+        - - - - E E F G H I J K L - - - -
+       - - - - D E E F G H J K L o - - -
+      - - - - C D E E F G I J K o o - -
+     - - - - B C D E E G H I K o o o -
+    - - - - A B C D E F H H K o o o o
+   - - - - - - - - - o o o o - - - -
+  - - - - - - - - - - o o o - - - -
+ - - - - - - - - - - - o o - - - -
+- - - - - - - - - - - - o - - - -
+
+6:
+                - - - - o - - - - - - - - - - - -
+               - - - - o o - - - - - - - - - - -
+              - - - - o o o - - - - - - - - - -
+             - - - - o o o o - - - - - - - - -
+            o o o o K H H F E D C B A - - - -
+           - o o o K I H G E E D C B - - - -
+          - - o o L J I G F E E D C - - - -
+         - - - o L K J H G F E E D - - - -
+        - - - - L K J I H G F E E - - - -
+       - - - - W L K J I H G G F o - - -
+      - - - - X W L K J J I H H o o - -
+     - - - - Y X W L K K J I H o o o -
+    - - - - Z Y X W L L K K K o o o o
+   - - - - - - - - - o o o o - - - -
+  - - - - - - - - - - o o o - - - -
+ - - - - - - - - - - - o o - - - -
+- - - - - - - - - - - - o - - - -
+

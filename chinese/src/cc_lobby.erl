@@ -252,8 +252,9 @@ handle_call(list_players, _From, S=#st{pls = Players}) ->
 %% Handling cast messages
 %% @end
 %%--------------------------------------------------------------------
-handle_cast({game_over, GameName}, S=#st{pls = Players, games = Games}) ->
-    {running, Game} = find_game(GameName, Games),
+handle_cast({Won={won,_,_},Game=#game{pls = GPlayers, specs = GSpecs}},
+             S=#st{pls = Players, games = Games}) ->
+    send(Won, GPlayers ++ GSpecs),
     {noreply, S#st{pls = set_all_idle(Game, Players),
                    games = remove_game(Game, Games)}}.
 
