@@ -126,7 +126,6 @@ def parallel_matches(server,port,path,bots,max_updates=1000,pause=0):
     queues=[]
     results=[]
     for b in bots:
-        print b
         q = Queue()
         p = Process(target = evaluate_match, args=(server,port,path,b,max_updates,pause,q))
         p.start()
@@ -136,4 +135,5 @@ def parallel_matches(server,port,path,bots,max_updates=1000,pause=0):
     for i in xrange(len(matches)):
         results.append(queues[i].get())
         matches[i].join()
-    pass
+    return results
+
