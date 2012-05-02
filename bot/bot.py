@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+#TODO Nice pypy arguments --jit threshold=3
 # Chinese checkers bot
 # Copyright (C) 2012 Göran Weinholt
 
@@ -24,7 +25,61 @@ import protocol
 from protocol import A
 from board import *
 
+def parallel_bot(c,timeout,board,player_id,distance_function=static_distance_from_target):
+    if not hasattr(parallel_bot,'players') and not hasattr(parallel_bot,'computed'):
+        #List of players playing the game, except self
+        parallel_bot.players=[int(i) for i in (set(board)- set(' #'+ str(player_id)))]
+        #set a dictionary to avoid recalculations
+        parallel_bot.computed={}
+        
+    def reasonable_moves(board,player):
+        '''returns the most reasonable moves,
+        it will return a list of tuples, every
+        tuple being (new_board,moves,distance)
+        '''
+        print "-->",player
+        moves = list(all_moves(board, player))
+        boards = [update_board(board,i) for i in moves]
+        distances = [distance_function(i,player) for i in boards]
+        r=zip(boards,moves,distances)
+        r.sort(key=(lambda x: x[2]))
+        return r[0:len(r)/5+1] #TODO that 5 is an heuristic
+    
+    m=reasonable_moves(board,player_id)
+    
+    for i in m:
+        prev= list(i[0])
+        for j in parallel_bot.players:
+            next_=[]
+            for k in prev:
+                next_=reasonable_moves(k,j)
+            prev=next_
+    b=[]
+    for i in parallel_bot.players:
+        pass
+    c.move(m[0][1])
+        
+    pass
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 def static_distance_bot(c,timeout,board,player_id):
     return trivial_bot(c,timeout,board,player_id,static_distance_from_target)
 
@@ -168,7 +223,7 @@ def main():
                 c.start_game()
                 print "Starting game with players:", players
             else:
-                raise Exception("I don't know what happened", x)
+                raise Exception("I don't know what happened")
 
 
     while True:
@@ -182,7 +237,7 @@ def main():
 
 
 
-personality = (trivial_bot,static_distance_bot,iddfs_bot,static_iddfs_bot)
+personality = (trivial_bot,static_distance_bot,iddfs_bot,static_iddfs_bot,parallel_bot)
 
 if __name__ == "__main__":
     main()
