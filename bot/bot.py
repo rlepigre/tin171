@@ -134,29 +134,39 @@ def static_iddfs_bot(c, timeout, board, player_id):
     return iddfs_bot(c, timeout, board, player_id, static_distance_from_target)
 
 def minimax_bot(c, timeout, board, player_id,distance_function=static_distance_from_target):
+    def board_evaluation(board, pid):
+        return distance_function(board, pid)
+
     def minimax(board, pid, depth):
-        score = distance_function(board, pid)
-        # Player won? Better way to check this?
-        if score == 0:
-            return 2**24
+        opp = (pid % 2) + 1
+        # Player won? Very high score.
+        if won(board, pid, opp):
+            ##print "Winning move found!"
+            return -(2**24)
         # Depth reached
         elif depth == 0:
-            return -1*score
+            return board_evaluation(board, pid)
         # Else branch on all moves
         else:
-            best_move = None
-            best_score = -2**24
-            for move in all_moves(board, pid):
-                nboard = update_board(board, move)
-                nscore = -1*minimax(nboard, OPPOSITES[pid], depth-1)
-                if nscore > best_score:
-                    best_move = move
-                    best_score = nscore
-            return best_move
-                    
-    m =  minimax(board, player_id, 2)
-    print "Move: ", m[0]
-    c.move(m)
+            best = None
+            for move in all_moves(board, opp):
+                val = -minimax(update_board(board, move), opp, depth-1)
+                if best == None or val > best:
+                    best = val
+            return best
+    
+    depth = 2
+    best = None
+    score = -(2**24)
+    for move in all_moves(board, player_id):
+        val = -minimax(update_board(board, move), player_id, depth)
+        print "Considering move: ", move, " with score: ", val
+        if best == None or val > score:
+            print "Move: ", move, " was better than ", best
+            best = move
+            score = val
+    print "Choosed: ", best
+    c.move(best)
 
 def play(c, player_id,make_move):
     """Play until someone wins... or something goes wrong."""
