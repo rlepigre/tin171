@@ -35,12 +35,12 @@
 \begin{abstract}\centering
 %%COMMENT (re-use from project proposal and modify if needed)
 Chinese Checkers is a board game for up to six players. The fact that
-it's a multi-player game makes it quite different from more widely
+it is a multi-player game makes it quite different from more widely
 explored two-player games like Chess. In writing a computer player for
-Chinese Checkers we explored search algorithms and heuristics. Our aim
-is to highlight the ways in which multi-player games differ from
-two-player games, and what effect this has on the effectiveness of a
-computer player.
+Chinese Checkers we have explored search algorithms and heuristics.
+Our aim is to highlight the ways in which multi-player games differ
+from two-player games, and the consequences this has for the
+effectiveness of a computer player.
 \end{abstract}
 
 \section{Introduction and Background}
@@ -54,7 +54,7 @@ one of the holes is occupied by another peg, it can also ``jump'' over
 that peg in a straight line (thereby traveling two holes over). The
 player can jump over other pegs an unlimited number of times every
 round, potentially moving a peg straight across the whole board. The
-objective is to move all pegs to the opposing corner.
+objective is to move all pegs to the opposite corner.
 % Maybe it would be nice to add a few lines about the history of the game ?
 
 \subsection{The problem you tried to solve}
@@ -65,7 +65,7 @@ We have implemented a computer program capable of playing Chinese
 Checkers. Our goal has been to create a program that could beat a
 novice human player.
 
-\subsection{Results from the literature}
+\subsection{Related work}
 % (Re-use form project proposal, extend with furhter findings from
 % literature study, cite and add references. Expain which are relevant
 % for your project and which not and why.)
@@ -129,23 +129,22 @@ properly. That being said, we did copy the server-client model of
 % (Re-use the content and structure of subsections from project
 % proposal. Add refinments and extensions, motivate changes compared
 % to earlier stages of the project.)
-\subsection{Why is the problem interesting or significant?  What will a solution
-achieve?}
+\subsection{Significance}
 
-An interesting aspect of Chinese Checkers is that it's a multi-player
+An interesting aspect of Chinese Checkers is that it is a multi-player
 game. This means that players can form temporary coalitions against
 other players. While traditional two-player strategies can be used to
 play the game they are not going to be able to play it perfectly and
 in this sense Chinese Checkers is still an open problem. Working on an
 open problem is always interesting.
 
-The multi-player attribute will provide a good setting for objectively
+The multi-player attribute provides a good setting for objectively
 evaluating the performance of different algorithms and heuristics. The
 existing literature is somewhat sparse on how existing computer
-programs fare against humans in multi-player Chinese Checkers, and
-maybe we can give a more detailed account.
+programs fare against humans in multi-player Chinese Checkers. We hope
+to rectify that with this report.
 
-\subsection{The central idea in your solution}
+\subsection{The central idea in our solution}
 
 The architecture of our solution consists of three parts: a game
 server written in Erlang, a graphical game client written in Python
@@ -173,13 +172,13 @@ board, where it is more likely that good paths towards the goal will
 be formed. The heuristics described in \cite{ulfhake} will be very
 useful for our continued work.
 
-\subsubsection{The python client}
-To be able to test different approaches, the python client supports multiple
+\subsubsection{The Python client}
+To be able to test different approaches, the Python client supports multiple
 functions.
-In general, python is a slow interpreted language, but there are projects that
-aim in providing just in time compilation. The pypy interpreter has proven to be
-somewhat faster than the standard cpython, when forced to compile loops after
-few iterations the ddfs algorithm is able to compute one level deeper
+In general, Python is a slow interpreted language, but there are projects that
+aim in providing just in time compilation. The PyPy interpreter has proven to be
+somewhat faster than the standard CPython, when forced to compile loops after
+few iterations the IDDFS algorithm is able to compute one level deeper.
 %% To improve
 %% the depth of our solution we will try and do some pruning of ``bad''
 %% plys, e.g.~those that do not move the player any closer to the goal
@@ -206,9 +205,9 @@ first programs can be preserved for later programs to play against.
 %% heuristics can force it to make forward progress.
 
 %% \subsection{Define an instance of the problem. How will you measure the
-performance of your program?}% Not in the report template
+%%performance of your program?}% Not in the report template
 %% %(You must know this in advance, find instances /benchmarks, or make your
-own).
+%%own).
 
 %% The program should play a game in the same way a human would play: the
 %% program waits its turn and makes a move. The initial board setup is
@@ -222,7 +221,7 @@ own).
 
 %% \subsection{The scope of your work}% Not in the report template
 %% %(also, what interesting and related things are outside the scope of your
-proposal?)
+%%proposal?)
 
 %% The scope of our project will ultimately be to try and challenge a set
 %% of amateur human players. The first version of the program will play a
