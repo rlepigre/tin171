@@ -223,6 +223,7 @@ class GameUI(QtGui.QMainWindow):
         pass
     
     def socket_disconnected(self):
+        self.ui.boardFrame.setTitle(QtGui.QApplication.translate("Form", "Board"))
         self.state = StateEnum.DISCONNECTED
         self.socket.close()
         self.ui.txtHostname.setEnabled(True)
