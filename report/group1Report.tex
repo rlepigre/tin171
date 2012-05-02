@@ -129,7 +129,8 @@ properly. That being said, we did copy the server-client model of
 % (Re-use the content and structure of subsections from project
 % proposal. Add refinments and extensions, motivate changes compared
 % to earlier stages of the project.)
-\subsection{Why is the problem interesting or significant?  What will a solution achieve?}
+\subsection{Why is the problem interesting or significant?  What will a solution
+achieve?}
 
 An interesting aspect of Chinese Checkers is that it's a multi-player
 game. This means that players can form temporary coalitions against
@@ -172,6 +173,13 @@ board, where it is more likely that good paths towards the goal will
 be formed. The heuristics described in \cite{ulfhake} will be very
 useful for our continued work.
 
+\subsubsection{The python client}
+To be able to test different approaches, the python client supports multiple
+functions.
+In general, python is a slow interpreted language, but there are projects that
+aim in providing just in time compilation. The pypy interpreter has proven to be
+somewhat faster than the standard cpython, when forced to compile loops after
+few iterations the ddfs algorithm is able to compute one level deeper
 %% To improve
 %% the depth of our solution we will try and do some pruning of ``bad''
 %% plys, e.g.~those that do not move the player any closer to the goal
@@ -197,8 +205,10 @@ first programs can be preserved for later programs to play against.
 %% win any contests but it will be able to play the game, because our
 %% heuristics can force it to make forward progress.
 
-%% \subsection{Define an instance of the problem. How will you measure the performance of your program?}% Not in the report template
-%% %(You must know this in advance, find instances /benchmarks, or make your own).
+%% \subsection{Define an instance of the problem. How will you measure the
+performance of your program?}% Not in the report template
+%% %(You must know this in advance, find instances /benchmarks, or make your
+own).
 
 %% The program should play a game in the same way a human would play: the
 %% program waits its turn and makes a move. The initial board setup is
@@ -211,7 +221,8 @@ first programs can be preserved for later programs to play against.
 
 
 %% \subsection{The scope of your work}% Not in the report template
-%% %(also, what interesting and related things are outside the scope of your proposal?)
+%% %(also, what interesting and related things are outside the scope of your
+proposal?)
 
 %% The scope of our project will ultimately be to try and challenge a set
 %% of amateur human players. The first version of the program will play a
