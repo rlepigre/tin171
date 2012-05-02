@@ -118,6 +118,7 @@ def iddfs_bot(c, timeout, board, player_id,distance_function=euclidean_distance_
     best = [[], -2**24, 2**24]
     stoptime = time.time() + timeout / 1000.0
 
+
     # Iterative deepening.
     for depth in xrange(1, 2**24):
         for move in all_moves(board, player_id):
@@ -131,6 +132,31 @@ def iddfs_bot(c, timeout, board, player_id,distance_function=euclidean_distance_
 
 def static_iddfs_bot(c, timeout, board, player_id):
     return iddfs_bot(c, timeout, board, player_id, static_distance_from_target)
+
+def minimax_bot(c, timeout, board, player_id,distance_function=static_distance_from_target):
+    def minimax(board, pid, depth):
+        score = distance_function(board, pid)
+        # Player won? Better way to check this?
+        if score == 0:
+            return 2**24
+        # Depth reached
+        elif depth == 0:
+            return -1*score
+        # Else branch on all moves
+        else:
+            best_move = None
+            best_score = -2**24
+            for move in all_moves(board, pid):
+                nboard = update_board(board, move)
+                nscore = -1*minimax(nboard, OPPOSITES[pid], depth-1)
+                if nscore > best_score:
+                    best_move = move
+                    best_score = nscore
+            return best_move
+                    
+    m =  minimax(board, player_id, 2)
+    print "Move: ", m[0]
+    c.move(m)
 
 def play(c, player_id,make_move):
     """Play until someone wins... or something goes wrong."""
@@ -237,7 +263,7 @@ def main():
 
 
 
-personality = (trivial_bot,static_distance_bot,iddfs_bot,static_iddfs_bot,parallel_bot)
+personality = (trivial_bot,static_distance_bot,iddfs_bot,static_iddfs_bot, minimax_bot,parallel_bot)
 
 if __name__ == "__main__":
     main()
