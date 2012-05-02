@@ -203,3 +203,30 @@ only collects all the moves, and the winner.
 2012-04-26
 Göran writes a bot function that uses the iterative-deepening depth
 first search algorithm. It seems to be better than the trivial bot.
+
+2012-05-02 
+
+We have a meeting with Birgit during which we receive feedback on the
+first sections of the report. Section headings should be changed. The
+original headings were more intended to be explanatory for us and now
+they should be changed to look like a real report. We receive some
+style tips, viz.: "it's" and "we've" is bad form; "effectiveness" and
+"effect" in the same sentence is clumsy; beginning a sentence with a
+term like /cheech/ looks bad; and it should be the "opposite" corner.
+
+A report should answer the questions of the reader, and we are not
+doing that in some places (e.g. where it says that "... strategies are
+less effective ...", the reader will want to know why). We mention
+that Ulfhake writes about heuristics, but the reader will want to know
+what they are. We might write about the type of heuristics she used,
+if we don't want to give a lot of details.
+
+In section 2.2 we should be more detailed about our heuristics. We
+could write pseudo code and reference it here.
+
+We also show Birgit the current state of the project and talk a bit
+about heuristics and search algorithms. It's good that we're doing
+many different things, but we should not forget to write it all down
+in the report as well. Write also about things that we have thought
+about; perhaps in a future work section.
+
