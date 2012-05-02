@@ -204,8 +204,12 @@ only collects all the moves, and the winner.
 Göran writes a bot function that uses the iterative-deepening depth
 first search algorithm. It seems to be better than the trivial bot.
 
-2012-05-02 
+2012-04-27
+Rodolphe writes a command-line client in C. It is possible to host / join /
+spectate a game. The plan is to use this to implement bots in C, because
+python bots seem to be a little slow.
 
+2012-05-02 
 We have a meeting with Birgit during which we receive feedback on the
 first sections of the report. Section headings should be changed. The
 original headings were more intended to be explanatory for us and now
