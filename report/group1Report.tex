@@ -112,18 +112,18 @@ against human players.
 
 \subsection{Tools and programs available}
 % (Re-use and extend your list of tools and programs from the project
-% proposal including references. 
-% Which ones are you actually using?  Cite and annotate them.  
+% proposal including references.
+% Which ones are you actually using?  Cite and annotate them.
 % Did you encounter any practical difficulties?)
-\emph{cheech} is a free software implementation of Chinese Checkers.
-It provides a graphical interface and a network protocol. It initially
-appeared to us that we could make our own program connect to
-\emph{cheech} as a player and thereby use the existing multi-player
-functionality and graphics. Unfortunately the program has suffered
-significant bit rot and we were unable to compile it. We evaluated
-half a dozen alternatives and found that none of them still work
-properly. That being said, we did copy the server-client model of
-\emph{cheech} for our own work.
+There is a free software implementation of Chinese Checkers called
+\emph{cheech}. It provides a graphical interface and a network
+protocol. It initially appeared to us that we could make our own
+program connect to \emph{cheech} as a player and thereby use the
+existing multi-player functionality and graphics. Unfortunately the
+program has suffered significant bit rot and we were unable to compile
+it. We evaluated half a dozen alternatives and found that none of them
+still work properly. That being said, we did copy the server-client
+model of \emph{cheech} for our own work.
 
 \section{The central idea in your solution}
 % (Re-use the content and structure of subsections from project
@@ -263,7 +263,54 @@ first programs can be preserved for later programs to play against.
 \section{Overview of the architecture}
 % (Describe the different parts of your program suite in detail.)
 \subsection{Running modules}
+%% arena  cclient   gui_client
+%% bot    chinese   hs-cli
+
+Our project is divided into a collection of programs that each solve
+different parts of the problem. The programs communicate using a
+network protocol that we have designed. Our choice to use a network
+protocol has let us write the programs in different programming
+languages. We have one server implementation, a graphical client and a
+bot client.
+
+%% TODO: note the cli client and the hs client?
+
+Players connect to a \emph{game server} which maintains the current
+game state, notifies each player of their turn and checks that the
+rules of the game are not violated. A player can host a game or join a
+game someone else is hosting. It is also possible to join as a
+spectator and see what is going on in a game. If the game is over the
+server also announces who the winner was. The server is written in
+Erlang and can host multiple games simultaneously.
+
+The \emph{graphical client} is written in Python and is designed for a
+human player. The main part of the interface is the current board
+state, shown as the star that one would normally see a on real life
+version of the game. When it is the players' turn they can make their
+move by clicking on the pegs shown on the screen.
+
+The \emph{bot} is the program that contains the AI components of our
+project. It is also written in Python and is divided in three major
+components: the protocol module, the board module and the bot module.
+The protocol module serializes and deserializes the network protocol.
+The board module contains code to generate all moves a player has
+available and it also contains our board evaluation functions. The bot
+module contains the search algorithms. It is the job of the search
+algorithms to use the possible moves and the board evaluation
+functions to determine which move will give the best outcome for the
+bot. When we have implemented a new search algorithm or board
+evaluation function the previous ones are still available. Each
+combination of search algorithm and evaluation function is given a
+\emph{bot personality} identifier.
+
+An important part of our project is not only to implement search
+algorithms and heuristics, but to also measure their performance. To
+aid in this we have the \emph{arena} program. This program can start
+up a game between different bot personalities so that we can determine
+which bot is the strongest in different situations.
+
 \subsection{Modules designed but not implemented}
+
 \subsection{Modules a future continuation may have}
 
 \section{Results and Evaluation}
@@ -315,8 +362,16 @@ future, \emph{ad infinitum}.
 \end{algorithmic}
 
 
+%% Fill in with ideas for what to write about:
+
+%% * The multiplayer aspect
+%% ** The search-tree explodes with many players
+%% ** So what else changes with three or more players?
+%% ** What about a bot that recognizes others of its ilk and conspires?
+
 \section{Discussion and Conclusions}
 %(Sum up your project, suggest future extensions and improvements.)
+
 
 % \section{References}
 % (Re-use from previous documents, extend.)
