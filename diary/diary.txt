@@ -234,3 +234,7 @@ many different things, but we should not forget to write it all down
 in the report as well. Write also about things that we have thought
 about; perhaps in a future work section.
 
+2012-05-03
+Göran writes a section in the report on the modules we currently have
+in our project.
+
