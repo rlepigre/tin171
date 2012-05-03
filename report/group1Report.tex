@@ -261,7 +261,7 @@ first programs can be preserved for later programs to play against.
 %% path.
 
 \section{Overview of the architecture}
-% (Desribe the different parts of your program suite in detail.)
+% (Describe the different parts of your program suite in detail.)
 \subsection{Running modules}
 \subsection{Modules designed but not implemented}
 \subsection{Modules a future continuation may have}
@@ -271,37 +271,49 @@ first programs can be preserved for later programs to play against.
 % benchmarks and instances? Describe advantages and disadvantages,
 % possibly in relation to other groups in this course.)
 
-A central part of our solution will be the \emph{IDDFS} algorithm.
-Shown below is the
-high-level pseudocode for that algorithm \cite{aimodern}.\\
+We have a time-limited implementation of iterative-deepening depth
+first search based on an algorithm from \cite{aimodern}. When the
+algorithm compares two moves that achieve an equally good outcome it
+will explicitly favor the move that achieves the outcome sooner (at a
+lower search depth). If this check is omitted the algorithm can end up
+looping at the end of a game. This is because it would make a move
+that would be the winning move two moves into the future, but on the
+next turn it might again choose a move that wins two moves into the
+future, \emph{ad infinitum}.
+
 \begin{algorithmic}
-\Function{ITERATIVE-DEEPENING-SEARCH}{\emph{board, time-limit}} \\
-\textbf{global} \emph{best-move} \\
-\emph{best-move}.SCORE = 0 \\
-\emph{best-move}.MOVE = UNDEFINED \\
-\For{\emph{depth} $= 0 \to \infty$}
-\State RECURSIVE-DLS(MAKE-NODE(\emph{board}), \emph{depth})
-\If {TIME-OUT(\emph{time-limit})}
-\State \Return \emph{best-move}
-\EndIf
+\Function{IDDFS}{board, player-id, time-limit}
+\State best.move = \emph{nil}
+\State best.score = $-\infty$
+\State best.depth = $\infty$
+\For{depth $= 0 \to \infty$}
+ \ForAll{move $\in$ possible-moves(board, player-id)}
+  \State nboard = update-board(board, move)
+  \State RECURSIVE-DLS(move, nboard, depth, 0, best)
+ \EndFor
+ \If{timeout}
+  \State \Return best.move
+ \EndIf
 \EndFor
 \EndFunction
 \\
-\Function{RECURSIVE-DLS}{\emph{node, limit}}
-\If{\emph{limit} $>$ 0}
-\ForAll{\emph{move} in VALID-MOVES(\emph{node})}
-\If{\emph{move}.SCORE $>$ \emph{best-move}.SCORE}
-\State \emph{best-move} $=$ \emph{move}
+\Function{RECURSIVE-DLS}{move1, board, limit, depth, best}
+\State score = board-evaluation(board, player-id)
+\If{score $>$ best.score $\vee$ (score $=$ best.score $\wedge$ depth $<$ best.depth)}
+\State best.move = move1
+\State best.score = score
+\State best.depth = depth
 \EndIf
-\State \emph{child} $=$ CHILD-NODE(\emph{node, move})
-\State RECURSIVE-DLS(\emph{child, limit - 1})
+\If{limit $\le$ 0 $\vee$ timeout}
+\State \Return
+\EndIf
+\ForAll{move $\in$ possible-moves(board, player-id)}
+ \State nboard = update-board(board, move)
+ \State RECURSIVE-DLS(move1, nboard, limit$-1$, depth$+1$, best)
 \EndFor
-\EndIf
 \EndFunction
 \end{algorithmic}
 
-[The pseudo code above has not been updated to reflect the current
-  IDDFS algorithm we're using.]
 
 \section{Discussion and Conclusions}
 %(Sum up your project, suggest future extensions and improvements.)
