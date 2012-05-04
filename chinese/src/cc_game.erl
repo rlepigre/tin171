@@ -214,7 +214,7 @@ play(Event, S) ->
 init_state(S=#game{pls = Players, num = Num}) ->
     Board = lib_cc:new_board(),
     PlayerIds = case Num of
-                    3 -> [1,3,5];
+                    3 -> [1,6,4];
                     _ -> lists:seq(1,Num)
                 end,
     NewPlayers = lists:map(fun({Player, Id}) -> set_id(Player, Id) end,

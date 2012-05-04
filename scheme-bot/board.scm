@@ -17,7 +17,7 @@
 
 (declare (unit board))
 
-(require-extension stack)
+(require-extension stack (srfi 1))
 
 (define BOARD-LENGTH (* 17 17))
 (define BOARD-START 4)
@@ -31,16 +31,24 @@
 
 (define NEIGHBORS '(+1 -1 -18 -17 +18 +17))
 
-(define FULL-BOARD "####1################11###############111##############1111#########3333     5555#####333      555######33       55#######3        5########         ########6        4#######66       44######666      444#####6666     4444#########2222##############222###############22################2###")
+(define FULL-BOARD "####1################11###############111##############1111#########3333     5555#####333      555######33       55#######3        5########         ########6        4#######66       44######666      444#####6666     4444#########2222##############222###############22################2####")
 
 
 (define OPPOSITES '#(#f 2 1 4 3 6 5))
 
 (define (update-board! board move)
-  #f)
+  (let ((from (last move))
+        (to (first move)))
+    (let ((tmp (string-ref board from)))
+      (string-set! board from (string-ref board to))
+      (string-set! board to tmp))))
 
 (define (restore-board! board move)
-  #f)
+  (let ((from (first move))
+        (to (last move)))
+    (let ((tmp (string-ref board from)))
+      (string-set! board from (string-ref board to))
+      (string-set! board to tmp))))
 
 ;; True if position n is inside the board.
 (define (on-board? n)
