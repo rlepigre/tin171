@@ -119,9 +119,13 @@ There is a free software implementation of Chinese Checkers called
 \emph{cheech}. It provides a graphical interface and a network
 protocol. It initially appeared to us that we could make our own
 program connect to \emph{cheech} as a player and thereby use the
-existing multi-player functionality and graphics. Unfortunately the
-program has suffered significant bit rot and we were unable to compile
-it. We evaluated half a dozen alternatives and found that none of them
+existing multi-player functionality and graphics. Unfortunately the program has
+not been updated for years and uses an old version of the GTK toolkit wrapper
+for C++ and other libraries, and some of the functions it was using have been
+removed or replacing. So it fails to build from source and after some failed
+effort to adapt it to the new libraries that are shipped on modern systems we
+decided to abandon it.
+We evaluated half a dozen alternatives and found that none of them
 still work properly. That being said, we did copy the server-client
 model of \emph{cheech} for our own work.
 
@@ -205,8 +209,8 @@ been modified to assign to these positions a great penality.
 
 \subsubsection{Startgame}
 Until the players' pegs are close enough to interact with each other, an opening
-book of pre-computed moves could be used. This would be useful just for two
-players games since in all the other configurations players are located in
+book of pre-computed moves could be used. This would be useful just for two or
+three players games since in all the other configurations players are located in
 adjacent corners and can interact with each other already from the 2nd or 3rd
 move.
 
@@ -421,7 +425,10 @@ considers its own moves and never the opponents. Because of this the bots
 agenda can be destroyed by the opponent by blocking the path it was about
 to take.
 
-To counter this we can use the \emph{MINIMAX-algorithm}. The \emph{MINIMAX-algorithm} tries to \emph{minimize} the board-evaluation function for itself while trying to maximize the board-evaluation function of its opponent.
+To counter this we can use the \emph{MINIMAX-algorithm}. The
+\emph{MINIMAX-algorithm} tries to \emph{minimize} the board-evaluation function
+for itself while trying to maximize the board-evaluation function of its
+opponent.
 
 %% MINIMAX
 \begin{algorithmic}
