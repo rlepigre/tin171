@@ -361,13 +361,64 @@ future, \emph{ad infinitum}.
 \EndFunction
 \end{algorithmic}
 
+The previous \emph{IDDFS-algorithm} was a very naive algorithm because it only
+considers its own moves and never the opponents. Because of this the bots
+agenda can be destroyed by the opponent by blocking the path it was about
+to take.
+
+To counter this we can use the \emph{MINIMAX-algorithm}. The \emph{MINIMAX-algorithm} tries to \emph{minimize} the board-evaluation function for itself while trying to maximize the board-evaluation function of its opponent.
+
+%% MINIMAX
+\begin{algorithmic}
+\Function{MINIMAX}{board, player-id, depth}
+  \State best.score = $-\infty$
+  \ForAll{move $\in$ possible-moves(board, player-id)}
+    \State val = -MINIMAX-VALUE(update-board(board, move), \\
+    \hspace{160pt} player-id, depth-1)
+    \If{val $>$ score}
+      \State best.score = val
+      \State best.move = move
+    \EndIf
+  \EndFor
+  \State \Return best.move
+\EndFunction
+
+\\
+
+\Function{MINIMAX-VALUE}{board, player-id, depth}
+\If{won(board, player-id)}
+  \State \Return WINNING-SCORE
+\ElsIf{depth $=$ 0}
+  \State \Return board-evaluation(board, player-id)
+\Else
+  \State opp-id = opponent(player-id)
+  \State best = $-\infty$
+  \ForAll{move $\in$ possible-moves(board, opp-id)}
+    \State val = -MINIMAX-VALUE(update-board(board, move), \\
+    \hspace{180pt} opp-id, depth-1)
+    \If{val $>$ best}
+      \State best = val
+    \EndIf
+  \EndFor
+  \State \Return best
+\EndIf
+\EndFunction
+\end{algorithmic}
+
+%% ALPHABETA
+%% pruning tactics?
 
 %% Fill in with ideas for what to write about:
 
 %% * The multiplayer aspect
 %% ** The search-tree explodes with many players
+%%    -- Especially in the middle of the game when alot of more paths open up
 %% ** So what else changes with three or more players?
+%%    -- Connected to the last one, there may be more paths around the
+%%       middle than through it with more players
 %% ** What about a bot that recognizes others of its ilk and conspires?
+%% ** 2/3-phase bot? Using IDDFS-bot in the beginning, reverting to minimax
+%%    and maybe ending with iddfs also? 
 
 \section{Discussion and Conclusions}
 %(Sum up your project, suggest future extensions and improvements.)
@@ -382,5 +433,9 @@ future, \emph{ad infinitum}.
 % (Here you include the diary and all other information and
 % documentation that did not fit into the report in the above sections
 % but that you consider too important to leave out.)
+
+%% A quick tutorial on how the server works
+
+%% Maybe a quick overlook of the gui-client?
 
 \end{document}
