@@ -18,7 +18,7 @@
 (declare (uses protocol)
          (uses board))
 
-(require-extension tcp getopt-long matchable stack)
+(require-extension tcp getopt-long matchable stack (srfi 18))
 
 (use extras data-structures)
 
@@ -28,18 +28,61 @@
     (client-move c move)))
 
 (define (trivial-bot c timeout board player)
-  (let* ((moves (map (lambda (move)
-                       (with-move! board move
-                                   (lambda ()
-                                     (vector (board-eval-static-distance board player)
-                                             move))))
-                     (stack->list
-                      (all-moves board player))))
+  (let* ((moves (shuffle
+                 (map (lambda (move)
+                        (with-move! board move
+                                    (lambda ()
+                                      (vector (board-eval-static-distance board player)
+                                              move))))
+                      (stack->list
+                       (all-moves board player)))
+                 random))
          (moves
           (sort! moves (lambda (x y)
                          (< (vector-ref x 0) (vector-ref y 0))))))
     (print "best: " (car moves))
     (client-move c (vector-ref (car moves) 1))))
+
+(define (iddfs-bot c timeout board player)
+  (define best-move '())
+  (define best-score (- (expt 2 23)))
+  (define best-depth (expt 2 23))
+  (define stop-time (+ (time->seconds (current-time)) (/ timeout 1000)))
+  (define (board-eval board player)
+    (fx- 0 (board-eval-static-distance board player)))
+
+  (define (recursive-dls first-move limit depth)
+    (let ((score (board-eval board player)))
+      (when (or (> score best-score)
+                (and (= score best-score)
+                     (fx< depth best-depth)))
+        (print "The move " (list first-move score depth)
+               " is better than " (list best-move best-score best-depth))
+        (set! best-move first-move)
+        (set! best-score score)
+        (set! best-depth depth))
+      (when (not (or (fx<= limit 0)
+                     (> (time->seconds (current-time)) stop-time)))
+        (stack-for-each (all-moves board player)
+                        (lambda (move)
+                          (with-move! board move
+                                      (lambda ()
+                                        (recursive-dls first-move (fx- limit 1)
+                                                       (fx+ depth 1)))))))))
+
+  (let lp ((depth 1))
+    (when (or (null? best-move)
+              (< (time->seconds (current-time)) stop-time))
+      (stack-for-each (all-moves board player)
+                      (lambda (first-move)
+                        (print ";; Considering move " (reverse first-move)
+                               " at depth limit " depth)
+                        (with-move! board first-move
+                                    (lambda ()
+                                      (recursive-dls first-move depth 0)))))
+      (lp (fx+ depth 1))))
+  (print "best move: " best-move)
+  (client-move c best-move))
 
 (define (play c player make-move)
   (let lp ()
@@ -89,7 +132,7 @@
               (match (read-literal/no-error c)
                 (#('game_start player players board)
                  (print "The game starts.")
-                 (play c player trivial-bot))
+                 (play c player iddfs-bot))
                 (else
                  (lp))))))))))
 

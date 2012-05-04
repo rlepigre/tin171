@@ -1,4 +1,4 @@
-CFLAGS = -O2
+CFLAGS = -optimize-level 4 -unsafe -disable-interrupts -no-trace -no-lambda-info
 OBJECTS = protocol.o board.o
 
 .SUFFIXES:
@@ -9,7 +9,7 @@ OBJECTS = protocol.o board.o
 all: scheme-bot
 
 scheme-bot: bot.scm $(OBJECTS)
-	csc bot.scm $(OBJECTS) -o scheme-bot
+	csc $(CFLAGS) bot.scm $(OBJECTS) -o scheme-bot
 
 erlang-lexer.scm: erlang-lexer.l
 	csi -R silex -e '(lex "erlang-lexer.l" "erlang-lexer.scm")'
