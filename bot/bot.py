@@ -186,6 +186,7 @@ def alphabeta_bot(c, timeout, board, player_id, distance_function=static_distanc
             (best_val, best_move) = (val, move)
     print "Choosed: ", best_move
     c.move(best_move)
+'''
 
 def play(c, player_id,make_move):
     """Play until someone wins... or something goes wrong."""
@@ -197,7 +198,6 @@ def play(c, player_id,make_move):
         elif x[0] == A('won'):
             print "A winner was announced:", x
             return
-'''
 
 def list_personalities(*stuff):
     '''Prints a list of strings with all the available personalities for the
