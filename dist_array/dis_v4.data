@@ -6,10 +6,10 @@
 
 1:
                 - - - - z - - - - - - - - - - - -
-               - - - - i i - - - - - - - - - - -
-              - - - - e e e - - - - - - - - - -
-             - - - - a a a a - - - - - - - - -
-            * * * * V V V V V * * * * - - - -
+               - - - - o o - - - - - - - - - - -
+              - - - - Y Y Y - - - - - - - - - -
+             - - - - X X X X - - - - - - - - -
+            * * * * W W V W W * * * * - - - -
            - * * * T U U U U T * * * - - - -
           - - * * T S R R R S T * * - - - -
          - - - * Q Q P P P P Q Q * - - - -
@@ -36,10 +36,10 @@
        - - - - * Q Q P P P P Q Q * - - -
       - - - - * * T S R R R S T * * - -
      - - - - * * * T U U U U T * * * -
-    - - - - * * * * V V V V V * * * *
-   - - - - - - - - - a a a a - - - -
-  - - - - - - - - - - e e e - - - -
- - - - - - - - - - - - i i - - - -
+    - - - - * * * * W W V W W * * * *
+   - - - - - - - - - X X X X - - - -
+  - - - - - - - - - - Y Y Y - - - -
+ - - - - - - - - - - - o o - - - -
 - - - - - - - - - - - - z - - - -
 
 3:
@@ -47,11 +47,11 @@
                - - - - * * - - - - - - - - - - -
               - - - - * * * - - - - - - - - - -
              - - - - * * * * - - - - - - - - -
-            z i e a V T T Q O * * * * - - - -
-           - i e a V U S Q N L * * * - - - -
-          - - e a V U R P N L J * * - - - -
-         - - - a V U R P M K I H * - - - -
-        - - - - V U R P M K I H F - - - -
+            z o Y X W T T Q O * * * * - - - -
+           - o Y X W U S Q N L * * * - - - -
+          - - Y X V U R P N L J * * - - - -
+         - - - X W U R P M K I H * - - - -
+        - - - - W U R P M K I H F - - - -
        - - - - * T S P M K I G E D - - -
       - - - - * * T Q N K I G E D C - -
      - - - - * * * Q N L I H E D C B -
@@ -70,11 +70,11 @@
            - B C D E H I L N Q * * * - - - -
           - - C D E G I K N Q T * * - - - -
          - - - D E G I K M P S T * - - - -
-        - - - - F H I K M P R U V - - - -
-       - - - - * H I K M P R U V a - - -
-      - - - - * * J L N P R U V a e - -
-     - - - - * * * L N Q S U V a e i -
-    - - - - * * * * O Q T T V a e i z
+        - - - - F H I K M P R U W - - - -
+       - - - - * H I K M P R U W X - - -
+      - - - - * * J L N P R U V X Y - -
+     - - - - * * * L N Q S U W X Y o -
+    - - - - * * * * O Q T T W X Y o z
    - - - - - - - - - * * * * - - - -
   - - - - - - - - - - * * * - - - -
  - - - - - - - - - - - * * - - - -
@@ -85,11 +85,11 @@
                - - - - * * - - - - - - - - - - -
               - - - - * * * - - - - - - - - - -
              - - - - * * * * - - - - - - - - -
-            * * * * O Q T T V a e i z - - - -
-           - * * * L N Q S U V a e i - - - -
-          - - * * J L N P R U V a e - - - -
-         - - - * H I K M P R U V a - - - -
-        - - - - F H I K M P R U V - - - -
+            * * * * O Q T T W X Y o z - - - -
+           - * * * L N Q S U W X Y o - - - -
+          - - * * J L N P R U V X Y - - - -
+         - - - * H I K M P R U W X - - - -
+        - - - - F H I K M P R U W - - - -
        - - - - D E G I K M P S T * - - -
       - - - - C D E G I K N Q T * * - -
      - - - - B C D E H I L N Q * * * -
@@ -108,11 +108,11 @@
            - * * * Q N L I H E D C B - - - -
           - - * * T Q N K I G E D C - - - -
          - - - * T S P M K I G E D - - - -
-        - - - - V U R P M K I H F - - - -
-       - - - - a V U R P M K I H * - - -
-      - - - - e a V U R P N L J * * - -
-     - - - - i e a V U S Q N L * * * -
-    - - - - z i e a V T T Q O * * * *
+        - - - - W U R P M K I H F - - - -
+       - - - - X W U R P M K I H * - - -
+      - - - - Y X V U R P N L J * * - -
+     - - - - o Y X W U S Q N L * * * -
+    - - - - z o Y X W T T Q O * * * *
    - - - - - - - - - * * * * - - - -
   - - - - - - - - - - * * * - - - -
  - - - - - - - - - - - * * - - - -
