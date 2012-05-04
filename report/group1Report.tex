@@ -363,6 +363,8 @@ future, \emph{ad infinitum}.
 \EndFunction
 \end{algorithmic}
 
+\\
+
 The previous \emph{IDDFS-algorithm} was a very naive algorithm because it only
 considers its own moves and never the opponents. Because of this the bots
 agenda can be destroyed by the opponent by blocking the path it was about
@@ -408,6 +410,9 @@ To counter this we can use the \emph{MINIMAX-algorithm}. The \emph{MINIMAX-algor
 \end{algorithmic}
 
 %% ALPHABETA
+%% Reasons for alpha-beta over naive minimax.
+%% -- We need to prune because of the huge search tree
+%%    to gain more depth in the search.
 %% pruning tactics?
 
 %% Fill in with ideas for what to write about:
