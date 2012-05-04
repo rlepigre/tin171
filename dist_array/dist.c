@@ -17,7 +17,7 @@ int main(int argc, char **argv){
 
     counter = 0;
     while((counter < 17 * 17) && ((c = getchar()) != EOF)){
-      if(c == '-' || c == 'o'){
+      if(c == '-' || c == '*'){
         if(counter == 0)
           printf("-1");
         else
