@@ -131,4 +131,4 @@
   (send-literal c 'leave))
 
 (define (client-move c positions)
-  (send-literal/ok c `#(move ,positions)))
+  (send-literal/ok c `#(move ,(reverse positions))))

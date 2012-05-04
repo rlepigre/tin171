@@ -20,12 +20,26 @@
 
 (require-extension tcp getopt-long matchable stack)
 
-(use extras)
+(use extras data-structures)
 
 (define (random-bot c timeout board player)
   (let ((move (car (shuffle (stack->list (all-moves board player))
                              random))))
-    (client-move c (reverse move))))
+    (client-move c move)))
+
+(define (trivial-bot c timeout board player)
+  (let* ((moves (map (lambda (move)
+                       (with-move! board move
+                                   (lambda ()
+                                     (vector (board-eval-static-distance board player)
+                                             move))))
+                     (stack->list
+                      (all-moves board player))))
+         (moves
+          (sort! moves (lambda (x y)
+                         (< (vector-ref x 0) (vector-ref y 0))))))
+    (print "best: " (car moves))
+    (client-move c (vector-ref (car moves) 1))))
 
 (define (play c player make-move)
   (let lp ()
@@ -75,7 +89,7 @@
               (match (read-literal/no-error c)
                 (#('game_start player players board)
                  (print "The game starts.")
-                 (play c player random-bot))
+                 (play c player trivial-bot))
                 (else
                  (lp))))))))))
 
