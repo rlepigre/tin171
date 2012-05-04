@@ -172,23 +172,16 @@ board, where it is more likely that good paths towards the goal will
 be formed. The heuristics described in \cite{ulfhake} will be very
 useful for our continued work.
 
-\subsubsection{The Python client}
-To be able to test different approaches, the Python client supports multiple
-functions.
-In general, Python is a slow interpreted language, but there are projects that
-aim in providing just in time compilation. The PyPy interpreter has proven to be
-somewhat faster than the standard CPython, when forced to compile loops after
-few iterations the IDDFS algorithm is able to compute one level deeper.
 %% To improve
 %% the depth of our solution we will try and do some pruning of ``bad''
 %% plys, e.g.~those that do not move the player any closer to the goal
 %% state.
 
-The literature describes algorithms that are more capable than
-\emph{IDDFS}. An iterative development model means that we will be
-making continual improvements to our program, and it is likely that we
-will attempt to use some of the more capable algorithms later on. Our
-first programs can be preserved for later programs to play against.
+%% The literature describes algorithms that are more capable than
+%% \emph{IDDFS}. An iterative development model means that we will be
+%% making continual improvements to our program, and it is likely that we
+%% will attempt to use some of the more capable algorithms later on. Our
+%% first programs can be preserved for later programs to play against.
 
 %% \subsubsection{Why do you think it will work?}% Not in the report template
 
@@ -317,6 +310,15 @@ which bot is the strongest in different situations.
 % (What does your running code do? How does it fare against your
 % benchmarks and instances? Describe advantages and disadvantages,
 % possibly in relation to other groups in this course.)
+
+To be able to test different approaches, the bot supports multiple
+functions. In general, Python is a slow interpreted language, but
+there are projects that aim at providing just in time compilation. The
+PyPy interpreter has proven to be somewhat faster than the standard
+CPython. When PyPy is forced to compile loops, after a few iterations,
+the IDDFS algorithm is able to compute one level deeper. Because the
+algorithm is time-limited this gives the bot running on PyPy an
+advantage over the bots running on CPython.
 
 We have a time-limited implementation of iterative-deepening depth
 first search based on an algorithm from \cite{aimodern}. When the
