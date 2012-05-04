@@ -122,11 +122,12 @@ def peg_positions(board, peg_id):
     return [ x for x in range(len(board))
              if board[x] == PEG_IDS[peg_id] ]
 
-def won(board, player_id, goal_nest):
+def won(board, player_id):
     """ Return true if player with id player_id has won, else false. """
+    goal_nest = OPPOSITES[player_id]
     nest = REVERSED_FULL_BOARD[str(goal_nest)]
     for target_peg in nest:
-        if target_peg !=  player_id:
+        if board[target_peg] !=  str(player_id):
             return False
     return True
 
