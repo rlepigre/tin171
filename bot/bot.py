@@ -168,6 +168,24 @@ def minimax_bot(c, timeout, board, player_id,distance_function=static_distance_f
     print "Choosed: ", best
     c.move(best)
 
+'''
+def alphabeta_bot(c, timeout, board, player_id, distance_function=static_distance_from_target):
+
+    def alphabeta(b, d, 
+
+    depth = 2
+    best_val, best_move = None
+    for move in all_moves(board, player_id):
+        if best_val is not None:
+            opp_beta = -1 * best_val
+        else:
+            opp_beta = None
+        val = -1 * alphabeta_value(update_board(board, move), depth, None, opp_beta)
+        if best_val is None or val > best_val:
+            (best_val, best_move) = (val, move)
+    print "Choosed: ", best_move
+    c.move(best_move)
+
 def play(c, player_id,make_move):
     """Play until someone wins... or something goes wrong."""
     while True:
@@ -178,6 +196,7 @@ def play(c, player_id,make_move):
         elif x[0] == A('won'):
             print "A winner was announced:", x
             return
+'''
 
 def list_personalities(*stuff):
     '''Prints a list of strings with all the available personalities for the
