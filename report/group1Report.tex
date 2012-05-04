@@ -57,7 +57,7 @@ round, potentially moving a peg straight across the whole board. The
 objective is to move all pegs to the opposite corner.
 % Maybe it would be nice to add a few lines about the history of the game ?
 
-\subsection{The problem you tried to solve}
+\subsection{Problem statement}
 % (Re-use from project proposal, add changes, refinements,
 % extensions. If there has been major changes since the project
 % proposal, describe and motivate.)
@@ -224,23 +224,16 @@ In endgame phase a bot could consider a board where all the pegs of the
 opponents are removed, and those boards could be hashed and used as keys for an
 hash table that matches the best move for each board configuration.
 
-\subsubsection{The Python client}
-To be able to test different approaches, the Python client supports multiple
-functions.
-In general, Python is a slow interpreted language, but there are projects that
-aim in providing just in time compilation. The PyPy interpreter has proven to be
-somewhat faster than the standard CPython, when forced to compile loops after
-few iterations the IDDFS algorithm is able to compute one level deeper.
 %% To improve
 %% the depth of our solution we will try and do some pruning of ``bad''
 %% plys, e.g.~those that do not move the player any closer to the goal
 %% state.
 
-The literature describes algorithms that are more capable than
-\emph{IDDFS}. An iterative development model means that we will be
-making continual improvements to our program, and it is likely that we
-will attempt to use some of the more capable algorithms later on. Our
-first programs can be preserved for later programs to play against.
+%% The literature describes algorithms that are more capable than
+%% \emph{IDDFS}. An iterative development model means that we will be
+%% making continual improvements to our program, and it is likely that we
+%% will attempt to use some of the more capable algorithms later on. Our
+%% first programs can be preserved for later programs to play against.
 
 %% \subsubsection{Why do you think it will work?}% Not in the report template
 
@@ -370,6 +363,15 @@ which bot is the strongest in different situations.
 % benchmarks and instances? Describe advantages and disadvantages,
 % possibly in relation to other groups in this course.)
 
+To be able to test different approaches, the bot supports multiple
+functions. In general, Python is a slow interpreted language, but
+there are projects that aim at providing just in time compilation. The
+PyPy interpreter has proven to be somewhat faster than the standard
+CPython. When PyPy is forced to compile loops, after a few iterations,
+the IDDFS algorithm is able to compute one level deeper. Because the
+algorithm is time-limited this gives the bot running on PyPy an
+advantage over the bots running on CPython.
+
 We have a time-limited implementation of iterative-deepening depth
 first search based on an algorithm from \cite{aimodern}. When the
 algorithm compares two moves that achieve an equally good outcome it
@@ -414,13 +416,64 @@ best.depth)}
 \EndFunction
 \end{algorithmic}
 
+The previous \emph{IDDFS-algorithm} was a very naive algorithm because it only
+considers its own moves and never the opponents. Because of this the bots
+agenda can be destroyed by the opponent by blocking the path it was about
+to take.
+
+To counter this we can use the \emph{MINIMAX-algorithm}. The \emph{MINIMAX-algorithm} tries to \emph{minimize} the board-evaluation function for itself while trying to maximize the board-evaluation function of its opponent.
+
+%% MINIMAX
+\begin{algorithmic}
+\Function{MINIMAX}{board, player-id, depth}
+  \State best.score = $-\infty$
+  \ForAll{move $\in$ possible-moves(board, player-id)}
+    \State val = -MINIMAX-VALUE(update-board(board, move), \\
+    \hspace{160pt} player-id, depth-1)
+    \If{val $>$ score}
+      \State best.score = val
+      \State best.move = move
+    \EndIf
+  \EndFor
+  \State \Return best.move
+\EndFunction
+
+\\
+
+\Function{MINIMAX-VALUE}{board, player-id, depth}
+\If{won(board, player-id)}
+  \State \Return WINNING-SCORE
+\ElsIf{depth $=$ 0}
+  \State \Return board-evaluation(board, player-id)
+\Else
+  \State opp-id = opponent(player-id)
+  \State best = $-\infty$
+  \ForAll{move $\in$ possible-moves(board, opp-id)}
+    \State val = -MINIMAX-VALUE(update-board(board, move), \\
+    \hspace{180pt} opp-id, depth-1)
+    \If{val $>$ best}
+      \State best = val
+    \EndIf
+  \EndFor
+  \State \Return best
+\EndIf
+\EndFunction
+\end{algorithmic}
+
+%% ALPHABETA
+%% pruning tactics?
 
 %% Fill in with ideas for what to write about:
 
 %% * The multiplayer aspect
 %% ** The search-tree explodes with many players
+%%    -- Especially in the middle of the game when alot of more paths open up
 %% ** So what else changes with three or more players?
+%%    -- Connected to the last one, there may be more paths around the
+%%       middle than through it with more players
 %% ** What about a bot that recognizes others of its ilk and conspires?
+%% ** 2/3-phase bot? Using IDDFS-bot in the beginning, reverting to minimax
+%%    and maybe ending with iddfs also? 
 
 \section{Discussion and Conclusions}
 %(Sum up your project, suggest future extensions and improvements.)
@@ -435,5 +488,9 @@ best.depth)}
 % (Here you include the diary and all other information and
 % documentation that did not fit into the report in the above sections
 % but that you consider too important to leave out.)
+
+%% A quick tutorial on how the server works
+
+%% Maybe a quick overlook of the gui-client?
 
 \end{document}
