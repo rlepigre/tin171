@@ -86,6 +86,7 @@ def static_distance_bot(c,timeout,board,player_id):
 def trivial_bot(c, timeout, board, player_id,distance_function=euclidean_distance_from_target):
     key=lambda x:distance_function(update_board(board, x), player_id)
     moves = list(all_moves(board, player_id))
+    random.shuffle(moves) # In this way the bots don't get stuck.
     moves.sort(key=key)
     print "moves", moves
     c.move(moves[0])
