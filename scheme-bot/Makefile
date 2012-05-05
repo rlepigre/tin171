@@ -1,4 +1,5 @@
 CFLAGS = -optimize-level 4 -unsafe -disable-interrupts -no-trace -no-lambda-info
+#CFLAGS = -O2
 OBJECTS = protocol.o board.o
 
 .SUFFIXES:

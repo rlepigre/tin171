@@ -152,6 +152,35 @@
     (display #\space)
     (display (string-ref board i))))
 
+;; Computes the positions of the player's goal.
+(define (goal-positions player)
+  (let ((c (vector-ref PLAYER-IDS (vector-ref OPPOSITES player))))
+    (let lp ((i 0) (ret '()))
+      (cond ((= i BOARD-LENGTH)
+             ret)
+            ((eqv? c (string-ref FULL-BOARD i))
+             (lp (+ i 1) (cons i ret)))
+            (else
+             (lp (+ i 1) ret))))))
+
+(define (winning-state? board player)
+  (let ((c (vector-ref PLAYER-IDS player)))
+    (every (lambda (i)
+             (eqv? (string-ref board i) c))
+           (goal-positions player))))
+
+(define (in-winning-position board player)
+  (let ((c (vector-ref PLAYER-IDS player)))
+    (filter (lambda (i)
+              (eqv? (string-ref board i) c))
+            (goal-positions player))))
+
+(define (in-starting-position board player)
+  (let ((c (vector-ref PLAYER-IDS player)))
+    (filter (lambda (i)
+              (and (eqv? (string-ref FULL-BOARD i) c)
+                   (eqv? (string-ref board i) c)))
+            (iota BOARD-LENGTH))))
 
 ;;; Board evaluation functions
 
