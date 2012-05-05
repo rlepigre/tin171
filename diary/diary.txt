@@ -238,3 +238,11 @@ about; perhaps in a future work section.
 Göran writes a section in the report on the modules we currently have
 in our project.
 
+2012-05-04
+We meet to work on the report. Emil writes some pseudo code and Salvo
+writes about heuristics. Rodolphe is working on our board evaluation
+function.
+
+Later the same day Göran implements a genetic algorithm in the hopes
+that it can find a better board evaluation function. The algorithm is
+running and is showing promising results.
