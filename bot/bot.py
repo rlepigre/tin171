@@ -79,7 +79,9 @@ def parallel_bot(c,timeout,board,player_id,distance_function=static_distance_fro
     
     
     
-    
+def evolved_distance_bot(c,timeout,board,player_id):
+    return trivial_bot(c,timeout,board,player_id,evolved_distance)
+
 def static_distance_bot(c,timeout,board,player_id):
     return trivial_bot(c,timeout,board,player_id,static_distance_from_target)
 
@@ -130,6 +132,9 @@ def iddfs_bot(c, timeout, board, player_id,distance_function=euclidean_distance_
 
     print "best", best
     c.move(best[0])
+
+def evolved_iddfs_bot(c, timeout, board, player_id):
+    return iddfs_bot(c, timeout, board, player_id, evolved_distance)
 
 def static_iddfs_bot(c, timeout, board, player_id):
     return iddfs_bot(c, timeout, board, player_id, static_distance_from_target)
@@ -293,7 +298,8 @@ def main():
 
 
 
-personality = (trivial_bot,static_distance_bot,iddfs_bot,static_iddfs_bot, minimax_bot,parallel_bot)
+personality = (trivial_bot,static_distance_bot,iddfs_bot,static_iddfs_bot, minimax_bot,parallel_bot,
+               evolved_distance_bot, evolved_iddfs_bot)
 
 if __name__ == "__main__":
     main()
