@@ -555,6 +555,10 @@ There is a $6.67\%$ chance that one of the new individuals will have
 mutations. The mutations are guided so that it is less likely that
 they will be detrimental.
 
+The algorithm is not foolproof. Sometimes the surviving populations
+are hopeless--they never start to have positive fitness values. If
+that happens a new random population needs to be created.
+
 \begin{figure}
 \begin{algorithmic}
 \Function{Genetic-Algorithm}{population, fitness-fn}
@@ -701,6 +705,8 @@ artifact caused by the fitness function we used: in most two-player
 games it is unlikely that there will be a peg in this position, so
 there has been no evolutionary pressure to make this position lighter.
 This will be a drawback in games with more than two players.
+
+%% TODO: Write about the three-player experiment here
 
 \begin{figure}
 \centering
