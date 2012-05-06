@@ -23,6 +23,8 @@
 
 (use extras data-structures)
 
+;;; Playing the game
+
 (define (random-bot timeout board player)
   (let ((move (car (shuffle (stack->list (all-moves board player))
                             random))))
@@ -100,6 +102,8 @@
       (else
        (lp)))))
 
+;;; Genetic algorithm
+
 ;; Simulate a game between two players.
 (define (simulation p1 p2)
   (define timeout 5000)
@@ -113,11 +117,11 @@
              ;; This isn't going anywhere, so restart.
              (simulation p1 p2))
             ((winning-state? board 1)
-             (print-board board)
+             ;; (print-board board)
              (values 1 plies (- (eval board 2))))
             ((winning-state? board 2)
-             (when (zero? (random 50))
-               (print-board board))
+             ;; (when (zero? (random 50))
+             ;;   (print-board board))
              (values 2 plies (- (eval board 1))))
             (else
              (let ((move ((car p*) timeout (string-copy board) (car id*))))
@@ -143,18 +147,23 @@
 
 ;; Takes a static distance vector for player 1 and plays it against
 ;; the trivial bot.
-(define (fitness vec)
-  ;; XXX: pick median
+(define (fitness vec stats)
   (define bot (vector->trivial-bot vec))
-  (define RUNS 2)
+  (define PHASE1-RUNS 2)
+  (define PHASE2+-RUNS 5)
   (let lp ((i 0) (score 0))
-    (if (= i RUNS)
-        (/ score RUNS)
-        (let-values (((winner plies loser-eval) (simulation bot trivial-bot)))
-          (cond ((= winner 1)
-                 (lp (+ i 1) (+ score (- 500 plies))))
-                (else
-                 (lp (+ i 1) (+ score loser-eval))))))))
+    (cond ((and (= i PHASE1-RUNS) (< score 300))
+           (/ score PHASE1-RUNS))
+          ((= i PHASE2+-RUNS)
+           (/ score PHASE2+-RUNS))
+          (else
+           (let-values (((winner plies loser-eval) (simulation bot trivial-bot)))
+             (cond ((= winner 1)
+                    (stats 'win)
+                    (lp (+ i 1) (+ score (- 500 plies))))
+                   (else
+                    (stats 'loss)
+                    (lp (+ i 1) (+ score loser-eval)))))))))
 
 (define (random-vec)
   (do ((ret (make-vector BOARD-LENGTH -1))
@@ -210,19 +219,29 @@
             ;; positive if it's not in the goal.
             (when (or (positive? v) (memv i goal))
               (vector-set! x i v)))))))
-  (define (most-fit pop)
-    (let ((n (inexact->exact (floor (* 1/5 (vector-length pop))))))
-      (list->vector
-       (take (sort (map (lambda (vec) (cons (fitness vec) vec))
-                        (vector->list pop))
-                   (lambda (x y) (> (car x) (car y))))
-             n))))
+  (define (most-fit pop generation)
+    (define wins 0)
+    (define losses 0)
+    (define (stats outcome)
+      (case outcome
+        ((win) (set! wins (+ wins 1)))
+        ((loss) (set! losses (+ losses 1)))))
+    (let* ((n (inexact->exact (floor (* 1/5 (vector-length pop)))))
+           (survivors
+            (list->vector
+             (take (sort (map (lambda (vec) (cons (fitness-fn vec stats) vec))
+                              (vector->list pop))
+                         (lambda (x y) (> (car x) (car y))))
+                   n))))
+      (print "Generation " generation ":"
+             " Out of " (+ wins losses)
+             " games the population won " wins " and lost " losses " times. "
+             "That is " (* 100.0 (/ wins (+ wins losses))) "% wins. "
+             "Strongest survivor: " (vector-ref survivors 0))
+      (flush-output)
+      survivors))
   (let lp ((pop population) (iterations 0))
-    (let ((survivors (most-fit pop)))
-      (print "Survivors:")
-      (do ((i 0 (+ i 1)))
-          ((= i (vector-length survivors)))
-        (print (vector-ref survivors i)))
+    (let ((survivors (most-fit pop iterations)))
       (do ((new-pop (make-vector (vector-length pop)))
            (i 0 (+ i 1)))
           ((= i (vector-length pop))
@@ -234,27 +253,19 @@
               (mutate! child))
             (vector-set! new-pop i child)))))))
 
-(define (print-vec vec)
+(define (measure-1 vec)
+  (define wins 0)
+  (define losses 0)
+  (define (stats outcome)
+    (case outcome
+      ((win) (set! wins (+ wins 1)))
+      ((loss) (set! losses (+ losses 1)))))
   (do ((i 0 (+ i 1)))
-      ((= i BOARD-LENGTH)
-       (display (make-string (* 3 (/ i 17)) #\.))
-       (newline))
-    (cond ((zero? (modulo i 17))
-           (display (make-string (* 3 (/ i 17)) #\.))
-           (newline)
-           (display (make-string (* 3 (- 17 (/ i 17))) #\.))))
-    (display #\space)
-    (let ((x (cond ((invalid? i)
-                    "####")
-                   ((not (memv (string-ref FULL-BOARD i)
-                               (list (vector-ref PLAYER-IDS 1)
-                                     (vector-ref PLAYER-IDS 2)
-                                     EMPTY)))
-                    "    ")
-                   (else
-                    (number->string (vector-ref vec i))))))
-      (display (make-string (- 4 (string-length x)) #\space))
-      (display x))))
+      ((= i 100)
+       (* 100.0 (/ wins (+ wins losses))))
+    (fitness vec stats)))
+
+;;; Program startup
 
 (define (main args)
   (define grammar
