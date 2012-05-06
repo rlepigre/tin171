@@ -255,3 +255,7 @@ also makes two new bot personalities based on functions found by the
 genetic algorithm. One of the bots gets stuck in a local minimum just
 before winning. Our idea to split the game into different phases might
 be the cure for this problem.
+
+2012-05-06
+Göran writes a subsection on the results from the genetic algorithm
+experiment.

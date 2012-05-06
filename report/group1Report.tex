@@ -4,6 +4,7 @@
 \pagestyle{fancyplain}
 \usepackage{algpseudocode}
 \usepackage{tikz}
+\usepackage{graphicx}
 %\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
 
 \lhead{ }
@@ -180,17 +181,26 @@ combined with heuristics to form a kind of informed search.
 % useful for our continued work.
 
 \subsubsection{Heuristics}
-Functions to evaluate boards must be used to estimate which moves are better
-than others, and also to perform pruning.
-One idea is to consider the board as a two-dimensional array, use the Euclidean
-distance of all the pegs from their target position. Another board evaluation
-function that we used uses an hand-tuned distance function that counts the moves
-without jumps necessary to reach the corner position in the target.
-Currently both functions are implemented and can be used by the bots.
-To penalize bots that leave pegs behind, it is possible to use the function
-$d_{1}(x,y) = d(x,y)^{2}$ where \emph{d} is one of the already specified
-distance functions. In this way the bots will reach better positions by making
-the last peg to jump forward as far as possible.
+Functions to evaluate boards must be used to estimate which moves are
+better than others, and also to perform pruning. One idea we have used
+is to consider the board as a two-dimensional array and compute the
+Euclidean distance of all the pegs from their target position.
+
+%%Currently both functions are implemented and can be used by the bots.
+%% To penalize bots that leave pegs behind, it is possible to use the function
+%% $d_{1}(x,y) = d(x,y)^{2}$ where \emph{d} is one of the already specified
+%% distance functions. In this way the bots will reach better positions by making
+%% the last peg to jump forward as far as possible.
+%% TODO: the above is a bit speculative and should probably not be in the
+%% final report.
+
+Another board evaluation function that we have uses an hand-tuned
+distance function that counts the the number of moves (excluding
+jumps) necessary to reach the corner position in the target. The
+hand-tuned distance function uses an array of weights: one for each
+position on the board at which a peg can stop. The weights are then
+summed up over all the player's pegs.
+
 In different test games between the bots, it was noted that while moving to
 non-central positions can constitute a disadvantage in two players games, it can
 represent a good strategy on more populated boards where the moves available in
@@ -199,14 +209,22 @@ be effective on one scenario can lead the bot to defeat in other scenarios.
 Having said that, a good heuristic for two players games seems to assign more
 value to boards that keep the pegs in the central area of the board, as
 described in \cite{ulfhake}.
+
 The approach of keeping all the pegs in a cluster to allow jumps and to give low
 values to boards where the pegs of a certain player are scattered all around is
 a good solution for two players games, but in other cases the board is crowded
 so there are several opportunities to perform long jumps even for pegs isolated
 from the other ones of the same color.
+
 The three pegs located in the deepest positions of the corner risk to be trapped
 by the opponent if they are left behind, so the hand-tuned distance function has
 been modified to assign to these positions a great penalty.
+
+But since we're in the field of Artificial Intelligence our thoughts
+were drawn to the idea of having the computer make the distance
+function itself. We have used our hand-tuned distance function to run
+a genetic algorithm that finds better distance functions. More on this
+in subsection \ref{genetic}.
 
 \subsubsection{Startgame}
 Until the players' pegs are close enough to interact with each other, an opening
@@ -387,15 +405,16 @@ that would be the winning move two moves into the future, but on the
 next turn it might again choose a move that wins two moves into the
 future, \emph{ad infinitum}.
 
+\begin{figure}
 \begin{algorithmic}
 \Function{IDDFS}{board, player-id, time-limit}
 \State best.move = \emph{nil}
 \State best.score = $-\infty$
 \State best.depth = $\infty$
 \For{depth $= 0 \to \infty$}
- \ForAll{move $\in$ possible-moves(board, player-id)}
-  \State nboard = update-board(board, move)
-  \State RECURSIVE-DLS(move, nboard, depth, 0, best)
+ \ForAll{move $\in$ \textsc{All-Possible-Moves}(board, player-id)}
+  \State nboard = \textsc{Update-Board}(board, move)
+  \State \textsc{Recursive-DLS}(move, nboard, depth, 0, best)
  \EndFor
  \If{timeout}
   \State \Return best.move
@@ -403,8 +422,8 @@ future, \emph{ad infinitum}.
 \EndFor
 \EndFunction
 \\
-\Function{RECURSIVE-DLS}{move1, board, limit, depth, best}
-\State score = board-evaluation(board, player-id)
+\Function{Recursive-DLS}{move1, board, limit, depth, best}
+\State score = \textsc{Board-Evaluation}(board, player-id)
 \If{score $>$ best.score $\vee$ (score $=$ best.score $\wedge$ depth $<$
 best.depth)}
 \State best.move = move1
@@ -414,12 +433,14 @@ best.depth)}
 \If{limit $\le$ 0 $\vee$ timeout}
 \State \Return
 \EndIf
-\ForAll{move $\in$ possible-moves(board, player-id)}
- \State nboard = update-board(board, move)
- \State RECURSIVE-DLS(move1, nboard, limit$-1$, depth$+1$, best)
+\ForAll{move $\in$ \textsc{All-Possible-Moves}(board, player-id)}
+ \State nboard = \textsc{Update-Board}(board, move)
+ \State \textsc{Recursive-DLS}(move1, nboard, limit$-1$, depth$+1$, best)
 \EndFor
 \EndFunction
 \end{algorithmic}
+\caption{Iteratively-deepening depth-limited search with a time limit.}
+\end{figure}
 
 The previous \emph{IDDFS-algorithm} was a very naive algorithm because it only
 considers its own moves and never the opponent's. Because of this the bots
@@ -432,11 +453,12 @@ for itself while trying to maximize the board-evaluation function of its
 opponent.
 
 %% MINIMAX
+\begin{figure}
 \begin{algorithmic}
-\Function{MINIMAX}{board, player-id, depth}
+\Function{Minimax}{board, player-id, depth}
   \State best.score = $-\infty$
-  \ForAll{move $\in$ possible-moves(board, player-id)}
-    \State val = -MINIMAX-VALUE(update-board(board, move), \\
+  \ForAll{move $\in$ \textsc{All-Possible-Moves}(board, player-id)}
+    \State val = -\textsc{Minimax-Value}(\textsc{Update-Board}(board, move), \\
     \hspace{160pt} player-id, depth-1)
     \If{val $>$ score}
       \State best.score = val
@@ -445,19 +467,17 @@ opponent.
   \EndFor
   \State \Return best.move
 \EndFunction
-
 \\
-
-\Function{MINIMAX-VALUE}{board, player-id, depth}
-\If{won(board, player-id)}
-  \State \Return WINNING-SCORE
+\Function{Minimax-Value}{board, player-id, depth}
+\If{\textsc{Won}(board, player-id)}
+  \State \Return winning score
 \ElsIf{depth $=$ 0}
-  \State \Return board-evaluation(board, player-id)
+  \State \Return \textsc{Board-Evaluation}(board, player-id)
 \Else
-  \State opp-id = opponent(player-id)
+  \State opp-id = \textsc{Opponent}(player-id)
   \State best = $-\infty$
-  \ForAll{move $\in$ possible-moves(board, opp-id)}
-    \State val = -MINIMAX-VALUE(update-board(board, move), \\
+  \ForAll{move $\in$ \textsc{Possible-Moves}(board, opp-id)}
+    \State val = -\textsc{Minimax-Value}(\textsc{Update-Board}(board, move), \\
     \hspace{180pt} opp-id, depth-1)
     \If{val $>$ best}
       \State best = val
@@ -467,6 +487,8 @@ opponent.
 \EndIf
 \EndFunction
 \end{algorithmic}
+\caption{Minimax algorithm.}
+\end{figure}
 
 %% ALPHABETA
 %% Reasons for alpha-beta over naive minimax.
@@ -483,8 +505,240 @@ opponent.
 %%    -- Connected to the last one, there may be more paths around the
 %%       middle than through it with more players
 %% ** What about a bot that recognizes others of its ilk and conspires?
-%% ** 2/3-phase bot? Using IDDFS-bot in the beginning, reverting to minimax
-%%    and maybe ending with iddfs also? 
+%% * 2/3-phase bot? Using IDDFS-bot in the beginning, reverting to minimax
+%%   and maybe ending with iddfs also?
+%% * How does the bot play against a human?
+
+\subsection{Genetic algorithm}
+\label{genetic}
+
+It is difficult to know \emph{a priori} what a good board evaluation
+function\footnote{A board evaluation function measures how good a
+  board appears to be for the player. The score is higher when pegs
+  are closer to the goal.} looks like. All our heuristics are encoded
+in the board evaluation function, so it is vital for the performance
+of our bot. Our hand-tuned function is shown in figure
+\ref{handtuned}. It is meant to prefer moving pegs into positions
+incrementally closer to the goal. There is a preference for positions
+in the middle path of the board and a distinct penalty for leaving
+pegs in the ``point'' of the starting position.
+
+\begin{figure}
+\centering
+\include{dist-array-v4}
+\caption{Our hand-tuned distance function. Pegs placed in the brighter
+  positions give a lower score. Our bots use a search algorithm to
+  find moves that place all pegs in the darkest positions, i.e.~it
+  finds the moves that maximize the board evaluation function.}
+\label{handtuned}
+\end{figure}
+
+The problem is that it's difficult to get a feel for how this function
+acts when summed up over all pegs. Consider the case when the three
+pegs at the top of the star are still in their starting position and
+the seven other pegs are closer to the goal. There are two clusters of
+pegs and if the board evaluation function has not been properly
+designed then only the cluster closer to the goal will keep moving.
+The cluster still in the starting position will only start moving
+later in the game, when there are less opportunities for jumps.
+
+The genetic algorithm that we used is shown in figure \ref{genalg}. It
+never returns, but in our program it prints the most fit of each
+generation. The algorithm is called with a population of (almost)
+completely random individuals. To speed up the process the initial
+individuals are not random in the start and goal positions. Figure
+\ref{genpop0} shows a first-generation individual. The algorithm
+measures the fitness of all individuals in the population and only the
+most fit $20\%$ is kept. These individuals then mix to create a new
+population with as many individuals as in the original population.
+There is a $6.67\%$ chance that one of the new individuals will have
+mutations. The mutations are guided so that it is less likely that
+they will be detrimental.
+
+\begin{figure}
+\begin{algorithmic}
+\Function{Genetic-Algorithm}{population, fitness-fn}
+\While{$\top$}
+ \State survivors = \textsc{Most-Fit}(population, fitness-fn, $1/5$)
+ \State new-population = \emph{nil}
+ \For{$\textrm{i} = 0 \to |\textrm{survivors}|$}
+   \State x = \textsc{Random-Select}(survivors)
+   \State y = \textsc{Random-Select}(survivors)
+   \State child = \textsc{Reproduce}(x, y)
+   \If{$\textsc{Random-Integer}(15)=0$}
+     \State \textsc{Mutate}(child)
+   \EndIf
+   \State new-population[i] = child
+ \EndFor
+\EndWhile
+\EndFunction
+\\
+\Function{Reproduce}{x, y}
+\State z = \emph{nil}
+\For{$\textrm{i} = 0 \to |\textrm{x}|$}
+ \If{$\textsc{Random-Integer}(2) = 0$}
+  \State z[i] = x[i]
+ \Else
+  \State z[i] = y[i]
+ \EndIf
+\EndFor
+\State \Return z
+\EndFunction
+\\
+\Function{Mutate}{x}
+\State goal-positions = \emph{The positions in the player's goal}
+\For{$\textrm{i} = 0 \to |\textrm{x}|$}
+ \If{$\textsc{Random-Integer}(10) = 0$}
+  \State $\textrm{v} = \textsc{Random-Integer}(50) - 25$
+  \If{$\textrm{v} > 0 \vee \textrm{i} \in \textrm{goal-positions}$}
+    \State x[i] = v
+  \EndIf
+ \EndIf
+\EndFor
+\ForAll{$\textrm{i} \in \textrm{goal-positions}$}
+ \State x[i] = $\textsc{Min}(\textrm{x}[\textrm{i}], 5)$
+\EndFor
+\EndFunction
+\end{algorithmic}
+
+\caption{The genetic algorithm we used to derive a better board
+  evaluation function. It is losely based on an algorithm from
+  \cite{aimodern}.}
+\label{genalg}
+\end{figure}
+
+The fitness function is the key to this genetic algorithm. Figure
+\ref{fitness} shows that the early generations are not very successful
+at all. Then after a while some individuals start winning games and
+the general fitness of their offspring increases dramatically. After
+the first thousand generations the fitness only increases marginally.
+Figure \ref{winning} shows the rate at which the populations win. Our
+fitness function is shown in figure \ref{fitnessfn}.
+
+The \textsc{Simulation} function runs a game between two bots. In our
+case it runs the generated bot against our hand-tuned bot. Both bots
+are using a trivial search function that merely sorts all available
+moves by the board evaluation function and does no lookahead. If we
+used a more advanced search algorithm it would take much longer to run
+the genetic algorithm, and we do not have the computing resources
+required for that. Individuals from the early generations are likely
+going to leave some pegs behind in the starting position, which
+prevents either player from winning. In this case the simulation is
+restarted.
+
+The fitness function runs two simulations per individual and averages
+the score. This gives an adequate and fast estimate for the early
+generations. Later when the fitness function detects that the
+individual is good at winning (it has an aggregate score over $300$)
+it will switch over to running five simulations. This gives more
+accurate estimates of an individual's fitness and decreases the
+likelihood that a good individual will be penalized for what can be
+considered as bad luck.
+
+If the individual wins a simulation it is awarded $500-p$ points,
+where $p$ is how many plies it needed to win. If it loses it is
+penalized with $d$ points, where $d$ is a measure of how far away it
+was from winning. This is computed using the same board evaluation
+function that drives the bot used in the simulation. Thusly when the
+bot populations are losing, they will try to be as close to winning as
+possible. Later when they are winning they will be trying to win with
+as few plies as possible.
+
+\begin{figure}
+\begin{algorithmic}
+\Function{Fitness}{individual}
+\State score = 0
+\State iteration = 0
+\While{$\top$}
+ \If{$\textrm{iterations} = 2 \wedge \textrm{score} < 300$}
+   \State \Return $\textrm{score} / 2$
+ \ElsIf{$\textrm{iterations} = 5$}
+   \State \Return $\textrm{score} / 5$
+ \EndIf
+ \State $\textrm{winner}, \textrm{plies}, \textrm{distance} = \textsc{Simulation}(\textrm{individual})$
+ \If{$\textrm{winner} = \textrm{individual}$}
+   \State $\textrm{score} = \textrm{score} + (500 - \textrm{plies})$
+ \Else
+   \State $\textrm{score} = \textrm{score} - \textrm{distance}$
+ \EndIf
+\EndWhile
+\EndFunction
+\end{algorithmic}
+\caption{The fitness function computes a fitness score for an
+  individual by having it play against a pre-defined bot.}
+\label{fitnessfn}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics{population-fitness.pdf}
+\caption{The fitness of the populations generated by the genetic
+  algorithm improves over time. A lost game gives a negative fitness
+  which gets closer to zero the closer the individual was to winning.
+  Positive fitness means the game was won. The fewer moves were
+  used, the higher the fitness becomes.}
+\label{fitness}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{population-winning-percentage.pdf}
+\caption{The percentage of games won by the populations generated by
+  the genetic algorithm.}
+\label{winning}
+\end{figure}
+
+Figures \ref{genpop0}, \ref{genpop51}, \ref{genpop2427} and
+\ref{genpop7822} show distance functions from different generations.
+The first and second functions are not very useful in themselves, but
+provide a point of comparison. It is interesting to note that in the
+latter generations the genetic algorithm has built a path of darker
+positions leading up the goal. Another noteworthy point is the darker
+position in the lower right corner. There does not appear to be any
+benefit to having a peg in this position. This is most likely an
+artifact caused by the fitness function we used: in most two-player
+games it is unlikely that there will be a peg in this position, so
+there has been no evolutionary pressure to make this position lighter.
+This will be a drawback in games with more than two players.
+
+\begin{figure}
+\centering
+\include{genetic-population-0}
+\caption{The most fit distance function at generation 0. The first
+  generation is fully random except for the start and goal positions.
+  This individual did not win any games at all.}
+\label{genpop0}
+\end{figure}
+
+\begin{figure}
+\centering
+\include{genetic-population-51}
+\caption{This is the first individual that has actually won a game
+  against our hand-tuned bot. It is from generation 51.}
+\label{genpop51}
+\end{figure}
+
+\begin{figure}
+\centering
+\include{genetic-population-2427}
+\caption{The individuals from generation 2427 won every game they
+  played when the genetic algorithm was running. Each individual is
+  only tested five times by the algorithm, but more extensive
+  experiments show that this individual wins around $99\%$ of the
+  games it plays. The fitness of this individual was $416.6$.}
+\label{genpop2427}
+\end{figure}
+
+\begin{figure}
+\centering
+\include{genetic-population-7822}
+\caption{This individual from generation 7822 had a fitness of
+  $427.4$, the highest of all individuals generated. When tested by
+  the genetic algorithm it won in an average of only $500-427.4=72.6$
+  moves.}
+\label{genpop7822}
+\end{figure}
 
 \section{Discussion and Conclusions}
 %(Sum up your project, suggest future extensions and improvements.)
@@ -503,5 +757,8 @@ opponent.
 %% A quick tutorial on how the server works
 
 %% Maybe a quick overlook of the gui-client?
+
+%% Maybe a copy of the numbers for the distance arrays that were
+%% presented graphically.
 
 \end{document}
