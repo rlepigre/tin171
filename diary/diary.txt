@@ -259,3 +259,6 @@ be the cure for this problem.
 2012-05-06
 Göran writes a subsection on the results from the genetic algorithm
 experiment.
+Salvo works on the parallel bot and obtains a working version that does pruning
+and can consider the moves of all the players. At the moment limited depth but
+seems to perform better than the iddfs for two players.
