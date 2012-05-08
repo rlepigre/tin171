@@ -20,8 +20,21 @@
 # author Göran Weinholt
 
 from multiprocessing import Process, Queue, Value
+from time import sleep
 
 from board import *
+
+def get_opponents(board,player_id):
+    '''Returns a tuple of opponents suitable for the other functions'''
+    if hasattr(get_opponents,"opp"):
+        return get_opponents.opp
+    
+    l=list(set(board) - set(' #%s' % str(player_id)))
+    l.sort()
+    l=[int(i) for i in l]
+    res = [i for i in l if i > player_id] + [i for i in l if i < player_id]
+    get_opponents.opp = res
+    return res
 
 def reasonable_moves(board,player,distance_function=static_distance_from_target):
     '''returns the most reasonable moves,
@@ -33,7 +46,7 @@ def reasonable_moves(board,player,distance_function=static_distance_from_target)
     distances = [distance_function(i,player) for i in boards]
     r=zip(boards,moves,distances)
     r.sort(key=(lambda x: x[2]))
-    return r[0:3] #[0:len(r)/5+1] #TODO that 5 is an heuristic
+    return r[0:5] #[0:len(r)/5+1] #TODO that 5 is an heuristic
 
 def resulting_boards(board,opponents,distance):
     '''Returns a list of most likely boards from the starting board
@@ -51,37 +64,38 @@ def resulting_boards(board,opponents,distance):
        res=_next
     
     return res
-def points(board,opponents,distance,player_id,r=None):
+def points(board,opponents,distance,player_id,r,depth):
     '''
-    r can be a multiprocessing Value class, to use instead of return
+    r must be a multiprocessing Value class "d", to use instead of return
     '''
-    res = None
-    for i in resulting_boards(board,opponents,distance):
-        for move in all_moves(i,player_id):
-            d=distance(update_board(i,move), player_id)
-            if res==None:
-                res=d
-            elif res>d:
-                res=d
-        pass
+    key=lambda x:distance(x, player_id)
     
+    r.value=-1
+    depth.value=1
     
+    boards_to_consider=(board,)
     
-    if r!=None:
-        r.value=res
-    return res
-def get_opponents(board,player_id):
-    '''Returns a tuple of opponents suitable for the other functions'''
-    if hasattr(get_opponents,"opp"):
-        return get_opponents.opp
-    
-    l=list(set(board) - set(' #%s' % str(player_id)))
-    l.sort()
-    l=[int(i) for i in l]
-    res = [i for i in l if i > player_id] + [i for i in l if i < player_id]
-    get_opponents.opp = res
-    return res
-    
+    while True:
+        resboards=[]
+        next_=[]
+        
+        for i in boards_to_consider:
+            resboards += resulting_boards(i,opponents,distance)
+        
+        for i in resboards:
+            for move in all_moves(i,player_id):
+                new_board=update_board(i,move)
+                next_.append(new_board)               
+                
+                d=distance(new_board, player_id)
+                if r.value==-1 or r.value>d:
+                    r.value=d
+        
+        next_.sort(key=key)
+        boards_to_consider=next_[0:7]
+        depth.value+=1
+        #print "DDDDDDDDDDD",depth.value
+
 def parallel_static_bot(c, timeout, board, player_id,distance_function=euclidean_distance_from_target):
     
     key=lambda x:distance_function(update_board(board, x), player_id)
@@ -93,20 +107,23 @@ def parallel_static_bot(c, timeout, board, player_id,distance_function=euclidean
     
     opponents=get_opponents(board,player_id)
     
-    for depth in xrange(1,2): #TODO more depth?
-        workers=[]
-        for i in moves[0:5]:
-            v=Value('d',0.0)
-            p=Process(target = points, args=(update_board(board,i),opponents,distance_function,player_id,v))
-            workers.append((p,v,i))
-            p.start()
-            pass
-        for i in workers:
-            i[0].join()
-            if i[1].value < best_move[2]:
-                best_move[0]=i[2]
-                best_move[1]=depth+1
-                best_move[2]=i[1].value
+    workers=[]
+    for i in moves[0:5]:
+        v=Value('d',0.0)
+        d=Value('i',0)
+        p=Process(target = points, args=(update_board(board,i),opponents,distance_function,player_id,v,d))
+        workers.append((p,v,i,d))
+        p.start()
+    
+    sleep(timeout/1000)
+    for i in workers:
+        i[0].terminate()
+        print i[1].value, best_move[2]
+        if (i[1].value < best_move[2] and i[1].value>-1):# and best_move[1]<i[3]:
+            print "AA"
+            best_move[0]=i[2]
+            best_move[1]=i[3]
+            best_move[2]=i[1].value
     
     c.move(best_move[0])
 def parallel_euclidean_bot(c,timeout,board,player_id):
