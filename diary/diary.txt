@@ -267,3 +267,48 @@ seems to perform better than the iddfs for two players.
 Salvo fixes the parallel bot so that it can play against any number of players
 without needing manual changes everytime. Also adds "personalities" to play with
 the different evaluation functions.
+
+2012-05-08
+We meet with Birgit and discuss the latest draft. We also talk about
+the results from the genetic algorithm.
+
+It would be nice if the report had some pictures, e.g. the
+introduction could show a picture of the board.
+
+It was not as clear as it could be that our search algorithms are
+time-limited. And on that note, it appears that the minimax algorithm
+isn't time-limited.
+
+The section on heuristics might be split into dicussions on two-player
+heuristics and multiplayer heuristics. Things we did not implement
+(start and end game detection etc) should be moved to "Future work".
+There does not need to be a subsection for things not yet implemented
+and so on.
+
+We should probably write about alpha-beta pruning instead of just
+minimax. Alpha-beta is so trivial that it is gonna raise questions if
+we do not use it.
+
+We have been doing a lot of different things and they should all be
+visible in the report.
+
+The appendix should contain a summary of the diary or perhaps a link
+to it.
+
+The minimax pseudo code is different from the book. Is there a reason
+for this?
+
+The "Results" section should have tables comparing the bots against
+each other and against ourselves. There should be more text.
+
+Perhaps the pseudo code and the genetic algorithm description belongs
+in section 3.
+
+There is a demo and an oral exam coming up. In the demo we should be
+prepared to show the game being played by bots or people. We should be
+able to talk about the things we've written in the report. We should
+bring color printouts of the report. It is a small gathering so we
+will not need a projector or slides. The oral exam is a lot like the
+demo, but the report will have been finalized and everyone will have
+had an opportunity to read it. There will be no demos in the oral exam
+though.

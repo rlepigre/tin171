@@ -360,10 +360,10 @@ move by clicking on the pegs shown on the screen.
 The \emph{bot} is the program that contains the AI components of our
 project. It is also written in Python and is divided in three major
 components: the protocol module, the board module and the bot module.
-The protocol module serializes and deserializes the network protocol.
-The board module contains code to generate all moves a player has
-available and it also contains our board evaluation functions. The bot
-module contains the search algorithms. It is the job of the search
+The \emph{protocol module} serializes and deserializes the network protocol.
+The \emph{board module} contains code to generate all moves a player has
+available and it also contains our board evaluation functions. The
+\emph{bot module} contains the search algorithms. It is the job of the search
 algorithms to use the possible moves and the board evaluation
 functions to determine which move will give the best outcome for the
 bot. When we have implemented a new search algorithm or board
@@ -377,9 +377,9 @@ aid in this we have the \emph{arena} program. This program can start
 up a game between different bot personalities so that we can determine
 which bot is the strongest in different situations.
 
-\subsection{Modules designed but not implemented}
+%%\subsection{Modules designed but not implemented}
 
-\subsection{Modules a future continuation may have}
+%%\subsection{Modules a future continuation may have}
 
 \section{Results and Evaluation}
 % (What does your running code do? How does it fare against your
@@ -706,7 +706,16 @@ games it is unlikely that there will be a peg in this position, so
 there has been no evolutionary pressure to make this position lighter.
 This will be a drawback in games with more than two players.
 
-%% TODO: Write about the three-player experiment here
+The genetic algorithm is easily adapted to simulate games between
+three players. Figure \ref{gen3pop3594} shows an individual from such
+a simulation. It is remarkably similar to the two-player individual
+from figure \ref{genpop7822}. A three-player game exercises more of
+the positions on the board and therefore places greater demands on the
+individual. The dark positions are no longer isolated from the rest of
+the board: the are connected to the goal by some path. Running
+simulations with three players not only requires more CPU time, but
+also requires more generations before it gets good results (figures
+\ref{fitness} and \ref{winning}).
 
 \begin{figure}
 \centering
@@ -744,6 +753,15 @@ This will be a drawback in games with more than two players.
   the genetic algorithm it won in an average of only $500-427.4=72.6$
   moves.}
 \label{genpop7822}
+\end{figure}
+
+\begin{figure}
+\centering
+\include{genetic-3p-superior-population-3594}
+\caption{We extended the algorithm to simulate three-player games.
+  This individual comes from population 3594 in such a run. It had
+  $99.2\%$ wins and a fitness of $393.4$.}
+\label{gen3pop3594}
 \end{figure}
 
 \section{Discussion and Conclusions}
