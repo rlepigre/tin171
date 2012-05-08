@@ -267,3 +267,5 @@ seems to perform better than the iddfs for two players.
 Salvo fixes the parallel bot so that it can play against any number of players
 without needing manual changes everytime. Also adds "personalities" to play with
 the different evaluation functions.
+Salvo modifies the arena to gather stats about the games between the various
+personalities.
