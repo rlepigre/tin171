@@ -24,6 +24,7 @@ import os
 import socket
 from time import sleep
 from multiprocessing import Process, Queue
+import sys
 
 import protocol
 from protocol import A
@@ -107,13 +108,12 @@ def run_match(server,port,path,bots,max_updates=1000,pause=0):
 
 def evaluate_match(server,port,path,bots,max_updates=1000,pause=0,queue=None):
     result = run_match(server,port,path,bots,max_updates,pause)
-    print result['players']
-    result['stats']=[None]
+    result['distances']={}
     for i in result['players']:
-        result['stats'].append(board.euclidean_distance_from_target(result['boards'][-1],i))
-        
-    print result['stats']
-    
+        result['distances'][i]=(board.euclidean_distance_from_target(result['boards'][-1],i))
+    for i in result['players']:
+        result['players'][i] = result['players'][i].split('-')[1]
+    result['plies'] = len(result['boards'])
     #TODO collect all updates and won here
     if queue==None:
         return result
@@ -136,4 +136,18 @@ def parallel_matches(server,port,path,bots,max_updates=1000,pause=0):
         results.append(queues[i].get())
         matches[i].join()
     return results
+
+def gather_stats(addr):
+    fd=open('stats.py','a')
+    matches=(
+    (6,1),
+    (0,1),
+    )
+    
+    for i in matches:
+        for k_ in xrange(20):
+            r=evaluate_match(addr,8000,'/home/salvo/Documents/uni/artificial/tin171/bot/bot.py',i,pause=0)
+            r['boards']=r['boards'][-1]
+            fd.write('%s\n' % repr(r))
+    fd.close()
 
