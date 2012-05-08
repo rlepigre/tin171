@@ -262,3 +262,8 @@ experiment.
 Salvo works on the parallel bot and obtains a working version that does pruning
 and can consider the moves of all the players. At the moment limited depth but
 seems to perform better than the iddfs for two players.
+
+2012-05-08
+Salvo fixes the parallel bot so that it can play against any number of players
+without needing manual changes everytime. Also adds "personalities" to play with
+the different evaluation functions.

@@ -70,8 +70,19 @@ def points(board,opponents,distance,player_id,r=None):
     if r!=None:
         r.value=res
     return res
+def get_opponents(board,player_id):
+    '''Returns a tuple of opponents suitable for the other functions'''
+    if hasattr(get_opponents,"opp"):
+        return get_opponents.opp
     
-def parallel_bot(c, timeout, board, player_id,distance_function=euclidean_distance_from_target):
+    l=list(set(board) - set(' #%s' % str(player_id)))
+    l.sort()
+    l=[int(i) for i in l]
+    res = [i for i in l if i > player_id] + [i for i in l if i < player_id]
+    get_opponents.opp = res
+    return res
+    
+def parallel_static_bot(c, timeout, board, player_id,distance_function=euclidean_distance_from_target):
     
     key=lambda x:distance_function(update_board(board, x), player_id)
     moves = list(all_moves(board, player_id))
@@ -80,7 +91,7 @@ def parallel_bot(c, timeout, board, player_id,distance_function=euclidean_distan
     
     best_move=[moves[0],1,distance_function(update_board(board, moves[0]), player_id)]
     
-    opponents=(2,) #FIXME what is this shit?
+    opponents=get_opponents(board,player_id)
     
     for depth in xrange(1,2): #TODO more depth?
         workers=[]
@@ -98,6 +109,7 @@ def parallel_bot(c, timeout, board, player_id,distance_function=euclidean_distan
                 best_move[2]=i[1].value
     
     c.move(best_move[0])
-
-#print points(FULL_BOARD,[2,3,4,5,6,1],distance_function,1)
-#print reasonable_moves(FULL_BOARD,1)
+def parallel_euclidean_bot(c,timeout,board,player_id):
+    return parallel_static_bot(c,timeout,board,player_id,distance_function=euclidean_distance_from_target)
+def parallel_evolved_bot(c,timeout,board,player_id):
+    return parallel_static_bot(c,timeout,board,player_id,distance_function=evolved_distance)

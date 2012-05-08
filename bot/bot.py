@@ -245,8 +245,8 @@ def main():
 
 
 
-personality = (trivial_bot,static_distance_bot,iddfs_bot,static_iddfs_bot, minimax_bot,parbot.parallel_bot,
-               evolved_distance_bot, evolved_iddfs_bot)
+personality = (trivial_bot,static_distance_bot,iddfs_bot,static_iddfs_bot, minimax_bot,parbot.parallel_static_bot,
+               evolved_distance_bot, evolved_iddfs_bot,parbot.parallel_euclidean_bot,parbot.parallel_evolved_bot)
 
 if __name__ == "__main__":
     main()
