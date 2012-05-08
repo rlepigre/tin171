@@ -128,6 +128,30 @@
                (update-board! board move)
                (lp (cdr id*) (cdr p*) (+ plies 1))))))))
 
+;; Simulate a game between three players. (Not very general, is it?)
+(define (simulation-3 p1 p2)
+  (define timeout 5000)
+  (define eval board-eval-static-distance) ;XXX: used in the losing phase
+  (let ((board (string-copy "####1################11###############111##############1111#########             #####            ######           #######          ########         ########6        4#######66       44######666      444#####6666     4444#########    ##############   ###############  ################ ####")))
+    (let lp ((id* (circular-list 1 4 6))
+             (p* (circular-list p1 p2 p2))
+             (plies 0))
+      ;; (print-board board)
+      (cond ((> plies 150)
+             ;; This isn't going anywhere, so restart.
+             (simulation-3 p1 p2))
+            ((winning-state? board 1)
+             (values 1 plies (+ (- (eval board 4))
+                                (- (eval board 6)))))
+            ((winning-state? board 4)
+             (values 4 plies (- (eval board 1))))
+            ((winning-state? board 6)
+             (values 6 plies (- (eval board 1))))
+            (else
+             (let ((move ((car p*) timeout (string-copy board) (car id*))))
+               (update-board! board move)
+               (lp (cdr id*) (cdr p*) (+ plies 1))))))))
+
 (define (vector->trivial-bot vec)
   (define (bot timeout board player)
     (let* ((moves (shuffle
