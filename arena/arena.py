@@ -21,6 +21,7 @@
 import subprocess
 import random
 import os
+import os.path
 import socket
 from time import sleep
 from multiprocessing import Process, Queue
@@ -61,12 +62,14 @@ def run_match(server,port,path,bots,max_updates=200,pause=0):
 
     #Launches 1st bot and creates the game
     logfile=open('%s/Log-%s'%(logdir,str(bots[0])),'w')
-    host_gladiator = subprocess.Popen([path,'-s',server,'-p',str(port),'-H',game_name,'-y',str(len(bots)),'-b',str(bots[0])],
-                                      stdout=logfile,stderr=logfile)
+    host_gladiator = subprocess.Popen(['/usr/bin/pypy','--jit', 'threshold=3', path,'-s',server,'-p',str(port),'-H',game_name,'-y',str(len(bots)),'-b',str(bots[0])],
+                                      stdout=logfile,stderr=logfile,cwd=os.path.dirname(path))
+                                      
     gladiators.append(host_gladiator)
 
     #Spectate the game
     for count in xrange(60):
+        sleep(0.5)
         if count>50:
             print "Game can't be spectated"
             gladiators[0].kill()
@@ -82,8 +85,8 @@ def run_match(server,port,path,bots,max_updates=200,pause=0):
     #Launch all the other bots
     for i in bots[1:]:
         logfile=open('%s/Log-%s'%(logdir,str(i)),'w')
-        proc=subprocess.Popen([path,'-s',server,'-p',str(port),'-g',game_name,'-b',str(i)],
-                              stdout=logfile,stderr=logfile)
+        proc=subprocess.Popen(['/usr/bin/pypy','--jit', 'threshold=3', path,'-s',server,'-p',str(port),'-g',game_name,'-b',str(i)],
+                              stdout=logfile,stderr=logfile,cwd=os.path.dirname(path))
         gladiators.append(proc)
     
     
@@ -155,17 +158,17 @@ def gather_stats(addr):
     #(1,1),
     #(2,2),  --stuck
     #(2,0),
-    #(2,1),
-    #(3,2),
+    (2,1),
+    (3,2),
     #(3,3), --stuck
-    #(3,0),
-    #(3,1),
-    #(0,1,2),
-    #(0,5,9),
-    #(0,5,3),
-    #(5,0),
+    (3,0),
+    (3,1),
+    (0,1,2),
+    (0,5,9),
+    (0,5,3),
+    (5,0),
     (5,1),
-    (5,2),
+    #(5,2), --stuck
     (5,3),
     (6,6),
     (6,0),
@@ -192,7 +195,7 @@ def gather_stats(addr):
     
     for i in matches:
         for k_ in xrange(2):
-            sleep(3)
+            sleep(120)
             r=evaluate_match(addr,8000,'/home/salvo/Documents/uni/artificial/tin171/bot/bot.py',i,pause=0)
             r['boards']=r['boards'][-1]
             fd.write('%s\n' % repr(r))
