@@ -93,7 +93,7 @@ def minimax_bot(c, timeout, board, player_id,distance_function=static_distance_f
     def minimax(board, pid, depth):
         opp = (pid % 2) + 1
         # Player won? Very high score.
-        if won(board, pid, opp):
+        if won(board, pid):
             ##print "Winning move found!"
             return -(2**24)
         # Depth reached
