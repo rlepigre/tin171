@@ -315,3 +315,7 @@ though.
 
 Salvo modifies the arena to gather stats about the games between the various
 personalities.
+
+2012-05-10
+Salvo resolves a race condition in the parallel bot that caused it to hang
+sometimes.
