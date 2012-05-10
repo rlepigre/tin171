@@ -96,7 +96,7 @@ def points(board,opponents,distance,player_id,r,depth,terminate_condition):
         boards_to_consider=next_[0:7]
         depth.value+=1
 
-def parallel_static_bot(c, timeout, board, player_id,distance_function=euclidean_distance_from_target):
+def parallel_static_bot(c, timeout, board, player_id,players,distance_function=euclidean_distance_from_target):
     
     key=lambda x:distance_function(update_board(board, x), player_id)
     moves = list(all_moves(board, player_id))
@@ -129,7 +129,7 @@ def parallel_static_bot(c, timeout, board, player_id,distance_function=euclidean
             best_move[2]=i[1].value
     
     c.move(best_move[0])
-def parallel_euclidean_bot(c,timeout,board,player_id):
-    return parallel_static_bot(c,timeout,board,player_id,distance_function=euclidean_distance_from_target)
-def parallel_evolved_bot(c,timeout,board,player_id):
-    return parallel_static_bot(c,timeout,board,player_id,distance_function=evolved_distance)
+def parallel_euclidean_bot(c,timeout,board,player_id,players):
+    return parallel_static_bot(c,timeout,board,player_id,players,distance_function=euclidean_distance_from_target)
+def parallel_evolved_bot(c,timeout,board,player_id,players):
+    return parallel_static_bot(c,timeout,board,player_id,players,distance_function=evolved_distance)
