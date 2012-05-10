@@ -126,25 +126,6 @@ def minimax_bot(c, timeout, board, player_id, players,
     print "Choosed: ", best
     c.move(best)
 
-'''
-def alphabeta_bot(c, timeout, board, player_id, distance_function=static_distance_from_target):
-
-    def alphabeta(b, d,
-
-    depth = 2
-    best_val, best_move = None
-    for move in all_moves(board, player_id):
-        if best_val is not None:
-            opp_beta = -1 * best_val
-        else:
-            opp_beta = None
-        val = -1 * alphabeta_value(update_board(board, move), depth, None, opp_beta)
-        if best_val is None or val > best_val:
-            (best_val, best_move) = (val, move)
-    print "Choosed: ", best_move
-    c.move(best_move)
-'''
-
 def evolved_alphabeta_bot(c, timeout, board, player_id, players):
     return alphabeta_bot(c, timeout, board, player_id, players,
                          evolved_distance)
