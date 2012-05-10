@@ -17,6 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Authors: Emil Falk, Rodolphe Lepigre,
+#          Salvo Tomaselli, Göran Weinholt
+
 import random
 import sys
 import time
@@ -26,21 +29,23 @@ from protocol import A
 from board import *
 import parbot
 
-def evolved_distance_bot(c,timeout,board,player_id):
-    return trivial_bot(c,timeout,board,player_id,evolved_distance)
+def evolved_distance_bot(c, timeout, board, player_id, players):
+    return trivial_bot(c, timeout, board, player_id, players, evolved_distance)
 
-def static_distance_bot(c,timeout,board,player_id):
-    return trivial_bot(c,timeout,board,player_id,static_distance_from_target)
+def static_distance_bot(c, timeout, board, player_id, players):
+    return trivial_bot(c, timeout, board, player_id, players, static_distance_from_target)
 
-def trivial_bot(c, timeout, board, player_id,distance_function=euclidean_distance_from_target):
-    key=lambda x:distance_function(update_board(board, x), player_id)
+def trivial_bot(c, timeout, board, player_id, players,
+                distance_function=euclidean_distance_from_target):
+    key = lambda x: distance_function(update_board(board, x), player_id)
     moves = list(all_moves(board, player_id))
     random.shuffle(moves) # In this way the bots don't get stuck.
     moves.sort(key=key)
     print "moves", moves
     c.move(moves[0])
 
-def iddfs_bot(c, timeout, board, player_id,distance_function=euclidean_distance_from_target):
+def iddfs_bot(c, timeout, board, player_id, players,
+              distance_function=euclidean_distance_from_target):
     def board_evaluation(board, player_id):
         # The bot tries to minimize the distance.
         return -distance_function(board, player_id)
@@ -68,7 +73,6 @@ def iddfs_bot(c, timeout, board, player_id,distance_function=euclidean_distance_
     best = [[], -2**24, 2**24]
     stoptime = time.time() + timeout / 1000.0
 
-
     # Iterative deepening.
     for depth in xrange(1, 2**24):
         for move in all_moves(board, player_id):
@@ -80,13 +84,14 @@ def iddfs_bot(c, timeout, board, player_id,distance_function=euclidean_distance_
     print "best", best
     c.move(best[0])
 
-def evolved_iddfs_bot(c, timeout, board, player_id):
-    return iddfs_bot(c, timeout, board, player_id, evolved_distance)
+def evolved_iddfs_bot(c, timeout, board, player_id, players):
+    return iddfs_bot(c, timeout, board, player_id, players, evolved_distance)
 
-def static_iddfs_bot(c, timeout, board, player_id):
-    return iddfs_bot(c, timeout, board, player_id, static_distance_from_target)
+def static_iddfs_bot(c, timeout, board, player_id, players):
+    return iddfs_bot(c, timeout, board, player_id, players, static_distance_from_target)
 
-def minimax_bot(c, timeout, board, player_id,distance_function=static_distance_from_target):
+def minimax_bot(c, timeout, board, player_id, players,
+                distance_function=static_distance_from_target):
     def board_evaluation(board, pid):
         return distance_function(board, pid)
 
@@ -107,7 +112,7 @@ def minimax_bot(c, timeout, board, player_id,distance_function=static_distance_f
                 if best == None or val > best:
                     best = val
             return best
-    
+
     depth = 2
     best = None
     score = -(2**24)
@@ -124,7 +129,7 @@ def minimax_bot(c, timeout, board, player_id,distance_function=static_distance_f
 '''
 def alphabeta_bot(c, timeout, board, player_id, distance_function=static_distance_from_target):
 
-    def alphabeta(b, d, 
+    def alphabeta(b, d,
 
     depth = 2
     best_val, best_move = None
@@ -140,13 +145,70 @@ def alphabeta_bot(c, timeout, board, player_id, distance_function=static_distanc
     c.move(best_move)
 '''
 
-def play(c, player_id,make_move):
+def evolved_alphabeta_bot(c, timeout, board, player_id, players):
+    return alphabeta_bot(c, timeout, board, player_id, players,
+                         evolved_distance)
+
+def alphabeta_bot(c, timeout, board, player_id, players,
+                  dist=static_distance_from_target):
+    """Minimax with alpha-beta pruning and iterative deepening. Only
+    considers the player and his opponent, not any of the other
+    players."""
+    def alphabeta(board, depth, alpha, beta, player, stoptime):
+        opponent = (player % 2) + 1
+        if depth == 0 or won(board, player_id) or time.time() >= stoptime:
+            ## XXX: should also return depth
+            return -dist(board, player_id)
+        if player == player_id:
+            for move in all_moves(board, player):
+                nboard = update_board(board, move)
+                alpha = max(alpha, alphabeta(nboard, depth - 1, alpha,
+                                             beta, opponent, stoptime))
+                if beta <= alpha:
+                    break
+            return alpha
+        else:
+            for move in all_moves(board, player):
+                nboard = update_board(board, move)
+                beta = min(beta, alphabeta(nboard, depth - 1, alpha,
+                                           beta, opponent, stoptime))
+                if beta <= alpha:
+                    break
+            return beta
+
+    depth = 2
+    stoptime = time.time() + timeout / 1000.0
+    best = None
+    best_score = -2**24
+
+    for depth in xrange(0, 5):
+        for move in all_moves(board, player_id):
+            print "Considering move", move, "at depth", depth
+            score = alphabeta(update_board(board, move), depth, -2**24, 2**24,
+                              player_id, stoptime)
+            if score > best_score or not best:
+                print "Move",(move, score),"is better than",(best,best_score)
+                (best, best_score) = (move, score)
+        if time.time() >= stoptime:
+            break
+
+    c.move(best)
+
+# class Dummy():
+#     def move(self,x):
+#         print "selected move:",x
+# alphabeta_bot(Dummy(), 5000, '####1################11###############111##############1111#########             #####            ######           #######          ########         ########          #######           ######            #####             #########2222##############222###############22################2####',
+#               1, [(1, 'Bot-evolved_distance_bot-567'), (2, 'Bot-minimax_bot-185')],
+#               static_distance_from_target)
+
+
+def play(c, player_id, players, make_move):
     """Play until someone wins... or something goes wrong."""
     while True:
         x = c.read_noerror()
         if x[0] == A('your_turn'):
             (_, timeout, board) = x
-            make_move(c, timeout, board, player_id)
+            make_move(c, timeout, board, player_id, players)
         elif x[0] == A('won'):
             print "A winner was announced:", x
             return
@@ -239,7 +301,7 @@ def main():
         if x[0] == A('game_start'):
             print "The game starts."
             (_, player_id, players, board) = x
-            play(c, player_id,personality[opts.bot])
+            play(c, player_id, players, personality[opts.bot])
             return
 
 
@@ -248,13 +310,15 @@ def main():
 personality = (trivial_bot,
                static_distance_bot,
                iddfs_bot,
-               static_iddfs_bot, 
+               static_iddfs_bot,
                minimax_bot,
                parbot.parallel_static_bot,
-               evolved_distance_bot, 
+               evolved_distance_bot,
                evolved_iddfs_bot,
                parbot.parallel_euclidean_bot,
                parbot.parallel_evolved_bot,
+               alphabeta_bot,
+               evolved_alphabeta_bot
                )
 
 if __name__ == "__main__":
