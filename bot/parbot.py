@@ -64,7 +64,7 @@ def resulting_boards(board,opponents,distance):
        res=_next
     
     return res
-def points(board,opponents,distance,player_id,r,depth):
+def points(board,opponents,distance,player_id,r,depth,terminate_condition):
     '''
     r must be a multiprocessing Value class "d", to use instead of return
     '''
@@ -78,11 +78,12 @@ def points(board,opponents,distance,player_id,r,depth):
     while True:
         resboards=[]
         next_=[]
-        
+        if terminate_condition.value!=0:return
         for i in boards_to_consider:
             resboards += resulting_boards(i,opponents,distance)
         
         for i in resboards:
+            if terminate_condition.value!=0:return
             for move in all_moves(i,player_id):
                 new_board=update_board(i,move)
                 next_.append(new_board)               
@@ -94,7 +95,6 @@ def points(board,opponents,distance,player_id,r,depth):
         next_.sort(key=key)
         boards_to_consider=next_[0:7]
         depth.value+=1
-        #print "DDDDDDDDDDD",depth.value
 
 def parallel_static_bot(c, timeout, board, player_id,distance_function=euclidean_distance_from_target):
     
@@ -109,18 +109,21 @@ def parallel_static_bot(c, timeout, board, player_id,distance_function=euclidean
     
     workers=[]
     for i in moves[0:5]:
-        v=Value('d',0.0)
+        v=Value('d',-1.0)
         d=Value('i',0)
-        p=Process(target = points, args=(update_board(board,i),opponents,distance_function,player_id,v,d))
-        workers.append((p,v,i,d))
+        terminator=Value('i',0)
+        p=Process(target = points, args=(update_board(board,i),opponents,distance_function,player_id,v,d,terminator))
+        workers.append((p,v,i,d,terminator))
         p.start()
     
     sleep(timeout/1000)
     for i in workers:
-        i[0].terminate()
+        i[4].value=1
+    
+    for i in workers:
+        i[0].join()
         print i[1].value, best_move[2]
         if (i[1].value < best_move[2] and i[1].value>-1):# and best_move[1]<i[3]:
-            print "AA"
             best_move[0]=i[2]
             best_move[1]=i[3]
             best_move[2]=i[1].value
