@@ -263,6 +263,13 @@ Salvo works on the parallel bot and obtains a working version that does pruning
 and can consider the moves of all the players. At the moment limited depth but
 seems to perform better than the iddfs for two players.
 
+2012-05-06
+Rodolphe investigates possibilities with the Max-Prob algorithm. But it seems
+that the paper have a few typos and is quite unclear for the description of
+the algorithm, which might make it hard to implement. He also checks for other
+literature on the Max-Prob algorithm, but since it is described in a very
+recent paper (2011), there is nothing else...
+
 2012-05-08
 Salvo fixes the parallel bot so that it can play against any number of players
 without needing manual changes everytime. Also adds "personalities" to play with
@@ -319,3 +326,8 @@ personalities.
 2012-05-10
 Salvo resolves a race condition in the parallel bot that caused it to hang
 sometimes.
+
+2012-05-10
+Rodolphe begins to write a paragraph on the Max-Prob algorithm in the report.
+We will not implement this algorithm since we cannot undersand the details.
+
