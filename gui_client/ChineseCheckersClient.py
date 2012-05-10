@@ -237,6 +237,10 @@ class GameUI(QtGui.QMainWindow):
         
         self.ui.cmdDisconnect.setEnabled(False)
         
+        palette=self.ui.lstGames.palette()
+        #palette.setColor(9,None)
+        self.ui.lstPlayers.setPalette(palette)
+        
     def board_click(self,i):
         print i
         if self.my_turn == False or self.board[i] not in (self.player_id,0,7):
