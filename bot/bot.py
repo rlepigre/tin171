@@ -29,6 +29,9 @@ from protocol import A
 from board import *
 import parbot
 
+def evolved3_distance_bot(c, timeout, board, player_id, players):
+    return trivial_bot(c, timeout, board, player_id, players, evolved_distance3)
+
 def evolved_distance_bot(c, timeout, board, player_id, players):
     return trivial_bot(c, timeout, board, player_id, players, evolved_distance)
 
@@ -84,6 +87,9 @@ def iddfs_bot(c, timeout, board, player_id, players,
     print "best", best
     c.move(best[0])
 
+def evolved3_iddfs_bot(c, timeout, board, player_id, players):
+    return iddfs_bot(c, timeout, board, player_id, players, evolved_distance3)
+
 def evolved_iddfs_bot(c, timeout, board, player_id, players):
     return iddfs_bot(c, timeout, board, player_id, players, evolved_distance)
 
@@ -125,6 +131,10 @@ def minimax_bot(c, timeout, board, player_id, players,
             score = val
     print "Choosed: ", best
     c.move(best)
+
+def evolved3_alphabeta_bot(c, timeout, board, player_id, players):
+    return alphabeta_bot(c, timeout, board, player_id, players,
+                         evolved_distance3)
 
 def evolved_alphabeta_bot(c, timeout, board, player_id, players):
     return alphabeta_bot(c, timeout, board, player_id, players,
@@ -299,7 +309,11 @@ personality = (trivial_bot,
                parbot.parallel_euclidean_bot,
                parbot.parallel_evolved_bot,
                alphabeta_bot,
-               evolved_alphabeta_bot
+               evolved_alphabeta_bot,
+               evolved3_distance_bot,
+               evolved3_iddfs_bot,
+               evolved3_alphabeta_bot,
+               parbot.parallel_evolved3_bot,
                )
 
 if __name__ == "__main__":
