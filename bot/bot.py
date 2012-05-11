@@ -162,7 +162,7 @@ def alphabeta_bot(c, timeout, board, player_id, players,
     best = None
     best_score = -2**24
 
-    for depth in xrange(0, 5):
+    for depth in xrange(0, 2**24):
         for move in all_moves(board, player_id):
             print "Considering move", move, "at depth", depth
             score = alphabeta(update_board(board, move), depth, -2**24, 2**24,
