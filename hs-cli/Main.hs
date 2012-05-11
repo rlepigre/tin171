@@ -4,6 +4,7 @@ module Main
 import Network
 import System.Environment( getArgs )
 import System.Exit( exitSuccess )
+import System.Random( randomRIO )
 import Data.List
 import Data.BERT.Parser
 import Data.BERT
@@ -62,10 +63,11 @@ main = do
       hSetBuffering h LineBuffering
       login h userName
       putStrLn $ "Logged in as " ++ userName
-      lobbyLoop h 0 userName mode
+      lobby h userName mode
 
-lobbyLoop h n userName mode@"host" = do
-  let gameName = userName ++ show n
+lobby h userName "host" = do
+  gameNr <- randomRIO (1 :: Int, 10000)
+  let gameName = userName ++ "-" ++ show gameNr
   hostGame h gameName
   putStrLn $ "Hosted game: " ++ gameName ++ "\n Waiting for players..."
   waitForPlayers h 2
@@ -73,25 +75,21 @@ lobbyLoop h n userName mode@"host" = do
   startGame h
   putStrLn "Game started, playing game."
   playGame h
-  lobbyLoop h (n+1) userName mode
-lobbyLoop h n userName mode@"join" = do
+lobby h userName "join" = do
   (ngames,_) <- listGames h
   case ngames of
     []     -> do
       putStrLn "No games, retrying soon."
       threadDelay 1000000
-      lobbyLoop h n userName mode
+      lobby h userName "join"
     gs -> do
       res <- joinAGame h gs
       case res of
         Just g  -> do
           putStrLn $ "Joined game: " ++ g
           playGame h
-          lobbyLoop h (n+1) userName mode
         Nothing -> do
           putStrLn $ "Could not join any game."
-          threadDelay 1000000
-          lobbyLoop h n userName mode
 
 waitForPlayers h n = do
   pls <- recv h
@@ -116,15 +114,19 @@ gameLoop h pid = do
   res <- recv h
   putStrLn $ "Received: " ++ show res
   case res of
+    Right (TupleTerm [ AtomTerm "won"
+                     , whoWon
+                     , boardTerm
+                     ]) -> let Right winner = readBERT whoWon :: Either String (Int, String)
+                           in putStrLn $ "Winner: " ++ show winner
     Right (TupleTerm [ AtomTerm "your_turn"
                      , timeoutTerm
                      , boardTerm
                      ]) -> do
       let (Right boardStr) = readBERT boardTerm :: Either String String
-          moves = findMove pid boardStr
-          (cost, (Move start stop bestMove)) = head moves
+          moves@((cost, (_,_,bestMove)):_) = findMove pid boardStr
       putStrLn $ "Moves: " ++ show moves
-      putStrLn $ "My turn. Move: " ++ show bestMove
+      putStrLn $ "My turn. Move: " ++ show bestMove ++ " with cost: " ++ show cost
       status <- move h bestMove
       case status of
         Won -> putStrLn "I won."
@@ -254,124 +256,3 @@ hostGameTerm gameName = TupleTerm [ AtomTerm "host_game"
 leaveGame h _ = do
   call h leaveTerm
   exitSuccess
-
-{-
-gameLobby :: Handle -> Player -> IO ()
-gameLobby h player = do
-  gameLobbyMenu
-  c <- getChar
-  if (isDigit c)
-    then (lobbyCommand h c player)
-    else (do errorPrint "Menu item has to be integer"
-             gameLobby h player)
-
-lobbyCommand h c player = case findCommand c of
-  Nothing -> do
-    errorPrint "Choose a integer in the list"
-    gameLobby h player
-  Just fun ->
-    fun h player
-
-gameLobbyMenu = let
-  wel = "Choose a menu item:\n"
-  prompt = "Item: "
-  itemStr = unlines $ map (\(id, str, fun) -> show id ++ ". " ++ str) lobbyItems
-  in putStr $ wel ++ itemStr ++ prompt
-
-findCommand i = let ls = map (\(id,_,fun) -> (id, fun)) lobbyItems
-                in lookup i ls
-
-lobbyItems = [('1', "Host game", hostGame)
-             ,('2', "Join game", joinGame)
-             ,('3', "Spectate", spectateGame)
-             ,('4', "List players", listPlayers)
-             ,('5', "List games", listGames)
-             ,('6', "Leave", leaveGame)
-             ]
-
-usage :: String
-usage = "Usage: hs-cli hostname port username"
-
-hostGame h player = do
-  getLine
-  putStrLn "Game name: "
-  gameName <- getLine
-  let game = newGame gameName [player]
-  doCommand h (hostGameTerm gameName)
-    (do putStrLn "Game hosted!\nWrite start to start the game or leave to leave"
-        hosted h game) player
-
-startGame h game = do
-  res <- call h startGameTerm
-  case res of
-    Nothing ->
-      play h game
-    Just err -> do
-      errorPrint err
-      hosted h game
-
-joinGame = undefined
-spectateGame = undefined
-listGames = undefined
-listPlayers = undefined
-
-hosted h game@(Game name pls n) = do
-  ready <- hReady h
-  case ready of
-    False -> do
-      term <- timeout 10000 (getLine)
-      case term of
-        Nothing ->
-          hosted h game
-        Just str ->
-          case str of
-            "start" -> startGame h game
-            "leave" -> leaveGame h game
-            _       -> do
-              putStrLn "Write start to start the game or leave to leave."
-              hosted h game
-    True -> do
-      res <- recv h
-      case res of
-        Left err -> do
-          errorPrint $ show err
-          hosted h game
-        Right term ->
-          case term of
-            TupleTerm [ AtomTerm "player_joined", playerList] -> do
-              let Right ps = readBERT playerList :: Either String [String]
-                  ng = newGame name ps
-              playerJoined ps
-              hosted h newGame
-            TupleTerm [ AtomTerm "player_left", playerList] -> do
-              let Right ps = readBERT playerList :: Either String [String]
-                  ng = newGame name ps
-              playerLeft ps
-              hosted h ng
-
-playerLeft players = do
-  putStrLn "Player left\nPlayers:"
-  mapM_ (\x -> putStr (x ++ " ")) players
-  putStrLn ""
-
-playerJoined players = do
-  putStrLn "Player joined\nPlayers:"
-  mapM_ (\x -> putStr (x ++ " ")) players
-  putStrLn ""
-
-errorPrint err = putStrLn $ "Error: " ++ err
-
-doCommand h term action player = do
-  res <- call h term
-  case res of
-    Just err -> do
-      errorPrint err
-      gameLobby h player
-    Nothing ->
-      action
-
-
-play = undefined
-
-
--}
