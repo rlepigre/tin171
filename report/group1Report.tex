@@ -107,6 +107,18 @@ search. Something particularly interesting to us is her description of
 the heuristics she used. The program was reported to play excellently
 against human players.
 
+Sturtevant, Zinkevich and Bowling propose an algorithm called Prob-Max$^n$
+in \cite{probmaxn}. This algorithm seems very efficient in practice in a
+multi-player environment with more than two players. This solution uses
+a probabilistic approach to opponent modeling.
+
+Schadd and Winands propose yet another algorithm technique called \textit{
+Best Reply Search} \cite{bestreplysearch} which also applies to more that
+two players environments. The idea of this algorithm is to consider that
+only the opponent that is in the best position against the player is making
+moves, this makes the algorithm less paranoid. And in this way the size of
+the search tree is limited.
+
 %% Research into programs that play games is likely to be geared towards
 %% producing strong programs that one day will be able to beat the best
 %% human players. Perhaps a weaker program would be just as suitable for
