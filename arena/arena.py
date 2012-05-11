@@ -21,6 +21,7 @@
 import subprocess
 import random
 import os
+import os.path
 import socket
 from time import sleep
 from multiprocessing import Process, Queue
@@ -32,7 +33,7 @@ import board
 
 
 
-def run_match(server,port,path,bots,max_updates=1000,pause=0):
+def run_match(server,port,path,bots,max_updates=200,pause=0):
     '''Runs a match between bots
     server:     server's hostname
     port:       server's port
@@ -41,7 +42,7 @@ def run_match(server,port,path,bots,max_updates=1000,pause=0):
     
     This function should collect some stats on the game
     '''
-    
+    max_updates*=len(bots)
     game_name = 'automated-match-%u' % random.randint(0,7000000)
     
     results= {}
@@ -61,12 +62,14 @@ def run_match(server,port,path,bots,max_updates=1000,pause=0):
 
     #Launches 1st bot and creates the game
     logfile=open('%s/Log-%s'%(logdir,str(bots[0])),'w')
-    host_gladiator = subprocess.Popen([path,'-s',server,'-p',str(port),'-H',game_name,'-y',str(len(bots)),'-b',str(bots[0])],
-                                      stdout=logfile,stderr=logfile)
+    host_gladiator = subprocess.Popen(['/usr/bin/pypy','--jit', 'threshold=3', path,'-s',server,'-p',str(port),'-H',game_name,'-y',str(len(bots)),'-b',str(bots[0])],
+                                      stdout=logfile,stderr=logfile,cwd=os.path.dirname(path))
+                                      
     gladiators.append(host_gladiator)
 
     #Spectate the game
     for count in xrange(60):
+        sleep(0.5)
         if count>50:
             print "Game can't be spectated"
             gladiators[0].kill()
@@ -82,8 +85,8 @@ def run_match(server,port,path,bots,max_updates=1000,pause=0):
     #Launch all the other bots
     for i in bots[1:]:
         logfile=open('%s/Log-%s'%(logdir,str(i)),'w')
-        proc=subprocess.Popen([path,'-s',server,'-p',str(port),'-g',game_name,'-b',str(i)],
-                              stdout=logfile,stderr=logfile)
+        proc=subprocess.Popen(['/usr/bin/pypy','--jit', 'threshold=3', path,'-s',server,'-p',str(port),'-g',game_name,'-b',str(i)],
+                              stdout=logfile,stderr=logfile,cwd=os.path.dirname(path))
         gladiators.append(proc)
     
     
@@ -139,13 +142,60 @@ def parallel_matches(server,port,path,bots,max_updates=1000,pause=0):
 
 def gather_stats(addr):
     fd=open('stats.py','a')
+    #0               trivial_bot
+    #1               static_distance_bot
+    #2               iddfs_bot
+    #3               static_iddfs_bot
+    #4               minimax_bot
+    #5               parallel_static_bot
+    #6               evolved_distance_bot
+    #7               evolved_iddfs_bot
+    #8               parallel_euclidean_bot
+    #9               parallel_evolved_bot
     matches=(
+    
+    #(0,0),
+    #(1,1),
+    #(2,2),  --stuck
+    #(2,0),
+    (2,1),
+    (3,2),
+    #(3,3), --stuck
+    (3,0),
+    (3,1),
+    (0,1,2),
+    (0,5,9),
+    (0,5,3),
+    (5,0),
+    (5,1),
+    #(5,2), --stuck
+    (5,3),
+    (6,6),
+    (6,0),
     (6,1),
-    (0,1),
+    (6,2),
+    (6,5),
+    (9,5),
+    (8,5),
+    (9,7),
+    (9,9),
+    (9,8),
+    (5,5),
+    
+    (0,5,6),
+    (0,5,7),
+    (8,5,9),
+    (3,6,7),
+    (9,0,1),
+    (0,1,2,3,5,6),
+    (0,1,2,3,9,7),
+    (0,1,2,3,8,2),
+    (0,1,0,1,0,1),
     )
     
     for i in matches:
-        for k_ in xrange(20):
+        for k_ in xrange(2):
+            sleep(120)
             r=evaluate_match(addr,8000,'/home/salvo/Documents/uni/artificial/tin171/bot/bot.py',i,pause=0)
             r['boards']=r['boards'][-1]
             fd.write('%s\n' % repr(r))

@@ -34,7 +34,7 @@
         Salvatore Tomaselli, G\"oran Weinholt}
 \maketitle
 %-----------------------------------------------------------
-\begin{abstract}\centering
+\begin{abstract}%\centering
 %%COMMENT (re-use from project proposal and modify if needed)
 Chinese Checkers is a board game for up to six players. The fact that
 it is a multi-player game makes it quite different from more widely
@@ -380,6 +380,33 @@ which bot is the strongest in different situations.
 %%\subsection{Modules designed but not implemented}
 
 %%\subsection{Modules a future continuation may have}
+
+\subsection{Abandoned ideas}
+\subsection{The \textit{Max-Prob} algorithm}
+We investigated the \textit{Max-Prob} algorithm, designed by Hashavit and
+Markovitch in \cite{Hashavit}. However, some details of the algorithm being
+unclear in the paper, we decided not to implement this algorithm.
+
+According to the results presented in \cite{Hashavit}, the \textit{Max-Prob}
+algorithm should lead to better results that any other algorithms considered
+in this report for games with three players or more.
+
+The algorithm is based on a quite natural remark: if there are several
+possible moves leading to the same probability of winning the game, the bot
+should be as likely to choose any of these moves.
+
+\begin{figure}
+\begin{algorithmic}
+\Function{Max-Prob}{board, player-id}
+\State Moves = \textsc{All-possible-Moves}
+\State P = Max\{WinProb(m, player-id) $| \; c \in$ Moves\}
+\State $C_{max}$ = \{$m \in$ Moves $|$ WinProb(m, player-id) = P\}
+\State \Return rand($C_{max}$)
+\EndFunction
+\end{algorithmic}
+\caption{Max-Prob algorithm.}
+\end{figure}
+% TODO Continue
 
 \section{Results and Evaluation}
 % (What does your running code do? How does it fare against your

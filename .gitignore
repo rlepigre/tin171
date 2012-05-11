@@ -1,4 +1,5 @@
 *.pyc
+tablereg
 chinese/ebin/
 *~
 *.pdf
