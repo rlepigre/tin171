@@ -226,27 +226,6 @@ function itself. We have used our hand-tuned distance function to run
 a genetic algorithm that finds better distance functions. More on this
 in subsection \ref{genetic}.
 
-\subsubsection{Startgame}
-Until the players' pegs are close enough to interact with each other, an opening
-book of pre-computed moves could be used. This would be useful just for two or
-three players games since in all the other configurations players are located in
-adjacent corners and can interact with each other already from the
- 2\textsuperscript{nd} or 3\textsuperscript{rd} move.
-
-\subsubsection{Endgame}
-We have observed that in the phase of the endgame all the players' pegs are
-located around their target corner, and there are no longer interactions between
-them.
-In this situation it is no longer necessary to use a \emph{minimax} algorithm,
-because calculating the moves of the opponents is no longer necessary, so the
-objective becomes to place all the marbles in the target using the least
-possible amount of moves.
-For the purpose the bots could switch to the \emph{iterative deepening
-depth-first-search} or could even use a database of pre-computed moves.
-In endgame phase a bot could consider a board where all the pegs of the
-opponents are removed, and those boards could be hashed and used as keys for an
-hash table that matches the best move for each board configuration.
-
 %% To improve
 %% the depth of our solution we will try and do some pruning of ``bad''
 %% plys, e.g.~those that do not move the player any closer to the goal
@@ -382,6 +361,28 @@ which bot is the strongest in different situations.
 %%\subsection{Modules a future continuation may have}
 
 \subsection{Abandoned ideas}
+
+\subsubsection{Endgame}
+We have observed that in the phase of the endgame all the players' pegs are
+located around their target corner, and there are no longer interactions between
+them.
+In this situation it is no longer necessary to use a \emph{minimax} algorithm,
+because calculating the moves of the opponents is no longer necessary, so the
+objective becomes to place all the marbles in the target using the least
+possible amount of moves.
+For the purpose the bots could switch to the \emph{iterative deepening
+depth-first-search} or could even use a database of pre-computed moves.
+In endgame phase a bot could consider a board where all the pegs of the
+opponents are removed, and those boards could be hashed and used as keys for an
+hash table that matches the best move for each board configuration.
+
+\subsubsection{Startgame}
+Until the players' pegs are close enough to interact with each other, an opening
+book of pre-computed moves could be used. This would be useful just for two or
+three players games since in all the other configurations players are located in
+adjacent corners and can interact with each other already from the
+ 2\textsuperscript{nd} or 3\textsuperscript{rd} move.
+
 \subsection{The \textit{Max-Prob} algorithm}
 We investigated the \textit{Max-Prob} algorithm, designed by Hashavit and
 Markovitch in \cite{Hashavit}. However, some details of the algorithm being
