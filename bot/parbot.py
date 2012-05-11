@@ -133,3 +133,5 @@ def parallel_euclidean_bot(c,timeout,board,player_id,players):
     return parallel_static_bot(c,timeout,board,player_id,players,distance_function=euclidean_distance_from_target)
 def parallel_evolved_bot(c,timeout,board,player_id,players):
     return parallel_static_bot(c,timeout,board,player_id,players,distance_function=evolved_distance)
+def parallel_evolved3_bot(c,timeout,board,player_id,players):
+    return parallel_static_bot(c,timeout,board,player_id,players,distance_function=evolved_distance3)
