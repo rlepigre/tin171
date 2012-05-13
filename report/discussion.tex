@@ -4,6 +4,7 @@ The goal of our project was to propose machine players that could beat a
 novice human player. Among our bots, only a few can pretend to beat an human
 player, and none is really equiped to play against en expert player. The bots
 that have proven to be the most effective against an human player are:
+
 \begin{itemize}
   \item the \textbf{Alpha-Beta bot}, even if it sometimes leave a peg behind.
         This bot uses our hand-tuned board evaluation function.
@@ -14,7 +15,27 @@ that have proven to be the most effective against an human player are:
 When playing against those bots you easily see that it tries to adapt, avoid
 moves that will open up paths for the opponent and seldom move pieces alone.
 
-% TODO add a table with stats
+While playing against our bots we tried to take some notes about their
+behaviour, and how difficult it was to play against them.
+
+Several of the bots were ``cheating'' (i.e. were not getting out of their
+nest fast enough, thus preventing our pegs to get in), in particular the
+\textit{IDDFS bots}.
+
+Some bots lost because of pegs left behind: the \textit{minimax bot}, the
+\textit{parallel static bot} and the \textit{alpha-beta bot}.
+
+The bots that were the easyer to win against were the \textit{trivial bot} and
+the \textit{evolved distance bot}. The \textit{static distance bot} was easy
+to beat also, but it was a bit more chalenging (more than we expected).
+
+Several of the bots also take very bad decisions, in particular the \textit{
+parallel bots. Sometimes they are just moving inside their nest though they
+have pegs far behind.
+
+The bots that performs the best against one human player is the \textit{
+evolved alpha-beta bot}.
+
 % TODO add things about multi-player
 
 \subsection{Bot VS Bot}
