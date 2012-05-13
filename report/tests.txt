@@ -1,0 +1,39 @@
+Cheaters:
+  Against bot 2  : Won very easily, but the bot was cheating with pegs in his nests.
+  Against bot 3  : Won very easily, the bot was cheating... (also sent three pegs as scouts)
+  Against bot 7  : I destroyed it! But it was really cheating...
+
+Cowards:
+  Against bot 4  : Won easyly, the bot played well but left 2 guys behind...
+  Against bot 10 : Lost, but it shouldn't have because it left a guy behind. I did not play too well.
+                   Won the second time with one move difference.
+  Against bot 5  : Won easyly, the bot left guys behind.
+
+Easy:
+  Against bot 0  : Won really easily.
+  Against bot 6  : Won quite easily.
+
+Unexpected:
+  Against bot 1  : Won easily, but it was more difficult than I expected.
+
+Bad decisions:
+  Against bot 8  : Played quite well, but took very bad decisions some times. Also blocked me sometimes.
+  Against bot 9  : I destroyed it! It seems like it really wanted to use one path, and since I was there
+                   it didn't go forward much.
+
+Best bot:
+  Against bot 11 : Lost, but with only one move difference...
+                   Won the second time.
+
+0	 trivial_bot
+1	 static_distance_bot
+2	 iddfs_bot
+3	 static_iddfs_bot
+4	 minimax_bot
+5  parallel_static_bot
+6  evolved_distance_bot
+7  evolved_iddfs_bot
+8  parallel_euclidean_bot
+9	 parallel_evolved_bot
+10 alphabeta_bot
+11 evolved_alphabeta_bot

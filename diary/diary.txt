@@ -329,6 +329,34 @@ sometimes.
 Rodolphe begins to write a paragraph on the Max-Prob algorithm in the report.
 We will not implement this algorithm since we cannot undersand the details.
 
+2012-05-10
+Rodolphe plays against all the bots, and get the following results:
+Cheaters:
+  Against bot 2  : Won very easily, but the bot was cheating with pegs in his
+                   nests.
+  Against bot 3  : Won very easily, the bot was cheating... (also sent three
+                   pegs as scouts)
+  Against bot 7  : I destroyed it! But it was really cheating...
+Cowards:
+  Against bot 4  : Won easyly, the bot played well but left 2 guys behind...
+  Against bot 5  : Won easyly, the bot left guys behind.
+  Against bot 10 : Lost, but it shouldn't have because it left a guy behind.
+                   I did not play too well.
+                   Won the second time with one move difference.
+Easy:
+  Against bot 0  : Won really easily.
+  Against bot 6  : Won quite easily.
+Unexpected:
+  Against bot 1  : Won easily, but it was more difficult than I expected.
+Bad decisions:
+  Against bot 8  : Played quite well, but took very bad decisions some times.
+                   Also blocked me sometimes.
+  Against bot 9  : I destroyed it! It seems like it really wanted to use one
+                   path, and since I was there it didn't go forward much.
+Best bot:
+  Against bot 11 : Lost, but with only one move difference...
+  Won the second time.
+
 2012-05-11
 Salvo modifies the arena giving shorter limits for games where bots get stuck
 and nobody can win, also a manual signal can be send to force a game to end and
