@@ -336,3 +336,8 @@ We have a meeting where we divide the remaining work. Salvo will be
 working on benchmarks. Rodolphe writes about some more papers he
 found. Emil investigates why alphabeta appears to be worse than our
 less clever bots. Göran will edit the report.
+
+2012-05-12
+Göran splits the report TeX source into multiple files to make it
+easier to edit. There's now a preliminary editing which will be
+finished Sunday.
