@@ -371,3 +371,6 @@ less clever bots. Göran will edit the report.
 Göran splits the report TeX source into multiple files to make it
 easier to edit. There's now a preliminary editing which will be
 finished Sunday.
+
+2012-05-13
+We have a Sunday meeting to finish up the report.
