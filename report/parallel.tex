@@ -7,15 +7,48 @@ The commonly used Python implementation CPython has a global interpreter lock wh
 
 The parallel bot can use different heuristics. Its first step is always to evaluate the boards resulting from the possible moves it can do. So in case of a timeout it will always have a move to perform.
 The outcomes of the board are sorted and new processes are then spawned to evaluate the future scenarios deriving from the best immediate moves.
+The child processes will continue evaluate moves in the future until they are terminated.
+The algorithm is shown in detail in Figure \ref{parallel_algorithm}.
 
 \begin{figure}
 \begin{algorithmic}
-\Function{Max-Prob}{board, player-id}
-\State Moves = \textsc{All-possible-Moves}
-\State P = Max\{WinProb(m, player-id) $| \; c \in$ Moves\}
-\State $C_{max}$ = \{$m \in$ Moves $|$ WinProb(m, player-id) = P\}
-\State \Return rand($C_{max}$)
+\Function{parallel-bot}{board, player-id}
+    \State Moves = \textsc{All-possible-Moves}
+    \State Points = Sort(Evaluate(\textsc{Moves}))
+    \State Best = Points[0]
+    \State Promising = Points[0..5]
+    \ForAll{move $\in$ \textsc{Promising}}
+        \State NewChild = Fork(move, player-id)
+        \State Child.append(NewChild)
+    \EndFor
+    \State Wait(timeout)
+
+    \ForAll{c $\in$ Child}
+        \State Terminate(c)
+        \If {c.result $>$ Best}
+            \State Best = c.result
+        \EndIf
+    \EndFor
+
+    \State \Return Best
 \EndFunction
+\\
+\Function{move}{move, player-id}
+    \State Result = 0
+    \While{True}
+        \ForAll{P $\in$ Opponents}
+            \State Boards=EvaluatePossibleBoards()
+            \State Boards=Prune(Boards)
+            \ForAll{B $\in$ Boards}
+                \If {Evaluate(B) > Result}
+                    \State Result = Evaluate(B)
+                \EndIf
+            \EndFor
+        \EndFor
+    \EndWhile
+\EndFunction
+
 \end{algorithmic}
 \caption{parallel algorithm}
+\label{parallel_algorithm}
 \end{figure}
