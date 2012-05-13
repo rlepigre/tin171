@@ -326,8 +326,11 @@ personalities.
 2012-05-10
 Salvo resolves a race condition in the parallel bot that caused it to hang
 sometimes.
-
-2012-05-10
 Rodolphe begins to write a paragraph on the Max-Prob algorithm in the report.
 We will not implement this algorithm since we cannot undersand the details.
 
+2012-05-11
+Salvo modifies the arena giving shorter limits for games where bots get stuck
+and nobody can win, also a manual signal can be send to force a game to end and
+the arena to move to the next match. Also wrote a module to read the results of
+the various matches and get some meaningful data from it.
