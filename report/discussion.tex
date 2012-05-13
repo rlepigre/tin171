@@ -1,21 +1,29 @@
 \section{Discussion and Conclusions}
 %(Sum up your project, suggest future extensions and improvements.)
 
-Our computer program can win a game against a human.
-Our goal has been fulfilled and many ideas for future development have
-been brought to light.
-The multi-player side of Chinese Checkers remains largely unexplored
-for us but it is still very interesting while in the meantime being rather
-complicated.
+Our computer program can win a game against a human. Our goal has been
+fulfilled and many ideas for future development have been brought to
+light. The multi-player side of Chinese Checkers remains largely
+unexplored for us but it is still very interesting while in the
+meantime being rather complicated.
 
-Algorithms for solving multi-player games have been discussed recently in
-\cite{Hashavit} and \cite{bestreplysearch}, but there have not been much
-discussion about them in the scientific world. However investigating them
-would be a very natural continuation for this project.
+One of our most interesting discoveries was about the genetic
+algorithm. It was surprisingly effective in finding heuristic
+functions. It would be interesting to see how it would be affected by
+variants of the fitness function, e.g.~making the generations play
+against several different bots. Games with five and six players have
+not yet been explored.
 
-One of our most interesting discovery was about the genetic algorithm, and
-it would be interesting to see how far it could get by making the generations play
-against several different bots. The game with 5 and 6 players remains to be
-explored completely.
+It turned out that two-player games are easier to handle than
+multiplayer games for a number of reasons. First of all in two-player
+games there are fewer pegs on the board and therefore fewer possible
+moves. This means the search space is that much smaller. Add a few
+players and not only are there more possible moves, but now the
+minimax algorithm is no longer sufficient (max$^n$ or something more
+advanced must be used). Alpha-beta pruning is no longer effective
+either \cite{Korf199199}.
 
-%% TODO: two-player vs multiplayer
+Algorithms for solving multi-player games have been discussed recently
+in \cite{Hashavit} and \cite{bestreplysearch}, but we have not found
+any discussion about them in the literature. However investigating
+them would be a very natural continuation of this project.

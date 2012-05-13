@@ -1,67 +1,55 @@
 
 \section{Future work}
 
-\subsection{Abandoned ideas}
+Towards the end of the game all the players' pegs are located around
+their target corner and there are no longer interactions between them
+and other players. In this situation it is not necessary to use a
+\emph{minimax} algorithm, because calculating the moves of the
+opponents is no longer necessary. The objective becomes to place
+all the pegs in the target using the least possible amount of moves.
 
-\subsubsection{Endgame}
-We have observed that in the phase of the endgame all the players' pegs are
-located around their target corner, and there are no longer interactions between
-them.
-In this situation it is no longer necessary to use a \emph{minimax} algorithm,
-because calculating the moves of the opponents is no longer necessary, so the
-objective becomes to place all the marbles in the target using the least
-possible amount of moves.
-For the purpose the bots could switch to the \emph{iterative deepening
-depth-first-search} or could even use a database of pre-computed moves.
-In endgame phase a bot could consider a board where all the pegs of the
-opponents are removed, and those boards could be hashed and used as keys for an
-hash table that matches the best move for each board configuration.
+For this purpose the bots could switch to the \emph{iterative
+  deepening depth-first-search} or could even use a database of
+pre-computed moves. In the endgame phase a bot could consider a board
+where all the pegs of the opponents are removed, and those boards
+could be hashed and used as keys for an hash table that matches the
+best move for each board configuration.
 
-\subsubsection{Startgame}
+A similar situation occurs at the start of a game.
 Until the players' pegs are close enough to interact with each other, an opening
 book of pre-computed moves could be used. This would be useful just for two or
 three players games since in all the other configurations players are located in
 adjacent corners and can interact with each other already from the
- 2\textsuperscript{nd} or 3\textsuperscript{rd} move.
+ 2\textsuperscript{nd} or 3\textsuperscript{rd} moves.
 
-\subsection{The \textit{Max-Prob} algorithm}
-We investigated the \textit{Max-Prob} algorithm, designed by Hashavit and
-Mar\-ko\-vi\-tch in \cite{Hashavit}. However, some details of the algorithm being
-unclear in the paper, we decided not to implement this algorithm.
+We investigated the Max-Prob algorithm, designed by Hashavit and
+Mar\-ko\-vi\-tch in \cite{Hashavit}. However, some details of the
+algorithm being unclear in the paper, we decided not to implement this
+algorithm. According to the results presented in \cite{Hashavit}, the
+Max-Prob algorithm should lead to better results than any other
+algorithms considered in this report for games with three players or
+more.
 
-According to the results presented in \cite{Hashavit}, the \textit{Max-Prob}
-algorithm should lead to better results that any other algorithms considered
-in this report for games with three players or more.
-
-The algorithm is based on a quite natural remark: if there are several
-possible moves leading to the same probability of winning the game, the bot
-should be as likely to choose any of these moves.
-
-\begin{figure}
-\begin{algorithmic}
-\Function{Max-Prob}{board, player-id}
-\State Moves = \textsc{All-possible-Moves}
-\State P = Max\{WinProb(m, player-id) $| \; c \in$ Moves\}
-\State $C_{max}$ = \{$m \in$ Moves $|$ WinProb(m, player-id) = P\}
-\State \Return rand($C_{max}$)
-\EndFunction
-\end{algorithmic}
-\caption{Max-Prob algorithm.}
-\end{figure}
-% TODO Continue
-
+%% The algorithm is based on a quite natural remark: if there are several
+%% possible moves leading to the same probability of winning the game, the bot
+%% should be as likely to choose any of these moves.
 
 %% To penalize bots that leave pegs behind, it is possible to use the function
 %% $d_{1}(x,y) = d(x,y)^{2}$ where \emph{d} is one of the already specified
 %% distance functions. In this way the bots will reach better positions by making
 %% the last peg to jump forward as far as possible.
 
-\subsection{Bot versus Bot}
+A result that we have not figured out is why our bots with lookahead
+is getting beaten by the trival ones. A hypothesis is that minimax is
+modelling its opponent as always doing the right thing, but since the
+trival bots only look at what is right for the moment it does not
+behave as the minimax bot thinks it should. This then leads it to
+making the wrong decisions.
 
-A result that we have not figured out is why our bots with lookahead is
-getting beaten by the trival ones. A hypothesis is that \emph{minimax} is modelling
-its opponent as always doing the right thing, but since the trival bots only
-looks at what is right for the moment it does not behave as the minimax
-bot thinks it should. And this then leads it to making the wrong decisions.
-
-\subsection{Tournaments}
+A better way of benchmarking the bots against each other could be to
+use tournaments. This is how the same problem is solved in sports,
+where there exists a large number of teams. It is not possible for
+every team to play against every other team, just like our bots can't
+play against every other bot. In our case it is worse, because we
+would really like to see the bots play against more than one player as
+well.
