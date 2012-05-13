@@ -2,15 +2,13 @@
 \label{genetic}
 
 It is difficult to know \emph{a priori} what a good board evaluation
-function\footnote{A board evaluation function measures how good a
-  board appears to be for the player. The score is higher when pegs
-  are closer to the goal.} looks like. All our heuristics are encoded
-in the board evaluation function, so it is vital for the performance
-of our bot. Our hand-tuned function is shown in figure
-\ref{handtuned}. It is meant to prefer moving pegs into positions
-incrementally closer to the goal. There is a preference for positions
-in the middle path of the board and a distinct penalty for leaving
-pegs in the ``point'' of the starting position.
+function looks like. All our heuristics are encoded in the board
+evaluation function, so it is vital for the performance of our bot.
+Our hand-tuned function is shown in figure \ref{handtuned}. It is
+meant to prefer moving pegs into positions incrementally closer to the
+goal. There is a preference for positions in the middle path of the
+board and a distinct penalty for leaving pegs in the ``point'' of the
+starting position.
 
 \begin{figure}
 \centering
@@ -103,10 +101,9 @@ that happens a new random population needs to be created.
 The fitness function is the key to this genetic algorithm. Figure
 \ref{fitness} shows that the early generations are not very successful
 at all. Then after a while some individuals start winning games and
-the general fitness of their offspring increases dramatically. After
-the first thousand generations the fitness only increases marginally.
-Figure \ref{winning} shows the rate at which the populations win. Our
-fitness function is shown in figure \ref{fitnessfn}.
+the general fitness of their offspring increases dramatically. Figure
+\ref{winning} shows the rate at which the populations win. Our fitness
+function is shown in figure \ref{fitnessfn}.
 
 The \textsc{Simulation} function runs a game between two bots. In our
 case it runs the generated bot against our hand-tuned bot. Both bots
@@ -193,7 +190,7 @@ benefit to having a peg in this position. This is most likely an
 artifact caused by the fitness function we used: in most two-player
 games it is unlikely that there will be a peg in this position, so
 there has been no evolutionary pressure to make this position lighter.
-This will be a drawback in games with more than two players.
+This will be bad in games with more than two players.
 
 The genetic algorithm is easily adapted to simulate games between
 three players. Figure \ref{gen3pop3594} shows an individual from such

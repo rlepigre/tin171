@@ -30,7 +30,7 @@ Bot & \multicolumn{5}{|c|}{Players} \\
 \hline
 Trivial-Euclidean & 42\% & 20\% & 50\% & - & 25\% \\
 \hline
-Trivial-Static & 15\% & - & 60\% & - & 8\% \\
+Trivial-Handtuned & 15\% & - & 60\% & - & 8\% \\
 \hline
 Trivial-Evolved & 83\% & - & 12\% & - & - \\
 \hline
@@ -38,22 +38,60 @@ Trivial-Evolved3 & 100\% & - & 12\% & - & - \\
 \hline
 IDDFS-Euclidean & 50\% & 100\% & - & - & - \\
 \hline
-IDDFS-Static & 66\% & - & - & - & - \\
+IDDFS-Handtuned & 66\% & - & - & - & - \\
 \hline
 IDDFS-Evolved & - & - & 50\% & - & - \\
 \hline
-MiniMax-Static & 66\% & - & - & - & - \\
+MiniMax-Handtuned & 66\% & - & - & - & - \\
 \hline
-AlphaBeta-Static & 50\% & - & - & - & - \\
+AlphaBeta-Handtuned & 50\% & - & - & - & - \\
 \hline
 AlphaBeta-Evolved & 100\% & - & 33\% & - & - \\
 \hline
 AlphaBeta-Evolved3 & 50\% & - & 50\% & - & - \\
 \hline
-Parallel-Static & 50\% & 66\% & 25\% & - & - \\
+Parallel-Handtuned & 50\% & 66\% & 25\% & - & - \\
 \hline
 Parallel-Evolved & 50\% & - & - & - & - \\
 \hline
 Parallel-Evolved3 & 25\% & - & - & - & - \\
 \hline
 \end{tabular}
+
+
+\subsection{Bot versus human player}
+The goal of our project was to propose machine players that could beat a
+novice human player. Among our bots, only a few can pretend to beat an human
+player, and none is really equiped to play against en expert player. The bots
+that have proven to be the most effective against an human player are:
+
+\begin{itemize}
+  \item the \textbf{Alpha-Beta bot}, even if it sometimes leave a peg behind.
+        This bot uses our hand-tuned board evaluation function.
+  \item the \textbf{Evolved Alpha-Beta bot}, which uses the board evaluation
+        function generated with the genetic algorithm.
+\end{itemize}
+
+When playing against those bots you easily see that it tries to adapt, avoid
+moves that will open up paths for the opponent and seldom move pieces alone.
+
+While playing against our bots we tried to take some notes about their
+behaviour, and how difficult it was to play against them.
+
+Several of the bots were ``cheating'' (i.e. were not getting out of their
+nest fast enough, thus preventing our pegs to get in), in particular the
+\textit{IDDFS bots}.
+
+Some bots lost because of pegs left behind: the \textit{minimax bot}, the
+\textit{parallel hand-tuned bot} and the \textit{alpha-beta bot}.
+
+The bots that were the easier to win against were the \textit{trivial Euclidean bot} and
+the \textit{trivial evolved bot}. The \textit{trivial hand-tuned bot} was easy
+to beat as well, but it was a bit more challenging than we expected.
+
+Several of the bots also take very bad decisions, in particular the
+\textit{parallel bots}. Sometimes they are just moving inside their
+nest even though they have pegs far behind.
+
+The bots that perform the best against one human player is the
+\textit{evolved alpha-beta bot}.

@@ -42,8 +42,9 @@ first computer player used a simple search algorithm that did
 basically no lookahead: it merely considered the result from the board
 evaluation function for every possible move. The board evaluation
 function was based on the Euclidean distance between each peg and the
-goal. When we have implemented new search algorithms and board
-evaluation functions we have kept the old ones around for comparison.
+goal. Since then we have written more search algorithms and board
+evaluation functions. The old algorithms and functions have been kept
+around for comparison.
 
 \subsection{Search algorithms}
 
@@ -92,14 +93,17 @@ best.depth)}
 \end{figure}
 
 The IDDFS algorithm is rather na\"ive, because it only considers its
-own moves and never the opponent's. Because of this the bot's agenda
-can be destroyed by the opponent by blocking the path it was about to
-take.
+own moves and not those of the opponents. Because of this the bot's
+agenda can be destroyed by an opponent, e.g.~by blocking a path it was
+about to take.
 
-To counter this we can use the minimax algorithm, that tries to
-\emph{minimize} the board-evaluation function for itself while trying
-to \emph{maximize} the board-evaluation function of its opponent. We
-have implemented minimax in the way shown in figure \ref{minimax}.
+To fix this problem we can use the minimax algorithm. It tries to
+\emph{maximize} the board evaluation function for itself while trying
+to \emph{minimize} the board evaluation function of its opponent. In
+other words, it thinks about what the other player might do next and
+picks a move that is good, but that does not make it too vulnerable to
+the opponent. We have implemented minimax in the way shown in figure
+\ref{minimax}.
 
 %% MINIMAX
 \begin{figure}
@@ -141,26 +145,18 @@ have implemented minimax in the way shown in figure \ref{minimax}.
 \end{figure}
 
 A problem with minimax is that the search tree is incredibly large.
-Not only do you have to consider all your own possible moves, but you
-also have to consider those of the opponents. In our minimax algorithm
+Not only does the bot need to consider all its own possible moves, but
+it must also consider those of the opponents. In our minimax algorithm
 we only consider one of the opponents, but this still makes the search
 tree much larger than for IDDFS. A standard technique for reducing the
 search tree is alpha-beta pruning. We have implemented this algorithm
-as well.
-
-The minimax algorithm with alpha-beta pruning is well-equipped for
-two-player games. Unfortunately the technique does not work as well
-for games with more than two players \cite{Korf199199}.
+as well. The minimax algorithm with alpha-beta pruning is
+well-equipped for two-player games. Unfortunately the technique does
+not work as well for games with more than two players
+\cite{Korf199199}.
 
 %% TODO: the player in the opposite corner... will there even be one
 %% in three-player games?
-
-%% ALPHABETA
-%% Reasons for alpha-beta over naive minimax.
-%% -- We need to prune because of the huge search tree
-%%    to gain more depth in the search.
-%% pruning tactics?
-
 
 \input{parallel.tex}
 
@@ -172,7 +168,7 @@ is to consider the board as a two-dimensional array and compute the
 Euclidean distance of all the pegs from their target position.
 
 Another board evaluation function of ours uses a hand-tuned distance
-function that counts the the number of moves (excluding jumps)
+function that estimates the number of moves (excluding jumps)
 necessary to reach the corner position in the target. The hand-tuned
 distance function uses an array of weights: one for each position on
 the board at which a peg can stop. The weights are then summed up over
@@ -182,7 +178,7 @@ into consideration.
 
 In test games between the bots, it was noted that while moving to
 non-central positions can constitute a disadvantage in two players games, it can
-represent a good strategy on more populated boards where the moves available in
+also represent a good strategy on more populated boards where the moves available in
 the central area are very limited. As a consequence the heuristics that prove to
 be effective on one scenario can lead the bot to defeat in other scenarios.
 Having said that, a good heuristic for two players games seems to assign more
@@ -191,8 +187,8 @@ described in \cite{ulfhake}.
 
 The approach of keeping all the pegs in a cluster to allow jumps and to give low
 values to boards where the pegs of a certain player are scattered all around is
-a good solution for two players games, but in other cases the board is crowded
-so there are several opportunities to perform long jumps even for pegs isolated
+a good solution for two player games. However, in other cases the board is crowded
+and there are several opportunities to perform long jumps even for pegs isolated
 from the other ones of the same color.
 
 The three pegs located in the deepest positions of the corner risk being trapped
@@ -201,7 +197,7 @@ been modified to assign to these positions a great penalty.
 
 Since we are in the field of Artificial Intelligence our thoughts
 were drawn to the idea of having the computer make the distance
-function itself. We have used our hand-tuned distance function to run
+function by itself. We have used our hand-tuned distance function to run
 a genetic algorithm that finds better distance functions.
 
 \input{genetic}

@@ -1,56 +1,62 @@
-\subsection{Parallel bot}
-\label{parallel}
+%% \subsection{Parallel bot}
+%% \label{parallel}
 
-The approach for the parallel bot is to try to use multiple cores on systems to
-try to achieve better results in evaluating moves within the time constraints.
+Our search algorithms presented thus far have been designed to run on
+single processors. We have given the algorithms a limited time in
+which to pick a move, and therefore a faster search algorithm might
+perform better. Modern machines have multiple processor cores, so we
+have written a parallel bot that uses those cores.
 
-The commonly used Python implementation CPython has a global interpreter lock
-which prevents multiple threads to really run in parallel when the machine
-provides more than one thread/core\cite{pygil}. To circumvent this limitation
-Python provides a module to distribute computation over several processes,
-providing shared memory and other means to comunicate.
+%% This is a sideline and does not belong in this part of the report:
 
-The parallel bot can use different heuristics. Its first step is always to
-evaluate the boards resulting from the possible moves it can do. So in case of a
+%% The commonly used Python implementation CPython has a global interpreter lock
+%% which prevents multiple threads to really running in parallel when the machine
+%% provides more than one thread/core \cite{pygil}. To circumvent this limitation
+%% Python provides a module to distribute computation over several processes,
+%% providing shared memory and other means of comunication.
+
+The parallel bot can also be combined with different board evaluation functions.
+Its first step is always to
+evaluate the boards resulting from the possible moves it can do. This is so that in case of a
 timeout it will always have a move to perform.
-The outcomes of the board are sorted and new processes are then spawned to
+The different outcomes are sorted and new processes are then spawned to
 evaluate the future scenarios deriving from the best immediate moves.
-The child processes will continue evaluate moves in the future until they are
+The child processes will continue to evaluate future moves until they are
 terminated.
-The algorithm is shown in detail in Figure \ref{parallel_algorithm}.
+An overview of the algorithm is shown in figure \ref{parallel_algorithm}.
 
 \begin{figure}
 \begin{algorithmic}
-\Function{parallel-bot}{board, player-id}
-    \State Moves = \textsc{All-possible-Moves}
-    \State Points = Sort(Evaluate(\textsc{Moves}))
-    \State Best = Points[0]
-    \State Promising = Points[0..5]
-    \ForAll{move $\in$ \textsc{Promising}}
-        \State NewChild = Fork(move, player-id)
-        \State Child.append(NewChild)
+\Function{Parallel-Bot}{board, player-id}
+    \State moves = \textsc{All-possible-Moves}
+    \State points = \textsc{Sort}(\textsc{Evaluate}(moves))
+    \State best = points[0]
+    \State promising = points[$0\dots 5$]
+    \ForAll{move $\in$ promising}
+        \State child = \textsc{Fork}(\textsc{Move}, player-id)
+        \State \textsc{Append}(children, child)
     \EndFor
-    \State Wait(timeout)
+    \State \textsc{Wait}(timeout)
 
-    \ForAll{c $\in$ Child}
-        \State Terminate(c)
-        \If {c.result $>$ Best}
-            \State Best = c.result
+    \ForAll{C $\in$ children}
+        \State \textsc{Terminate}(C)
+        \If {C.result $>$ best}
+            \State best = C.result
         \EndIf
     \EndFor
 
-    \State \Return Best
+    \State \Return best
 \EndFunction
 \\
-\Function{move}{move, player-id}
-    \State Result = 0
-    \While{True}
-        \ForAll{P $\in$ Opponents}
-            \State Boards=EvaluatePossibleBoards()
-            \State Boards=Prune(Boards)
-            \ForAll{B $\in$ Boards}
-                \If {Evaluate(B) > Result}
-                    \State Result = Evaluate(B)
+\Function{Move}{player-id}
+    \State result = 0
+    \While{$\top$}
+        \ForAll{P $\in$ opponents}
+            \State boards = \textsc{Evaluate-Possible-Boards}()
+            \State boards = \textsc{Prune}(boards)
+            \ForAll{B $\in$ boards}
+                \If {\textsc{Evaluate}(B) $>$ result}
+                    \State result = \textsc{Evaluate}(B)
                 \EndIf
             \EndFor
         \EndFor
@@ -58,6 +64,6 @@ The algorithm is shown in detail in Figure \ref{parallel_algorithm}.
 \EndFunction
 
 \end{algorithmic}
-\caption{parallel algorithm}
+\caption{Overview of the parallel algorithm.}
 \label{parallel_algorithm}
 \end{figure}

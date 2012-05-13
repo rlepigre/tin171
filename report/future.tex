@@ -55,3 +55,13 @@ should be as likely to choose any of these moves.
 %% $d_{1}(x,y) = d(x,y)^{2}$ where \emph{d} is one of the already specified
 %% distance functions. In this way the bots will reach better positions by making
 %% the last peg to jump forward as far as possible.
+
+\subsection{Bot versus Bot}
+
+A result that we have not figured out is why our bots with lookahead is
+getting beaten by the trival ones. A hypothesis is that \emph{minimax} is modelling
+its opponent as always doing the right thing, but since the trival bots only
+looks at what is right for the moment it does not behave as the minimax
+bot thinks it should. And this then leads it to making the wrong decisions.
+
+\subsection{Tournaments}
