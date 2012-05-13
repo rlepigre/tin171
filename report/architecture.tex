@@ -1,6 +1,5 @@
 \section{Overview of the architecture}
 % (Describe the different parts of your program suite in detail.)
-\subsection{Running modules}
 %% arena  cclient   gui_client
 %% bot    chinese   hs-cli
 
@@ -8,10 +7,8 @@ Our project is divided into a collection of programs that each solve
 different parts of the problem. The programs communicate using a
 network protocol that we have designed. Our choice to use a network
 protocol has let us write the programs in different programming
-languages. We have one server implementation, a graphical client and a
-bot client.
-
-%% TODO: note the cli client and the hs client?
+languages. We have one server implementation, a graphical client, a
+command-line client and several bot clients.
 
 Players connect to a \emph{game server} which maintains the current
 game state, notifies each player of their turn and checks that the
@@ -27,22 +24,35 @@ state, shown as the star that one would normally see a on real life
 version of the game. When it is the players' turn they can make their
 move by clicking on the pegs shown on the screen.
 
-The \emph{bot} is the program that contains the AI components of our
-project. It is also written in Python and is divided in three major
-components: the protocol module, the board module and the bot module.
-The \emph{protocol module} serializes and deserializes the network protocol.
-The \emph{board module} contains code to generate all moves a player has
-available and it also contains our board evaluation functions. The
-\emph{bot module} contains the search algorithms. It is the job of the search
-algorithms to use the possible moves and the board evaluation
-functions to determine which move will give the best outcome for the
-bot. When we have implemented a new search algorithm or board
-evaluation function the previous ones are still available. Each
-combination of search algorithm and evaluation function is given a
-\emph{bot personality} identifier.
+The \emph{command-line client} has been written in C. It can be used to
+host, join or spectate a game. The board is represented using ASCII
+characters, and the holes in the board are indexed in a grid. The aim
+of this client was to serve as a base for an efficient implementation of
+our bots. However, our Scheme and Haskell implementation have proven to
+be fast enough, so the idea was left out.
+
+The \emph{bots} is the programs that contains the AI components of our
+project. They are written in Python, Scheme and Haskell respectively.
+
+The \emph{Python bot} is divided in three major components: the protocol
+module, the board module and the bot module. The \emph{protocol module}
+serializes and deserializes the network protocol. The \emph{board module}
+contains code to generate all moves a player has available and it also
+contains our board evaluation functions. The \emph{bot module} contains
+the search algorithms. It is the job of the search algorithms to use the
+possible moves and the board evaluation functions to determine which move
+will give the best outcome for the bot. When we have implemented a new
+search algorithm or board evaluation function the previous ones are still
+available. Each combination of search algorithm and evaluation function
+is given a \emph{bot personality} identifier.
+
+The \emph{Haskell bot} ... % TODO
+
+The \emph{Scheme bot} ... % TODO
 
 An important part of our project is not only to implement search
 algorithms and heuristics, but to also measure their performance. To
 aid in this we have the \emph{arena} program. This program can start
 up a game between different bot personalities so that we can determine
 which bot is the strongest in different situations.
+
