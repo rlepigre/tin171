@@ -29,8 +29,14 @@ population-fitness3.dat: genetic-data-3p-superior.txt
 population-winning-percentage3.dat: genetic-data-3p-superior.txt
 	grep ^Generation genetic-data-3p-superior.txt | sed 's/^Generation \(.*\): Out.*That is \(.*\)% wins.*/ \1 \2/g'  > population-winning-percentage3.dat
 
-population-fitness.pdf: population-fitness.dat population-fitness3.dat population-fitness.gnuplot
+population-fitness4.dat: genetic-data-4p.txt
+	grep ^Generation genetic-data-4p.txt | sed 's/^Generation \(.*\): Out.*survivor: (\(.*\) \..*/ \1 \2/g'  > population-fitness4.dat
+
+population-winning-percentage4.dat: genetic-data-4p.txt
+	grep ^Generation genetic-data-4p.txt | sed 's/^Generation \(.*\): Out.*That is \(.*\)% wins.*/ \1 \2/g'  > population-winning-percentage4.dat
+
+population-fitness.pdf: population-fitness.dat population-fitness3.dat population-fitness4.dat population-fitness.gnuplot
 	gnuplot population-fitness.gnuplot
 
-population-winning-percentage.pdf: population-winning-percentage.dat population-winning-percentage3.dat population-winning-percentage.gnuplot
+population-winning-percentage.pdf: population-winning-percentage.dat population-winning-percentage3.dat population-winning-percentage4.dat population-winning-percentage.gnuplot
 	gnuplot population-winning-percentage.gnuplot

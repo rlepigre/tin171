@@ -1,0 +1,57 @@
+
+\section{Future work}
+
+\subsection{Abandoned ideas}
+
+\subsubsection{Endgame}
+We have observed that in the phase of the endgame all the players' pegs are
+located around their target corner, and there are no longer interactions between
+them.
+In this situation it is no longer necessary to use a \emph{minimax} algorithm,
+because calculating the moves of the opponents is no longer necessary, so the
+objective becomes to place all the marbles in the target using the least
+possible amount of moves.
+For the purpose the bots could switch to the \emph{iterative deepening
+depth-first-search} or could even use a database of pre-computed moves.
+In endgame phase a bot could consider a board where all the pegs of the
+opponents are removed, and those boards could be hashed and used as keys for an
+hash table that matches the best move for each board configuration.
+
+\subsubsection{Startgame}
+Until the players' pegs are close enough to interact with each other, an opening
+book of pre-computed moves could be used. This would be useful just for two or
+three players games since in all the other configurations players are located in
+adjacent corners and can interact with each other already from the
+ 2\textsuperscript{nd} or 3\textsuperscript{rd} move.
+
+\subsection{The \textit{Max-Prob} algorithm}
+We investigated the \textit{Max-Prob} algorithm, designed by Hashavit and
+Mar\-ko\-vi\-tch in \cite{Hashavit}. However, some details of the algorithm being
+unclear in the paper, we decided not to implement this algorithm.
+
+According to the results presented in \cite{Hashavit}, the \textit{Max-Prob}
+algorithm should lead to better results that any other algorithms considered
+in this report for games with three players or more.
+
+The algorithm is based on a quite natural remark: if there are several
+possible moves leading to the same probability of winning the game, the bot
+should be as likely to choose any of these moves.
+
+\begin{figure}
+\begin{algorithmic}
+\Function{Max-Prob}{board, player-id}
+\State Moves = \textsc{All-possible-Moves}
+\State P = Max\{WinProb(m, player-id) $| \; c \in$ Moves\}
+\State $C_{max}$ = \{$m \in$ Moves $|$ WinProb(m, player-id) = P\}
+\State \Return rand($C_{max}$)
+\EndFunction
+\end{algorithmic}
+\caption{Max-Prob algorithm.}
+\end{figure}
+% TODO Continue
+
+
+%% To penalize bots that leave pegs behind, it is possible to use the function
+%% $d_{1}(x,y) = d(x,y)^{2}$ where \emph{d} is one of the already specified
+%% distance functions. In this way the bots will reach better positions by making
+%% the last peg to jump forward as far as possible.

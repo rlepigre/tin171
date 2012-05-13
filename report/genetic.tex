@@ -1,0 +1,256 @@
+\subsection{Genetic algorithm}
+\label{genetic}
+
+It is difficult to know \emph{a priori} what a good board evaluation
+function\footnote{A board evaluation function measures how good a
+  board appears to be for the player. The score is higher when pegs
+  are closer to the goal.} looks like. All our heuristics are encoded
+in the board evaluation function, so it is vital for the performance
+of our bot. Our hand-tuned function is shown in figure
+\ref{handtuned}. It is meant to prefer moving pegs into positions
+incrementally closer to the goal. There is a preference for positions
+in the middle path of the board and a distinct penalty for leaving
+pegs in the ``point'' of the starting position.
+
+\begin{figure}
+\centering
+\input{dist-array-v4}
+\caption{Our hand-tuned distance function. Pegs placed in the brighter
+  positions give a lower score. Our bots use a search algorithm to
+  find moves that place all pegs in the darkest positions, i.e.~it
+  finds the moves that maximize the board evaluation function.}
+\label{handtuned}
+\end{figure}
+
+The problem is that it's difficult to get a feel for how this function
+acts when summed up over all pegs. Consider the case when the three
+pegs at the top of the star are still in their starting position and
+the seven other pegs are closer to the goal. There are two clusters of
+pegs and if the board evaluation function has not been properly
+designed then only the cluster closer to the goal will keep moving.
+The cluster still in the starting position will only start moving
+later in the game, when there are less opportunities for jumps.
+
+The genetic algorithm that we used is shown in figure \ref{genalg}. It
+never returns, but in our program it prints the most fit of each
+generation. The algorithm is called with a population of (almost)
+completely random individuals. To speed up the process the initial
+individuals are not random in the start and goal positions. Figure
+\ref{genpop0} shows a first-generation individual. The algorithm
+measures the fitness of all individuals in the population and only the
+most fit $20\%$ is kept. These individuals then mix to create a new
+population with as many individuals as in the original population.
+There is a $6.67\%$ chance that one of the new individuals will have
+mutations. The mutations are guided so that it is less likely that
+they will be detrimental.
+
+The algorithm is not foolproof. Sometimes the surviving populations
+are hopeless--they never start to have positive fitness values. If
+that happens a new random population needs to be created.
+
+\begin{figure}
+\begin{algorithmic}
+\Function{Genetic-Algorithm}{population, fitness-fn}
+\While{$\top$}
+ \State survivors = \textsc{Most-Fit}(population, fitness-fn, $1/5$)
+ \State new-population = \emph{nil}
+ \For{$\textrm{i} = 0 \to |\textrm{survivors}|$}
+   \State x = \textsc{Random-Select}(survivors)
+   \State y = \textsc{Random-Select}(survivors)
+   \State child = \textsc{Reproduce}(x, y)
+   \If{$\textsc{Random-Integer}(15)=0$}
+     \State \textsc{Mutate}(child)
+   \EndIf
+   \State new-population[i] = child
+ \EndFor
+\EndWhile
+\EndFunction
+\\
+\Function{Reproduce}{x, y}
+\State z = \emph{nil}
+\For{$\textrm{i} = 0 \to |\textrm{x}|$}
+ \If{$\textsc{Random-Integer}(2) = 0$}
+  \State z[i] = x[i]
+ \Else
+  \State z[i] = y[i]
+ \EndIf
+\EndFor
+\State \Return z
+\EndFunction
+\\
+\Function{Mutate}{x}
+\State goal-positions = \emph{The positions in the player's goal}
+\For{$\textrm{i} = 0 \to |\textrm{x}|$}
+ \If{$\textsc{Random-Integer}(10) = 0$}
+  \State $\textrm{v} = \textsc{Random-Integer}(50) - 25$
+  \If{$\textrm{v} > 0 \vee \textrm{i} \in \textrm{goal-positions}$}
+    \State x[i] = v
+  \EndIf
+ \EndIf
+\EndFor
+\ForAll{$\textrm{i} \in \textrm{goal-positions}$}
+ \State x[i] = $\textsc{Min}(\textrm{x}[\textrm{i}], 5)$
+\EndFor
+\EndFunction
+\end{algorithmic}
+
+\caption{The genetic algorithm we used to derive a better board
+  evaluation function. It is losely based on an algorithm from
+  \cite{aimodern}.}
+\label{genalg}
+\end{figure}
+
+The fitness function is the key to this genetic algorithm. Figure
+\ref{fitness} shows that the early generations are not very successful
+at all. Then after a while some individuals start winning games and
+the general fitness of their offspring increases dramatically. After
+the first thousand generations the fitness only increases marginally.
+Figure \ref{winning} shows the rate at which the populations win. Our
+fitness function is shown in figure \ref{fitnessfn}.
+
+The \textsc{Simulation} function runs a game between two bots. In our
+case it runs the generated bot against our hand-tuned bot. Both bots
+are using a trivial search function that merely sorts all available
+moves by the board evaluation function and does no lookahead. If we
+used a more advanced search algorithm it would take much longer to run
+the genetic algorithm, and we do not have the computing resources
+required for that. Individuals from the early generations are likely
+going to leave some pegs behind in the starting position, which
+prevents either player from winning. In this case the simulation is
+restarted.
+
+The fitness function runs two simulations per individual and averages
+the score. This gives an adequate and fast estimate for the early
+generations. Later when the fitness function detects that the
+individual is good at winning (it has an aggregate score over $300$)
+it will switch over to running five simulations. This gives more
+accurate estimates of an individual's fitness and decreases the
+likelihood that a good individual will be penalized for what can be
+considered as bad luck.
+
+If the individual wins a simulation it is awarded $500-p$ points,
+where $p$ is how many plies it needed to win. If it loses it is
+penalized with $d$ points, where $d$ is a measure of how far away it
+was from winning. This is computed using the same board evaluation
+function that drives the bot used in the simulation. Thusly when the
+bot populations are losing, they will try to be as close to winning as
+possible. Later when they are winning they will be trying to win with
+as few plies as possible.
+
+\begin{figure}
+\begin{algorithmic}
+\Function{Fitness}{individual}
+\State score = 0
+\State iteration = 0
+\While{$\top$}
+ \If{$\textrm{iterations} = 2 \wedge \textrm{score} < 300$}
+   \State \Return $\textrm{score} / 2$
+ \ElsIf{$\textrm{iterations} = 5$}
+   \State \Return $\textrm{score} / 5$
+ \EndIf
+ \State $\textrm{winner}, \textrm{plies}, \textrm{distance} = \textsc{Simulation}(\textrm{individual})$
+ \If{$\textrm{winner} = \textrm{individual}$}
+   \State $\textrm{score} = \textrm{score} + (500 - \textrm{plies})$
+ \Else
+   \State $\textrm{score} = \textrm{score} - \textrm{distance}$
+ \EndIf
+\EndWhile
+\EndFunction
+\end{algorithmic}
+\caption{The fitness function computes a fitness score for an
+  individual by having it play against a pre-defined bot.}
+\label{fitnessfn}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics{population-fitness.pdf}
+\caption{The fitness of the populations generated by the genetic
+  algorithm improves over time. A lost game gives a negative fitness
+  which gets closer to zero the closer the individual was to winning.
+  Positive fitness means the game was won. The fewer moves were
+  used, the higher the fitness becomes.}
+\label{fitness}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{population-winning-percentage.pdf}
+\caption{The percentage of games won by the populations generated by
+  the genetic algorithm.}
+\label{winning}
+\end{figure}
+
+Figures \ref{genpop0}, \ref{genpop51}, \ref{genpop2427} and
+\ref{genpop7822} show distance functions from different generations.
+The first and second functions are not very useful in themselves, but
+provide a point of comparison. It is interesting to note that in the
+latter generations the genetic algorithm has built a path of darker
+positions leading up the goal. Another noteworthy point is the darker
+position in the lower right corner. There does not appear to be any
+benefit to having a peg in this position. This is most likely an
+artifact caused by the fitness function we used: in most two-player
+games it is unlikely that there will be a peg in this position, so
+there has been no evolutionary pressure to make this position lighter.
+This will be a drawback in games with more than two players.
+
+The genetic algorithm is easily adapted to simulate games between
+three players. Figure \ref{gen3pop3594} shows an individual from such
+a simulation. It is remarkably similar to the two-player individual
+from figure \ref{genpop7822}. A three-player game exercises more of
+the positions on the board and therefore places greater demands on the
+individual. The dark positions are no longer isolated from the rest of
+the board: they are connected to the goal by some path. Running
+simulations with three players not only requires more CPU time, but
+also requires more generations before it gets good results (figures
+\ref{fitness} and \ref{winning}). The results for four players were
+promising, but could not be completed due to lack of time. Games with
+more than four players have not been attempted.
+
+\begin{figure}
+\centering
+\input{genetic-population-0}
+\caption{The most fit distance function at generation 0. The first
+  generation is fully random except for the start and goal positions.
+  This individual did not win any games at all.}
+\label{genpop0}
+\end{figure}
+
+\begin{figure}
+\centering
+\input{genetic-population-51}
+\caption{This is the first individual that has actually won a game
+  against our hand-tuned bot. It is from generation 51.}
+\label{genpop51}
+\end{figure}
+
+\begin{figure}
+\centering
+\input{genetic-population-2427}
+\caption{The individuals from generation 2427 won every game they
+  played when the genetic algorithm was running. Each individual is
+  only tested five times by the algorithm, but more extensive
+  experiments show that this individual wins around $99\%$ of the
+  games it plays. The fitness of this individual was $416.6$.}
+\label{genpop2427}
+\end{figure}
+
+\begin{figure}
+\centering
+\input{genetic-population-7822}
+\caption{This individual from generation 7822 had a fitness of
+  $427.4$, the highest of all individuals generated. When tested by
+  the genetic algorithm it won in an average of only $500-427.4=72.6$
+  moves.}
+\label{genpop7822}
+\end{figure}
+
+\begin{figure}
+\centering
+\input{genetic-3p-superior-population-3594}
+\caption{We extended the algorithm to simulate three-player games.
+  This individual comes from population 3594 in such a run. It had
+  $99.2\%$ wins and a fitness of $393.4$.}
+\label{gen3pop3594}
+\end{figure}

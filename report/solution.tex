@@ -1,0 +1,207 @@
+\section{Our solution}
+% (Re-use the content and structure of subsections from project
+% proposal. Add refinments and extensions, motivate changes compared
+% to earlier stages of the project.)
+\subsection{Significance}
+
+An interesting aspect of Chinese Checkers is that it is a multi-player
+game. This means that players can form temporary coalitions against
+other players. While traditional two-player strategies can be used to
+play the game, they are not going to be able to play it perfectly and
+in this sense Chinese Checkers is still an open problem. Working on an
+open problem is always interesting.
+
+The multi-player attribute provides a good setting for objectively
+evaluating the performance of different algorithms and heuristics. The
+existing literature is somewhat sparse on how existing computer
+programs fare against humans in multi-player Chinese Checkers. We hope
+to rectify that with this report.
+
+\subsection{The central idea}
+
+The architecture of our solution consists of three parts: a game
+server written in Erlang, a graphical game client written in Python
+and several autonomous game clients. A network protocol has been
+specified that supports multiple running games. The server coordinates
+the game and tells each player what is happening to the board and
+prompts players to make their move. The server verifies that the moves
+are legal and checks if there is a winner. The graphical client can
+connect either as a player or a spectator. It shows a graphical
+representation of the board and lets the user make moves.
+
+When it is a computer player's turn it needs to generate the possible
+moves and select the best one. In order to select the best one our bot
+uses search algorithms combined with board evaluation functions. A
+board evaluation function returns a number that is larger when the
+board is better for the player. The search algorithm will be looking
+for the move that maximizes that number.
+
+We have a number of different bots that are based on different
+combinations of search algorithms and board evaluation functions. Our
+first computer player used a simple search algorithm that did
+basically no lookahead: it merely considered the result from the board
+evaluation function for every possible move. The board evaluation
+function was based on the Euclidean distance between each peg and the
+goal. When we have implemented new search algorithms and board
+evaluation functions we have kept the old ones around for comparison.
+
+\subsection{Search algorithms}
+
+Our first real search algorithm was an implementation of
+\emph{iterative deepening depth-first-search} (IDDFS) \cite{aimodern}.
+It tries to consider what would happen after it has made a particular
+move: does that move give the bot a big benefit at its next turn, or
+the turn after that? This algorithm is shown in figure \ref{iddfs}.
+
+\begin{figure}
+\begin{algorithmic}
+\Function{IDDFS}{board, player-id, time-limit}
+\State best.move = \emph{nil}
+\State best.score = $-\infty$
+\State best.depth = $\infty$
+\For{depth $= 0 \to \infty$}
+ \ForAll{move $\in$ \textsc{All-Possible-Moves}(board, player-id)}
+  \State nboard = \textsc{Update-Board}(board, move)
+  \State \textsc{Recursive-DLS}(move, nboard, depth, 0, best)
+ \EndFor
+ \If{timeout}
+  \State \Return best.move
+ \EndIf
+\EndFor
+\EndFunction
+\\
+\Function{Recursive-DLS}{move1, board, limit, depth, best}
+\State score = \textsc{Board-Evaluation}(board, player-id)
+\If{score $>$ best.score $\vee$ (score $=$ best.score $\wedge$ depth $<$
+best.depth)}
+\State best.move = move1
+\State best.score = score
+\State best.depth = depth
+\EndIf
+\If{limit $\le$ 0 $\vee$ timeout}
+\State \Return
+\EndIf
+\ForAll{move $\in$ \textsc{All-Possible-Moves}(board, player-id)}
+ \State nboard = \textsc{Update-Board}(board, move)
+ \State \textsc{Recursive-DLS}(move1, nboard, limit$-1$, depth$+1$, best)
+\EndFor
+\EndFunction
+\end{algorithmic}
+\caption{Iteratively-deepening depth-limited search with a time limit.}
+\label{iddfs}
+\end{figure}
+
+The IDDFS algorithm is rather na\"ive, because it only considers its
+own moves and never the opponent's. Because of this the bot's agenda
+can be destroyed by the opponent by blocking the path it was about to
+take.
+
+To counter this we can use the minimax algorithm, that tries to
+\emph{minimize} the board-evaluation function for itself while trying
+to \emph{maximize} the board-evaluation function of its opponent. We
+have implemented minimax in the way shown in figure \ref{minimax}.
+
+%% MINIMAX
+\begin{figure}
+\begin{algorithmic}
+\Function{Minimax}{board, player-id, depth}
+  \State best.score = $-\infty$
+  \ForAll{move $\in$ \textsc{All-Possible-Moves}(board, player-id)}
+    \State val = -\textsc{Minimax-Value}(\textsc{Update-Board}(board, move), \\
+    \hspace{160pt} player-id, depth-1)
+    \If{val $>$ score}
+      \State best.score = val
+      \State best.move = move
+    \EndIf
+  \EndFor
+  \State \Return best.move
+\EndFunction
+\\
+\Function{Minimax-Value}{board, player-id, depth}
+\If{\textsc{Won}(board, player-id)}
+  \State \Return winning score
+\ElsIf{depth $=$ 0}
+  \State \Return \textsc{Board-Evaluation}(board, player-id)
+\Else
+  \State opp-id = \textsc{Opponent}(player-id)
+  \State best = $-\infty$
+  \ForAll{move $\in$ \textsc{Possible-Moves}(board, opp-id)}
+    \State val = -\textsc{Minimax-Value}(\textsc{Update-Board}(board, move), \\
+    \hspace{180pt} opp-id, depth-1)
+    \If{val $>$ best}
+      \State best = val
+    \EndIf
+  \EndFor
+  \State \Return best
+\EndIf
+\EndFunction
+\end{algorithmic}
+\caption{Minimax algorithm.}
+\label{minimax}
+\end{figure}
+
+A problem with minimax is that the search tree is incredibly large.
+Not only do you have to consider all your own possible moves, but you
+also have to consider those of the opponents. In our minimax algorithm
+we only consider one of the opponents, but this still makes the search
+tree much larger than for IDDFS. A standard technique for reducing the
+search tree is alpha-beta pruning. We have implemented this algorithm
+as well.
+
+The minimax algorithm with alpha-beta pruning is well-equipped for
+two-player games. Unfortunately the technique does not work as well
+for games with more than two players \cite{Korf199199}.
+
+%% TODO: the player in the opposite corner... will there even be one
+%% in three-player games?
+
+%% ALPHABETA
+%% Reasons for alpha-beta over naive minimax.
+%% -- We need to prune because of the huge search tree
+%%    to gain more depth in the search.
+%% pruning tactics?
+
+
+%% TODO: Salvo: write about the parallel bot here
+
+\subsubsection{Heuristics}
+
+Functions to evaluate boards must be used to estimate which moves are
+better than others, and also to perform pruning. One idea we have used
+is to consider the board as a two-dimensional array and compute the
+Euclidean distance of all the pegs from their target position.
+
+Another board evaluation function of ours uses a hand-tuned distance
+function that counts the the number of moves (excluding jumps)
+necessary to reach the corner position in the target. The hand-tuned
+distance function uses an array of weights: one for each position on
+the board at which a peg can stop. The weights are then summed up over
+all the player's pegs. Figure \ref{handtuned} shows a graphical
+representation of that function. This function takes several things
+into consideration.
+
+In test games between the bots, it was noted that while moving to
+non-central positions can constitute a disadvantage in two players games, it can
+represent a good strategy on more populated boards where the moves available in
+the central area are very limited. As a consequence the heuristics that prove to
+be effective on one scenario can lead the bot to defeat in other scenarios.
+Having said that, a good heuristic for two players games seems to assign more
+value to boards that keep the pegs in the central area of the board, as
+described in \cite{ulfhake}.
+
+The approach of keeping all the pegs in a cluster to allow jumps and to give low
+values to boards where the pegs of a certain player are scattered all around is
+a good solution for two players games, but in other cases the board is crowded
+so there are several opportunities to perform long jumps even for pegs isolated
+from the other ones of the same color.
+
+The three pegs located in the deepest positions of the corner risk being trapped
+by the opponent if they are left behind, so the hand-tuned distance function has
+been modified to assign to these positions a great penalty.
+
+Since we are in the field of Artificial Intelligence our thoughts
+were drawn to the idea of having the computer make the distance
+function itself. We have used our hand-tuned distance function to run
+a genetic algorithm that finds better distance functions.
+
+\input{genetic}
