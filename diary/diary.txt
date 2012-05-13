@@ -331,3 +331,8 @@ sometimes.
 Rodolphe begins to write a paragraph on the Max-Prob algorithm in the report.
 We will not implement this algorithm since we cannot undersand the details.
 
+2012-05-11
+We have a meeting where we divide the remaining work. Salvo will be
+working on benchmarks. Rodolphe writes about some more papers he
+found. Emil investigates why alphabeta appears to be worse than our
+less clever bots. Göran will edit the report.
