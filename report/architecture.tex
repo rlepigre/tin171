@@ -23,6 +23,8 @@ human player. The main part of the interface is the current board
 state, shown as the star that one would normally see a on real life
 version of the game. When it is the players' turn they can make their
 move by clicking on the pegs shown on the screen.
+In the list of the players, colors are used to represent which pegs belong to
+which player.
 
 The \emph{command-line client} has been written in C. It can be used to
 host, join or spectate a game. The board is represented using ASCII
@@ -55,4 +57,6 @@ algorithms and heuristics, but to also measure their performance. To
 aid in this we have the \emph{arena} program. This program can start
 up a game between different bot personalities so that we can determine
 which bot is the strongest in different situations.
+The outcomes of the automated games are then stored in a file for further
+analysis.
 
