@@ -3,25 +3,36 @@
 % benchmarks and instances? Describe advantages and disadvantages,
 % possibly in relation to other groups in this course.)
 
-To be able to test different approaches, the bot supports multiple
-functions. In general, Python is a slow interpreted language, but
-there are projects that aim at providing just in time compilation. The
-PyPy interpreter has proven to be somewhat faster than the standard
-CPython. When PyPy is forced to compile loops, after a few iterations,
-the IDDFS algorithm is able to compute one level deeper. Because the
-algorithm is time-limited this gives the bot running on PyPy an
-advantage over the bots running on CPython.
+%% To be able to test different approaches, the bot supports multiple
+%% functions. In general, Python is a slow interpreted language, but
+%% there are projects that aim at providing just in time compilation. The
+%% PyPy interpreter has proven to be somewhat faster than the standard
+%% CPython. When PyPy is forced to compile loops, after a few iterations,
+%% the IDDFS algorithm is able to compute one level deeper. Because the
+%% algorithm is time-limited this gives the bot running on PyPy an
+%% advantage over the bots running on CPython.
 
-We have a time-limited implementation of iterative-deepening depth
-first search based on an algorithm from \cite{aimodern}. When the
-algorithm compares two moves that achieve an equally good outcome it
-will explicitly favor the move that achieves the outcome sooner (at a
-lower search depth). If this check is omitted the algorithm can end up
-looping at the end of a game. This is because it would make a move
-that would be the winning move two moves into the future, but on the
-next turn it might again choose a move that wins two moves into the
-future, \emph{ad infinitum}.
+%% We have a time-limited implementation of iterative-deepening depth
+%% first search based on an algorithm from \cite{aimodern}. When the
+%% algorithm compares two moves that achieve an equally good outcome it
+%% will explicitly favor the move that achieves the outcome sooner (at a
+%% lower search depth). If this check is omitted the algorithm can end up
+%% looping at the end of a game. This is because it would make a move
+%% that would be the winning move two moves into the future, but on the
+%% next turn it might again choose a move that wins two moves into the
+%% future, \emph{ad infinitum}.
 
+We have quite a number of different bot personalities and it is not
+possible to test them all against each other in every possible
+setting. We have therefore limited ourselves to having the bots play a
+small set of games against a mixed set of opponents. If a bot is any
+good it should be able to win against an opponent, no matter exactly
+what type of opponent it is. The table in figure \ref{stats} should be
+taken with a grain of salt. It shows the percentage of wins the bots
+had.
+
+\begin{figure}
+\centering
 \begin{tabular}{ | l | c | c | c | c | c | }
 \hline
 Bot & \multicolumn{5}{|c|}{Players} \\
@@ -57,28 +68,31 @@ Parallel-Evolved & 50\% & - & - & - & - \\
 Parallel-Evolved3 & 25\% & - & - & - & - \\
 \hline
 \end{tabular}
+\caption{Portion of wins in a selected set of games.}
+\label{stats}
+\end{figure}
 
 
 \subsection{Bot versus human player}
-The goal of our project was to propose machine players that could beat a
-novice human player. Among our bots, only a few can pretend to beat an human
-player, and none is really equiped to play against en expert player. The bots
-that have proven to be the most effective against an human player are:
+The goal of our project was to propose machine players that could beat
+a novice human player. Among our bots, only a few can pretend to beat
+an human player, and we believe that none is really equipped to play
+against an expert player. The bots that have proven to be the most
+effective against ourselves are:
 
 \begin{itemize}
-  \item the \textbf{Alpha-Beta bot}, even if it sometimes leave a peg behind.
+  \item the \textbf{Alpha-Beta bot}, even if it sometimes leaves a peg behind.
         This bot uses our hand-tuned board evaluation function.
   \item the \textbf{Evolved Alpha-Beta bot}, which uses the board evaluation
         function generated with the genetic algorithm.
 \end{itemize}
 
-When playing against those bots you easily see that it tries to adapt, avoid
-moves that will open up paths for the opponent and seldom move pieces alone.
+When playing against these bots you easily see that it tries to adapt and avoid
+moves that will open up paths for the opponent and it seldom moves pieces alone.
+We tried to take some notes about their
+behaviour and how difficult it was to play against them.
 
-While playing against our bots we tried to take some notes about their
-behaviour, and how difficult it was to play against them.
-
-Several of the bots were ``cheating'' (i.e. were not getting out of their
+Several of the bots were ``cheating'' (i.e.~were not getting out of their
 nest fast enough, thus preventing our pegs to get in), in particular the
 \textit{IDDFS bots}.
 
@@ -89,9 +103,9 @@ The bots that were the easier to win against were the \textit{trivial Euclidean 
 the \textit{trivial evolved bot}. The \textit{trivial hand-tuned bot} was easy
 to beat as well, but it was a bit more challenging than we expected.
 
-Several of the bots also take very bad decisions, in particular the
+Several of the bots also make very bad decisions, in particular the
 \textit{parallel bots}. Sometimes they are just moving inside their
 nest even though they have pegs far behind.
 
-The bots that perform the best against one human player is the
+The bot that performs the best against one human player is the
 \textit{evolved alpha-beta bot}.
