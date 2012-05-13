@@ -27,7 +27,14 @@ def load_stats(filename):
         res.append(eval(i))
     
     return res
-
+def count_games(stats):
+    print "Amount of matches"
+    games=[0,0,0,0,0,0,0]
+    for i in stats:
+        games[len(i['players'])]+=1
+    for i in xrange(2,len(games)):
+        if games[i]>0:
+            print "%d: %d" % (i,games[i])
 def player_plies(stats):
     '''Average of plies depending on the number of players'''
     plies=[None,None,[],[],[],[],[]]
@@ -67,11 +74,12 @@ def winners(stats):
         print "%d" % i
         for l in r:
             print "\t\t%s: %d%%\t" %(l[0],float(l[1])*100/float(players[i].count(l[0])))
-    print players        
     return stuck
             
 def main():        
     stats=load_stats("stats.txt")
+    
+    count_games(stats)
     player_plies(stats)
     stuck=winners(stats)
 
