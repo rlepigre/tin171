@@ -6,16 +6,23 @@ player, and none is really equiped to play against en expert player. The bots
 that have proven to be the most effective against an human player are:
 \begin{itemize}
   \item the \textbf{Alpha-Beta bot}, even if it sometimes leave a peg behind.
-        This bot uses the board evaluation function generated with the genetic
-        algorithm.
+        This bot uses our hand-tuned board evaluation function.
   \item the \textbf{Evolved Alpha-Beta bot}, which uses the board evaluation
         function generated with the genetic algorithm.
 \end{itemize}
+
+When playing against those bots you easily see that it tries to adapt, avoid
+moves that will open up paths for the opponent and seldom move pieces alone.
+
 % TODO add a table with stats
 % TODO add things about multi-player
 
 \subsection{Bot VS Bot}
-% TODO
+One thing we still quite havn't figured out is why our bots with lookahead is
+getting beaten by the trival ones. A hypothesis is that minimax is modelling
+it's opponent as always doing the right thing but since the trival bots only
+looks at what's right for the moment it doesn't behave as the minimax/alphabeta
+bot thinks it should. And this then leads it to making the wrong decisions.
 
 \subsection{Conclusion}
 Our goal have been fulfilled, and many ideas of futur developpement have
