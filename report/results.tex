@@ -22,3 +22,38 @@ that would be the winning move two moves into the future, but on the
 next turn it might again choose a move that wins two moves into the
 future, \emph{ad infinitum}.
 
+\begin{tabular}{ | l | c | c | c | c | c | }
+\hline
+Bot & \multicolumn{5}{|c|}{Players} \\
+\hline
+& 2 & 3 & 4 & 5 & 6 \\
+\hline
+Trivial-Euclidean & 42\% & 20\% & 50\% & - & 25\% \\
+\hline
+Trivial-Static & 15\% & - & 60\% & - & 8\% \\
+\hline
+Trivial-Evolved & 83\% & - & 12\% & - & - \\
+\hline
+Trivial-Evolved3 & 100\% & - & 12\% & - & - \\
+\hline
+IDDFS-Euclidean & 50\% & 100\% & - & - & - \\
+\hline
+IDDFS-Static & 66\% & - & - & - & - \\
+\hline
+IDDFS-Evolved & - & - & 50\% & - & - \\
+\hline
+MiniMax-Static & 66\% & - & - & - & - \\
+\hline
+AlphaBeta-Static & 50\% & - & - & - & - \\
+\hline
+AlphaBeta-Evolved & 100\% & - & 33\% & - & - \\
+\hline
+AlphaBeta-Evolved3 & 50\% & - & 50\% & - & - \\
+\hline
+Parallel-Static & 50\% & 66\% & 25\% & - & - \\
+\hline
+Parallel-Evolved & 50\% & - & - & - & - \\
+\hline
+Parallel-Evolved3 & 25\% & - & - & - & - \\
+\hline
+\end{tabular}
