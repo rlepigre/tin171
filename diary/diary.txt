@@ -374,3 +374,12 @@ finished Sunday.
 
 2012-05-13
 We have a Sunday meeting to finish up the report.
+
+2012-05-17
+After the demo session it was pointed out that our statistics are more not very
+indicative, so we met again to decide how to improve them.
+We automatically generated a list of two players games to do all the
+combinations between the bots, Salvo fixed the arena to have timeouts in case
+bots get stuck.
+Göran started the new set of test games on his server, after estimating 28 hours
+to completion.
