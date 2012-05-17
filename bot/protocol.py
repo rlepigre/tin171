@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from yappy.parser import *      # apt-get install python-yappy
+from select import select
 
 debug = True
 
@@ -125,9 +126,17 @@ class Client():
                     raise e
             x += self.f.readline()
 
-    def read_noerror(self):
+    def read_noerror(self,timeout=None):
         """Read a datum from the server and raise an exception if the
-        the read datum is an error."""
+        the read datum is an error.
+        Timeout indicates the timeout before raising an exception"""
+        
+        if timeout!=None:
+            ready,useless_,useless__=select([self.f.fileno()],[],[],timeout)
+            if len(ready)==0:
+                #Timeout occurred
+                raise Exception('Timeout')
+        
         x = self.read()
         if type(x) == type(()) and x[0] == A('error'):
             raise Exception('Unexpected error from server', x)

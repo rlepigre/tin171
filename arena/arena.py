@@ -101,17 +101,21 @@ def run_match(server,port,path,bots,max_updates=300,pause=0):
         if interrupt.i: #Goes to next match in case of control-c
             interrupt.i=False
             break
+        try:
+            x = c.read_noerror(timeout=20)
             
-        x = c.read_noerror()
-        if x[0]=='won':
-            print "won"
-            results['winner'] = x[1]
-            results['boards'].append(x[2])
+            if x[0]=='won':
+                print "won"
+                results['winner'] = x[1]
+                results['boards'].append(x[2])
+                break
+            elif x[0]=='update':
+                results['players'][x[1][0]] = x[1][1]
+                print "update",count,max_updates
+                results['boards'].append(x[3])
+        except:
+            print "TIMEOUT!!!"
             break
-        elif x[0]=='update':
-            results['players'][x[1][0]] = x[1][1]
-            print "update",count,max_updates
-            results['boards'].append(x[3])
     
     
     for i in gladiators:
@@ -414,11 +418,12 @@ def gather_stats(addr):
             def_handler=signal.signal(signal.SIGUSR1,handler)
             r=evaluate_match(addr,8000,'/home/salvo/Documents/uni/artificial/tin171/bot/bot.py',i,pause=0)
             signal.signal(signal.SIGUSR1,def_handler)
-            r['boards']=r['boards'][-1]
+            
+            if len(r['boards'])>0: r['boards']=r['boards'][-1]
             fd.write('%s\n' % repr(r))
             fd.flush()
     fd.close()
 
 #evaluate_match('95.80.60.40',8000,'/home/salvo/Documents/uni/artificial/tin171/bot/bot.py',(8,0,1,0),pause=10)
+gather_stats('127.0.0.1')
 
-#gather_stats('127.0.0.1')
