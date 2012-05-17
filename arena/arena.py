@@ -66,10 +66,13 @@ def run_match(server,port,path,bots,max_updates=300,pause=0):
     print logdir
     
     gladiators=[]
+    
+    #pypy=['/usr/bin/pypy','--jit', 'threshold=3']
+    pypy=[]
 
     #Launches 1st bot and creates the game
     logfile=open('%s/Log-%s'%(logdir,str(bots[0])),'w')
-    host_gladiator = subprocess.Popen(['/usr/bin/pypy','--jit', 'threshold=3', path,'-s',server,'-p',str(port),'-H',game_name,'-y',str(len(bots)),'-b',str(bots[0])],
+    host_gladiator = subprocess.Popen(pypy + [path,'-s',server,'-p',str(port),'-H',game_name,'-y',str(len(bots)),'-b',str(bots[0])],
                                       stdout=logfile,stderr=logfile,cwd=os.path.dirname(path))
                                       
     gladiators.append(host_gladiator)
@@ -92,7 +95,7 @@ def run_match(server,port,path,bots,max_updates=300,pause=0):
     #Launch all the other bots
     for i in bots[1:]:
         logfile=open('%s/Log-%s'%(logdir,str(i)),'w')
-        proc=subprocess.Popen(['/usr/bin/pypy','--jit', 'threshold=3', path,'-s',server,'-p',str(port),'-g',game_name,'-b',str(i)],
+        proc=subprocess.Popen(pypy + [path,'-s',server,'-p',str(port),'-g',game_name,'-b',str(i)],
                               stdout=logfile,stderr=logfile,cwd=os.path.dirname(path))
         gladiators.append(proc)
     
