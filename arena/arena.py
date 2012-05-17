@@ -26,14 +26,24 @@ import socket
 from time import sleep
 from multiprocessing import Process, Queue
 import sys
+import signal
 
 import protocol
 from protocol import A
 import board
 
+class val:
+    def __init__(self):
+        self.i=False
+interrupt=val()
 
+def handler(signum, frame):
+    print 'Signal handler called with signal', signum
+    print interrupt.i
+    interrupt.i=True
+    print interrupt.i
 
-def run_match(server,port,path,bots,max_updates=200,pause=0):
+def run_match(server,port,path,bots,max_updates=300,pause=0):
     '''Runs a match between bots
     server:     server's hostname
     port:       server's port
@@ -42,7 +52,6 @@ def run_match(server,port,path,bots,max_updates=200,pause=0):
     
     This function should collect some stats on the game
     '''
-    max_updates*=len(bots)
     game_name = 'automated-match-%u' % random.randint(0,7000000)
     
     results= {}
@@ -91,6 +100,10 @@ def run_match(server,port,path,bots,max_updates=200,pause=0):
     
     
     for count in xrange(max_updates):
+        if interrupt.i: #Goes to next match in case of control-c
+            interrupt.i=False
+            break
+            
         x = c.read_noerror()
         if x[0]=='won':
             print "won"
@@ -99,7 +112,7 @@ def run_match(server,port,path,bots,max_updates=200,pause=0):
             break
         elif x[0]=='update':
             results['players'][x[1][0]] = x[1][1]
-            print "update"
+            print "update",count,max_updates
             results['boards'].append(x[3])
     
     
@@ -109,7 +122,7 @@ def run_match(server,port,path,bots,max_updates=200,pause=0):
         
     return results
 
-def evaluate_match(server,port,path,bots,max_updates=1000,pause=0,queue=None):
+def evaluate_match(server,port,path,bots,max_updates=300,pause=0,queue=None):
     result = run_match(server,port,path,bots,max_updates,pause)
     result['distances']={}
     for i in result['players']:
@@ -123,7 +136,7 @@ def evaluate_match(server,port,path,bots,max_updates=1000,pause=0,queue=None):
     queue.put(result)
 
 
-def parallel_matches(server,port,path,bots,max_updates=1000,pause=0):
+def parallel_matches(server,port,path,bots,max_updates=300,pause=0):
     
     matches=[]
     queues=[]
@@ -141,7 +154,7 @@ def parallel_matches(server,port,path,bots,max_updates=1000,pause=0):
     return results
 
 def gather_stats(addr):
-    fd=open('stats.py','a')
+    fd=open('stats.txt','a')
     #0               trivial_bot
     #1               static_distance_bot
     #2               iddfs_bot
@@ -152,52 +165,118 @@ def gather_stats(addr):
     #7               evolved_iddfs_bot
     #8               parallel_euclidean_bot
     #9               parallel_evolved_bot
-    matches=(
+    matches=((0, 2),
+    (0, 3),
+    (0, 4),
+    (0, 5),
+    (0, 7),
+    (0, 8),
+    (0, 9),
+    (0, 10),
+    (0, 11),
+    (0, 13),
+    (0, 14),
+    (0, 15),
+    (1, 2),                                                                                                                                              
+    (1, 3),
+    (1, 4),
+    (1, 5),
+    (1, 7),
+    (1, 8),
+    (1, 9),
+    (1, 10),
+    (1, 11),
+    (1, 13),
+    (1, 14),
+    (1, 15),
+    (6, 2),
+    (6, 3),
+    (6, 4),
+    (6, 5),
+    (6, 7),
+    (6, 8),
+    (6, 9),
+    (6, 10),
+    (6, 11),
+    (6, 13),
+    (6, 14),
+    (6, 15),
+    (12, 2),
+    (12, 3),
+    (12, 4),
+    (12, 5),
+    (12, 7),
+    (12, 8),
+    (12, 9),
+    (12, 10),
+    (12, 11),
+    (12, 13),
+    (12, 14),
+    (12, 15),
+    (2, 0),
+    (3, 0),
+    (4, 0),
+    (5, 0),
+    (7, 0),
+    (8, 0),
+    (9, 0),
+    (10, 0),
+    (11, 0),
+    (13, 0),
+    (14, 0),
+    (15, 0),
+    (2, 1),
+    (3, 1),
+    (4, 1),
+    (5, 1),
+    (7, 1),
+    (8, 1),
+    (9, 1),
+    (10, 1),
+    (11, 1),
+    (13, 1),
+    (14, 1),
+    (15, 1),
+    (2, 6),
+    (3, 6),
+    (4, 6),
+    (5, 6),
+    (7, 6),
+    (8, 6),
+    (9, 6),
+    (10, 6),
+    (11, 6),
+    (13, 6),
+    (14, 6),
+    (15, 6),
+    (2, 12),
+    (3, 12),
+    (4, 12),
+    (5, 12),
+    (7, 12),
+    (8, 12),
+    (9, 12),
+    (10, 12),
+    (11, 12),
+    (13, 12),
+    (14, 12),
+    (15, 12))
     
-    #(0,0),
-    #(1,1),
-    #(2,2),  --stuck
-    #(2,0),
-    (2,1),
-    (3,2),
-    #(3,3), --stuck
-    (3,0),
-    (3,1),
-    (0,1,2),
-    (0,5,9),
-    (0,5,3),
-    (5,0),
-    (5,1),
-    #(5,2), --stuck
-    (5,3),
-    (6,6),
-    (6,0),
-    (6,1),
-    (6,2),
-    (6,5),
-    (9,5),
-    (8,5),
-    (9,7),
-    (9,9),
-    (9,8),
-    (5,5),
     
-    (0,5,6),
-    (0,5,7),
-    (8,5,9),
-    (3,6,7),
-    (9,0,1),
-    (0,1,2,3,5,6),
-    (0,1,2,3,9,7),
-    (0,1,2,3,8,2),
-    (0,1,0,1,0,1),
-    )
+    
     
     for i in matches:
-        for k_ in xrange(2):
-            sleep(120)
+        for k_ in xrange(1):
+            print "Relaxing before a new game"
+            sleep(30)
+            def_handler=signal.signal(signal.SIGUSR1,handler)
             r=evaluate_match(addr,8000,'/home/salvo/Documents/uni/artificial/tin171/bot/bot.py',i,pause=0)
+            signal.signal(signal.SIGUSR1,def_handler)
             r['boards']=r['boards'][-1]
             fd.write('%s\n' % repr(r))
+            fd.flush()
     fd.close()
 
+#evaluate_match('95.80.60.40',8000,'/home/salvo/Documents/uni/artificial/tin171/bot/bot.py',(8,0,1,0),pause=10)
+
+#gather_stats('127.0.0.1')
