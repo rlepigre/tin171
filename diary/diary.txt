@@ -383,3 +383,8 @@ combinations between the bots, Salvo fixed the arena to have timeouts in case
 bots get stuck.
 Göran started the new set of test games on his server, after estimating 28 hours
 to completion.
+
+2012-05-20
+Two runs of the test games have been completed. Göran writes a program
+to generate LaTeX tables from the results and fixes up the final
+report.

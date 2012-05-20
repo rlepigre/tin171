@@ -24,65 +24,99 @@
 
 We have quite a number of different bot personalities and it is not
 possible to test them all against each other in every possible
-setting. We have therefore limited ourselves to having the bots play a
-small set of games against a mixed set of opponents. If a bot is any
-good it should be able to win against an opponent, no matter exactly
-what type of opponent it is. The table in figure \ref{stats} should be
-taken with a grain of salt. It shows the percentage of wins the bots
-had.
+setting. We have therefore limited ourselves to having each bot play
+every other bot in a two-player game. The results are shown in figures
+\ref{stats1} and \ref{stats2}. It takes more than 24 hours to run
+these simulations, so we have unfortunately not been able to do as
+many runs as we would have liked. We had two primary runs of every
+combination. For some combinations we also had earlier results that we
+were able to integrate with these.
 
 \begin{figure}
-{\tiny
-\begin{tabular}{ | c | c c c c c c c c c c c c c c c | }
+\centering
+\begin{tabular}{ | c |  c  c  c  c  c  c  c  | }
 \hline
- -  & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 \\ \hline
-0  & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-1  & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-2  & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-3  & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-4  & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-5  & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-6  & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-7  & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-8  & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-9  & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-10 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-11 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-12 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-13 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-14 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\
-15 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00 & .00  & .00  & .00  & .00  & .00  & .00  \\ \hline
-\end{tabular}}
-\caption{This table shows the percentage of wins in matches between two bots.
-The bots at the left makes the first move. Some games got stuck and those are denoted with -.}
-\label{stats}
+   &  0   &  1   &  2   &  3   &  4   &  5   &  6   \\
+\hline
+0  &      & 1.00 &  .50 &    - &    - &  .00 &  .00 \\
+1  &  .00 &      &  .00 &  .50 &    - &  .50 &  .00 \\
+2  &  .50 & 1.00 &      & 1.00 &    - &  .50 &  .00 \\
+3  & 1.00 & 1.00 & 1.00 &      &    - &  .50 &  .00 \\
+4  &    - & 1.00 &    - &    - &      &    - &    - \\
+5  & 1.00 &  .75 & 1.00 & 1.00 &    - &      &  .00 \\
+6  & 1.00 & 1.00 & 1.00 & 1.00 &    - & 1.00 &      \\
+7  & 1.00 & 1.00 &  .00 & 1.00 &    - & 1.00 &  .00 \\
+8  & 1.00 &  .50 &  .50 & 1.00 &    - & 1.00 &  .00 \\
+9  & 1.00 &  .50 &  .50 & 1.00 &    - & 1.00 &  .00 \\
+10 & 1.00 & 1.00 &    - & 1.00 &    - & 1.00 &  .50 \\
+11 & 1.00 &  .75 & 1.00 & 1.00 &    - &  .50 & 1.00 \\
+12 & 1.00 & 1.00 &    - & 1.00 &    - & 1.00 &  .50 \\
+13 & 1.00 & 1.00 & 1.00 & 1.00 &    - & 1.00 & 1.00 \\
+14 & 1.00 & 1.00 &    - & 1.00 &    - & 1.00 &  .00 \\
+15 &  .50 &  .50 &  .00 &  .50 &    - &  .00 &  .00 \\
+\hline
+\end{tabular}
+\caption{This table shows the proportion of wins in matches between
+  two bots. The bots at the left made the first move. Games that did
+  not finish are denoted with -. Continued in figure \ref{stats2}.}
+\label{stats1}
 \end{figure}
 
-
+\begin{figure}
+\centering
+\begin{tabular}{ | c |  c  c  c  c  c  c  c  c  c  | }
+\hline
+   &  7   &  8   &  9   &  10  &  11  &  12  &  13  &  14  &  15  \\
+\hline
+0  & 1.00 &  .00 &  .00 &  .00 &  .00 &  .00 &  .00 &  .00 & 1.00 \\
+1  &  .50 &  .00 &  .50 &  .50 & 1.00 &  .00 &  .50 &  .00 &  .50 \\
+2  & 1.00 & 1.00 &  .00 &  .00 &  .00 &  .00 &  .00 &  .00 &  .50 \\
+3  & 1.00 &  .50 & 1.00 &  .00 &  .00 &  .50 & 1.00 &  .00 &  .50 \\
+4  &    - &    - &  .50 &  .50 &    - &  .00 &    - & 1.00 & 1.00 \\
+5  & 1.00 &  .50 &  .50 &  .50 &  .00 &  .00 & 1.00 &  .50 & 1.00 \\
+6  & 1.00 &  .50 & 1.00 & 1.00 & 1.00 &  .50 & 1.00 &  .50 & 1.00 \\
+7  &      & 1.00 &  .50 &  .00 &  .00 &  .00 & 1.00 &  .00 & 1.00 \\
+8  & 1.00 &      &  .00 &  .00 &  .00 &  .50 & 1.00 &  .00 &  .50 \\
+9  & 1.00 &  .50 &      & 1.00 &  .50 &  .50 & 1.00 &  .50 & 1.00 \\
+10 &    - & 1.00 & 1.00 &      & 1.00 &  .50 &    - & 1.00 & 1.00 \\
+11 &  .00 & 1.00 & 1.00 &  .50 &      &  .00 & 1.00 &  .00 & 1.00 \\
+12 & 1.00 & 1.00 & 1.00 &  .50 & 1.00 &      & 1.00 &  .50 & 1.00 \\
+13 & 1.00 & 1.00 &  .50 &  .00 & 1.00 &  .00 &      &  .00 & 1.00 \\
+14 & 1.00 & 1.00 &  .50 & 1.00 & 1.00 &  .50 & 1.00 &      &  .50 \\
+15 & 1.00 &  .50 &  .50 &  .00 &  .50 &  .00 &  .50 &  .00 &      \\
+\hline
+\end{tabular}
+\caption{The bot numbers (0-15) are combinations of search algorithms
+  and board evaluation functions as shown in figure \ref{botid}.}
+\label{stats2}
+\end{figure}
 
 
 \begin{figure}
 \centering
-
-\begin{description}
-    \item [0] Trivial-Euclidean
-    \item [1] Trivial-Handtuned
-    \item [2] IDDFS-Euclidean
-    \item [3] IDDFS-Handtuned
-    \item [4] MiniMax-Handtuned
-    \item [5] Parallel-Handtuned
-    \item [6] Trivial-Evolved
-    \item [7] IDDFS-Evolved
-    \item [8] Parallel-Euclidean
-    \item [9] Parallel-Evolved
-    \item [10] AlphaBeta-Handtuned
-    \item [11] AlphaBeta-Evolved
-    \item [12] Trivial-Evolved3
-    \item [13] IDDFS-Evolved3
-    \item [14] AlphaBeta-Evolved3
-    \item [15] Parallel-Evolved3
-\end{description}
-\caption{Bot's algorithms}
+\begin{tabular}{|c | c c |}
+\hline
+  & Search algorithm & Board evaluation function \\
+ \hline
+0 & Trivial & Euclidean \\
+1 & Trivial & Handtuned \\
+2 & IDDFS & Euclidean \\
+3 & IDDFS & Handtuned \\
+4 & MiniMax & Handtuned \\
+5 & Parallel & Handtuned \\
+6 & Trivial & Evolved \\
+7 & IDDFS & Evolved \\
+8 & Parallel & Euclidean \\
+9 & Parallel & Evolved \\
+10 & AlphaBeta & Handtuned \\
+11 & AlphaBeta & Evolved \\
+12 & Trivial & Evolved3 \\
+13 & IDDFS & Evolved3 \\
+14 & AlphaBeta & Evolved3 \\
+15 & Parallel & Evolved3 \\
+\hline
+\end{tabular}
+\caption{Bot algorithms used in figure \ref{stats1} and \ref{stats2}.}
 \label{botid}
 \end{figure}
 
